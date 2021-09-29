@@ -1,0 +1,193 @@
+Python tools for Lanner Platform Support Package 2.1
+
+======================================================
+===================
+== Library path  ==
+===================
+Library should be located at /usr/local/lib/ ,make sure liblmbio.so and liblmbapi.so
+is at the correct location
+If didn't,please refer the "build-hwoto" file
+Use sudo make install to install library to /usr/local/lib/
+
+=============================
+== Tools Contents & Usage  ==
+=============================
+==============
+== hwm_util ==
+==============
+Description: SDK hardware monitor program
+
+Usage: python hwm_util.py -temp cpu1/cpu2/sys1/sys2
+       python hwm_util.py -volt core1/core2/12v/5v/3v3/5vsb/3v3sb/vbat/psu1/psu2
+       python hwm_util.py -rpm fan1/fan2/fan3/..../fan10
+       python hwm_util.py -rpm fan1a/fan1b/fan2a/fan2b/....../fan10a/fan10b
+       python hwm_util.py -callback	 	--> uses callback detect caseopen
+       python hwm_util.py -sidname #dec	 	--> print sensor name by #dec
+       python hwm_util.py -sidmsg #dec	 	--> print sensor message by #dec
+       python hwm_util.py -sidlist 	 	--> print list all supports sensor ID
+       python hwm_util.py -testop [seconds] 	--> for caseopen testing (default 5 seconds)
+       python hwm_util.py -testhwm		--> for hardware monitor testing
+
+
+e.g.:
+	# python hwm_util.py -temp cpu1	--> getting CPU-1 temperature
+	# python hwm_util.py -testop	--> testing case-open event
+	# python hwm_util.py -testhwm	--> testing all hardware monitor and check max/min boundary status
+				    the hwm.conf file is the boundary value setting file		
+===============
+== gpio_util ==
+===============
+Description: SDK General Purpose Input Output program
+
+Usage: python gpio_util.py -gpo -w -data hex 		 --> write GPO data
+       python gpio_util.py -gpo -wpin 1/../4 -set/-reset --> write GPO pin data
+       python gpio_util.py -gpo/-gpi -r 		 --> read GPO/GPI data
+       python gpio_util.py -gpi -rpin 1/../4 		 --> read GPI pin data
+       python gpio_util.py -callback
+
+e.g.:
+	# python gpio_util.py -gpo -w -data a		--> set GPIO4~1 data is 1010B
+	# python gpio_util.py -gpo -wpin 1 -set		--> set GPO-1 to high
+	# python gpio_util.py -gpi -rpin 2		--> get GPI-2 status
+	# python gpio_util.py -callback 		--> simulate GPI status changed event
+ 
+   
+==============
+== eep_util ==
+==============
+Description: SDK EEPROM program
+
+Usage: python eep_util.py -s0/../-s8 -byte/-word/-dword -addr #hex -read
+       python eep_util.py -s0/../-s8 -byte/-word/-dword -addr #hex -write #hex
+       python eep_util.py -s0/../-s8 -erase
+       python eep_util.py -s0/../-s8 -test [-c textfile]	--> for testing
+       python eep_util.py -query				--> report all eeprom slot
+	paramerer:
+	-s0/../-s8 	: assign slot device number, -s0 is onboard device
+	-erase		: erase EEPROM all content to value 0
+	-read/-write	: read or write access
+	-addr #hex	: assign data address of EEPROM device
+
+
+e.g.:
+	# python eep_util.py -s0 -word -addr 2 -read		--> read word data from OnBoard EEPROM address 0x02
+	# python eep_util.py -s2 -dword -addr 14 -write ab1234 	--> write dword data 0xab1234 to Slot2 address 0x14
+	# python eep_util.py -s3 -test 				--> test Slot3 EEPROM write/read by testeep.txt file input
+	# python eep_util.py -s3 -test -c eepfile		--> test Slot3 EEPROM write/read by assign file input
+
+
+==============
+== lbp_util ==
+==============
+Description: SDK Gen3 Lan Bypass program
+
+Usage: python lbp_util.py -s0/../-s8 -info/-status/-save
+       python lbp_util.py -s0/../-s8 -sysoff/-juston/-runtime  #hex
+       python lbp_util.py -s0/../-s8 -p1/../-p4 -enable/-disable
+       python lbp_util.py -s0/../-s8 -t1/-t2 -second #dec -effect #hex
+       python lbp_util.py -s0/../-s8 -t1/-t2 -start/-reload/-stop
+	paramerer:
+	-s0/../-s8 	: assign slot device number, -s0 is onboard device
+	-p1/../-p4 	: assign pair number (runtime stage)
+	-t1/-t2 	: assign time-1 or timer-2
+	-enable/-disable: enable or disable runtime assign pair number (runtime stage)
+	-info		: getting information
+	-status		: getting bypass status
+	-save		: svae value to default
+	-sysoff #hex	: system-off pairs setting
+	-juston	#hex	: just-on pairs setting
+	-runtime #hex	: runtime pairs setting
+	-second #dec	: counter setting for bypass timer (1~255)
+	-effect #hex	: setting after times-out which pair bypass enable
+	-start/-reload/-stop	: start, reload and stop timer
+
+
+e.g.:
+	# python lbp_util.py -s1 -info				--> getting Solt1 Bypass device information
+	# python lbp_util.py -s0 -save				--> save current setting to boot default
+	# python lbp_util.py -s3 -sysoff 5			--> setting systemoff stage paurs status is 0101B
+	# python lbp_util.py -s1 -t1 -second 30 -effect a	--> enable Slot1 Timer-1 30 seconds, time-out will enable pair4 and pair2 	
+	# python lbp_util.py -s1 -t1 -reload			--> reload Solt1 Timer-1
+
+===============
+== sled_util ==
+===============
+Description: SDK System/Status LED program
+
+Usage: python sled_util.py -green/-red/-off 	--> setting System/Status LED
+       python sled_util.py -test [seconds]	--> for testing (default 2 seconds delay)
+
+e.g.:
+	# python sled_util.py -green		--> set System/Status LED is green status
+	# python sled_util.py -test		--> test SLED green -> red/amber -> off between 2 seconds
+
+
+==============
+== swr_util ==
+==============
+Description: SDK Software Reset Button program
+
+Usage: python swr_util.py -status		--> read status
+       python swr_util.py -callback		--> uses callback detect
+       python swr_util.py -test [seconds]	--> for testing (default: 5 seconds)
+
+e.g.:
+	# python swr_util.py -callback 	--> detection SWR pressed event
+	# python swr_util.py -test	--> testing SWR pressed within 5 seconds
+
+
+==============
+== wdt_util ==
+==============
+Description: SDK Watch Dog Timer program
+
+Usage: python wdt_util.py -config seconds
+       python wdt_util.py -start [seconds]
+       python wdt_util.py -reload
+       python wdt_util.py -stop
+
+e.g.:
+	# python wdt_util.py -config 20		--> setting WDT 20 seconds but not start
+	# python wdt_util.py -start 15		--> setting WDT 15 seconds and starting
+	# python wdt_util.py -stop		--> stop WDT countdown
+	# python wdt_util.py -reload		--> reload WDT and re-countdown
+
+=============
+== sdk_psu ==
+=============
+Description: SDK Redundant Power Supply program  
+
+Usage: python psu_util.py -info/-sensor/-watts 1/2/3
+       python psu_util.py -callback
+       python psu_util.py -test [-c filename] (default: psu.conf)
+
+e.g:
+	# python psu_util.py -watts 1	--> getting PSU-1 Vin/Vout, Iin/Iout and WattsIn/Out
+	# python psu_util.py -test	--> testing all PSU information and check max/min boundary status
+					   
+==============
+== lcm_util ==
+==============
+Description: SDK LCD module program
+
+Usage: python lcm_util.py -search						--> search LCM port and baudrate
+       python lcm_util.py [-port #dec] [-baud #dec] -reset 			--> reset LCD module
+       python lcm_util.py [-port #dec] [-baud #dec] -clear 			--> clear LCD module screen
+       python lcm_util.py [-port #dec] [-baud #dec] -startup "starup message"	--> setting LCM startup message after reset
+       python lcm_util.py [-port #dec] [-baud #dec] -light 0/1			--> control LCM backlight Off/On
+       python lcm_util.py [-port #dec] [-baud #dec] -wrap 0/1			--> control LCM line wrap Off/On
+       python lcm_util.py [-port #dec] [-baud #dec] -bright 0/../8		--> control LCM brightness
+       python lcm_util.py [-port #dec] [-baud #dec] -curtype 0/1/2		--> setting cussor type off/underline/block_blink
+       python lcm_util.py [-port #dec] [-baud #dec] -cursor #row [#column]	--> set cursor position
+       python lcm_util.py [-port #dec] [-baud #dec] -write "string"		--> write string to LCM
+       python lcm_util.py [-port #dec] [-baud #dec] -setspeed #dec		--> setting new LCM connection speed
+       python lcm_util.py -callback						--> Callback for LCM key button
+Note: If not assigned port and speed, default is /dev/ttyS1 and 115200
+
+===============
+== ipmi_test ==
+===============
+Description: SDK IPMI sensor program
+
+Usage: python  ipmi_test.py		-->easy test for ipmi and show the results
+
