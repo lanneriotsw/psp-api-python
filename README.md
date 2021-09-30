@@ -13,7 +13,7 @@ your Lanner IPC's IO.
 
 * **ROOT** privileges
 * [Core SDKs](https://github.com/jrchen982/lannerpsp)
-* Python 3.6+
+* [Python 3.6+](https://www.python.org/)
 
 -----
 
