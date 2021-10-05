@@ -1,6 +1,5 @@
 import logging
 from ctypes import byref, c_uint32
-from typing import Optional
 
 from .lmbinc import PSP
 
@@ -12,12 +11,19 @@ class RFM:
     Radio Frequency Module.
 
     sdk/src_utils/sdk_rfm/sdk_rfm.c
+
+    :param lmb_io_path: path of liblmbio.so
+    :param lmb_api_path: path of liblmbapi.so
     """
 
-    _udw_reg = c_uint32(0)
+    def __init__(self,
+                 lmb_io_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbio.so",
+                 lmb_api_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbapi.so") -> None:
+        self._lmb_io_path = lmb_io_path
+        self._lmb_api_path = lmb_api_path
+        self._udw_reg = c_uint32(0)
 
-    @classmethod
-    def get_module(cls) -> Optional[int]:
+    def get_module(self) -> int:
         """Get LTE Module power state.
 
         bit 0 represent m.2 module, bit 1 represent mPCIE module
@@ -28,16 +34,16 @@ class RFM:
         2 (10): mPcie -> on,  m.2 -> off
         3 (11): mPcie -> on,  m.2 -> on
         """
-        with PSP() as psp:
-            i_ret = psp.LMB_RFM_GetModule(byref(cls._udw_reg))
-            if i_ret == PSP.ERR_Success:
-                logger.info(f"get rfm module status {cls._udw_reg.value:x}")
-                return cls._udw_reg.value
-            else:
-                PSP.show_error("LMB_RFM_GetModule", i_ret)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_RFM_GetModule(byref(self._udw_reg))
+            if i_ret != PSP.ERR_Success:
+                error_message = PSP.get_error_message("LMB_RFM_GetModule", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
+            logger.info(f"get rfm module status {self._udw_reg.value:x}")
+            return self._udw_reg.value
 
-    @classmethod
-    def set_module(cls, value: int) -> None:
+    def set_module(self, value: int) -> None:
         """Set LTE Module power state.
 
         bit 0 represent m.2 module, bit 1 represent mPCIE module
@@ -48,15 +54,18 @@ class RFM:
         2 (10): mPcie -> on,  m.2 -> off
         3 (11): mPcie -> on,  m.2 -> on
         """
-        with PSP() as psp:
+        # Check type.
+        if not isinstance(value, int):
+            raise TypeError("'value' type must be int")
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             i_ret = psp.LMB_RFM_SetModule(value)
-            if i_ret == PSP.ERR_Success:
-                logger.info(f"set rfm module status {value}")
-            else:
-                PSP.show_error("LMB_RFM_SetModule", i_ret)
+            if i_ret != PSP.ERR_Success:
+                error_message = PSP.get_error_message("LMB_RFM_SetModule", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
+            logger.info(f"set rfm module status {value}")
 
-    @classmethod
-    def get_sim(cls) -> Optional[int]:
+    def get_sim(self) -> int:
         """Get SIM card state.
 
         bit 0 represent m.2 module, bit 1 represent mPCIE module
@@ -67,16 +76,16 @@ class RFM:
         2 (10): mPcie -> second sim (SIM4), m.2 -> first sim (SIM1)
         3 (11): mPcie -> second sim (SIM4), m.2 -> second sim (SIM2)
         """
-        with PSP() as psp:
-            i_ret = psp.LMB_RFM_GetSIM(byref(cls._udw_reg))
-            if i_ret == PSP.ERR_Success:
-                logger.info(f"get rfm sim status {cls._udw_reg.value:x}")
-                return cls._udw_reg.value
-            else:
-                PSP.show_error("LMB_RFM_GetSIM", i_ret)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_RFM_GetSIM(byref(self._udw_reg))
+            if i_ret != PSP.ERR_Success:
+                error_message = PSP.get_error_message("LMB_RFM_GetSIM", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
+            logger.info(f"get rfm sim status {self._udw_reg.value:x}")
+            return self._udw_reg.value
 
-    @classmethod
-    def set_sim(cls, value: int) -> None:
+    def set_sim(self, value: int) -> None:
         """Set SIM card state.
 
         bit 0 represent m.2 module, bit 1 represent mPCIE module
@@ -87,9 +96,13 @@ class RFM:
         2 (10): mPcie -> second sim (SIM4), m.2 -> first sim (SIM1)
         3 (11): mPcie -> second sim (SIM4), m.2 -> second sim (SIM2)
         """
-        with PSP() as psp:
+        # Check type.
+        if not isinstance(value, int):
+            raise TypeError("'value' type must be int")
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             i_ret = psp.LMB_RFM_SetSIM(value)
-            if i_ret == PSP.ERR_Success:
-                logger.info(f"set rfm sim status {value}")
-            else:
-                PSP.show_error("LMB_RFM_SetSIM", i_ret)
+            if i_ret != PSP.ERR_Success:
+                error_message = PSP.get_error_message("LMB_RFM_SetSIM", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
+            logger.info(f"set rfm sim status {value}")

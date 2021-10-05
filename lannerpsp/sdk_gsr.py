@@ -1,7 +1,6 @@
 import logging
 from ctypes import byref, c_int16, Structure
 from time import sleep
-from typing import Optional
 
 from .lmbinc import PSP
 
@@ -19,6 +18,7 @@ class AxisRawData(Structure):
 
 
 class AxisData:
+    """To store axis data."""
 
     def __init__(self, wg_range: int, w_x_axis: int, w_y_axis: int, w_z_axis: int,
                  f_x_mg: float, f_y_mg: float, f_z_mg: float) -> None:
@@ -60,6 +60,7 @@ class AxisData:
 
 
 class AxisOffset:
+    """To store axis offset."""
 
     def __init__(self, w_x_axis: int, w_y_axis: int, w_z_axis: int) -> None:
         self._w_x_axis = w_x_axis
@@ -84,101 +85,110 @@ class GSR:
     G-Sensor.
 
     sdk/src_utils/sdk_gsr/sdk_gsr.c
+
+    :param lmb_io_path: path of liblmbio.so
+    :param lmb_api_path: path of liblmbapi.so
     """
 
-    _stu_raw_data = AxisRawData()
+    def __init__(self,
+                 lmb_io_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbio.so",
+                 lmb_api_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbapi.so") -> None:
+        self._lmb_io_path = lmb_io_path
+        self._lmb_api_path = lmb_api_path
+        self._stu_raw_data = AxisRawData()
 
-    @classmethod
-    def get_data(cls) -> Optional[AxisData]:
+    def get_axis_data(self) -> AxisData:
         """Get X/Y/Z direction accelerate value."""
-        with PSP() as psp:
-            i_ret = psp.LMB_GSR_GetAxisData(byref(cls._stu_raw_data))
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_GSR_GetAxisData(byref(self._stu_raw_data))
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_GSR_GetAxisData", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_GSR_GetAxisData", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
 
-            logger.info(f"get gsr w-range= ±{cls._stu_raw_data.wg_range:d}g")
+            logger.info(f"get gsr w-range= ±{self._stu_raw_data.wg_range:d}g")
 
-            if cls._stu_raw_data.wg_range == 2:
+            if self._stu_raw_data.wg_range == 2:
                 fmg_step = 2 / 255
-            elif cls._stu_raw_data.wg_range == 4:
+            elif self._stu_raw_data.wg_range == 4:
                 fmg_step = 4 / 255
-            elif cls._stu_raw_data.wg_range == 8:
+            elif self._stu_raw_data.wg_range == 8:
                 fmg_step = 8 / 255
-            elif cls._stu_raw_data.wg_range == 16:
+            elif self._stu_raw_data.wg_range == 16:
                 fmg_step = 16 / 255
 
-            f_x_mg = cls._stu_raw_data.w_x_axis * fmg_step
-            f_y_mg = cls._stu_raw_data.w_y_axis * fmg_step
-            f_z_mg = cls._stu_raw_data.w_z_axis * fmg_step
+            f_x_mg = self._stu_raw_data.w_x_axis * fmg_step
+            f_y_mg = self._stu_raw_data.w_y_axis * fmg_step
+            f_z_mg = self._stu_raw_data.w_z_axis * fmg_step
 
-            logger.info(f"get gsr x-axis raw= {cls._stu_raw_data.w_x_axis:d}, accel= {f_x_mg:03.8f}")
-            logger.info(f"get gsr x-axis raw= {cls._stu_raw_data.w_y_axis:d}, accel= {f_y_mg:03.8f}")
-            logger.info(f"get gsr x-axis raw= {cls._stu_raw_data.w_z_axis:d}, accel= {f_z_mg:03.8f}")
+            logger.info(f"get gsr x-axis raw= {self._stu_raw_data.w_x_axis:d}, accel= {f_x_mg:03.8f}")
+            logger.info(f"get gsr x-axis raw= {self._stu_raw_data.w_y_axis:d}, accel= {f_y_mg:03.8f}")
+            logger.info(f"get gsr x-axis raw= {self._stu_raw_data.w_z_axis:d}, accel= {f_z_mg:03.8f}")
 
-            return AxisData(wg_range=cls._stu_raw_data.wg_range,
-                            w_x_axis=cls._stu_raw_data.w_x_axis,
-                            w_y_axis=cls._stu_raw_data.w_y_axis,
-                            w_z_axis=cls._stu_raw_data.w_z_axis,
+            return AxisData(wg_range=self._stu_raw_data.wg_range,
+                            w_x_axis=self._stu_raw_data.w_x_axis,
+                            w_y_axis=self._stu_raw_data.w_y_axis,
+                            w_z_axis=self._stu_raw_data.w_z_axis,
                             f_x_mg=f_x_mg,
                             f_y_mg=f_y_mg,
                             f_z_mg=f_z_mg)
 
-    @classmethod
-    def get_offset(cls) -> Optional[AxisOffset]:
+    def get_axis_offset(self) -> AxisOffset:
         """Get X/Y/Z direction offset value."""
-        with PSP() as psp:
-            i_ret = psp.LMB_GSR_GetAxisOffset(byref(cls._stu_raw_data))
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_GSR_GetAxisOffset(byref(self._stu_raw_data))
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_GSR_GetAxisOffset", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_GSR_GetAxisOffset", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
 
-            logger.info(f"get gsr x-axis offset= {cls._stu_raw_data.w_x_axis:d}")
-            logger.info(f"get gsr y-axis offset= {cls._stu_raw_data.w_y_axis:d}")
-            logger.info(f"get gsr z-axis offset= {cls._stu_raw_data.w_z_axis:d}")
+            logger.info(f"get gsr x-axis offset= {self._stu_raw_data.w_x_axis:d}")
+            logger.info(f"get gsr y-axis offset= {self._stu_raw_data.w_y_axis:d}")
+            logger.info(f"get gsr z-axis offset= {self._stu_raw_data.w_z_axis:d}")
 
-            return AxisOffset(w_x_axis=cls._stu_raw_data.w_x_axis,
-                              w_y_axis=cls._stu_raw_data.w_y_axis,
-                              w_z_axis=cls._stu_raw_data.w_z_axis)
+            return AxisOffset(w_x_axis=self._stu_raw_data.w_x_axis,
+                              w_y_axis=self._stu_raw_data.w_y_axis,
+                              w_z_axis=self._stu_raw_data.w_z_axis)
 
-    @classmethod
-    def test(cls) -> None:
+    def test(self) -> None:
         """For testing."""
-        with PSP() as psp:
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             for i in range(100):
                 logger.info(f"---------> {i:d}")
 
                 # Get accel data.
-                i_ret = psp.LMB_GSR_GetAxisData(byref(cls._stu_raw_data))
-                if i_ret == PSP.ERR_Success:
-                    logger.info(f"stuRawData.wRange= ±{cls._stu_raw_data.wg_range:d}g")
+                i_ret = psp.LMB_GSR_GetAxisData(byref(self._stu_raw_data))
+                if i_ret != PSP.ERR_Success:
+                    error_message = PSP.get_error_message("LMB_GSR_GetAxisData", i_ret)
+                    logger.error(error_message)
+                else:
+                    logger.info(f"stuRawData.wRange= ±{self._stu_raw_data.wg_range:d}g")
 
-                    if cls._stu_raw_data.wg_range == 2:
+                    if self._stu_raw_data.wg_range == 2:
                         fmg_step = 2 / 255
-                    elif cls._stu_raw_data.wg_range == 4:
+                    elif self._stu_raw_data.wg_range == 4:
                         fmg_step = 4 / 255
-                    elif cls._stu_raw_data.wg_range == 8:
+                    elif self._stu_raw_data.wg_range == 8:
                         fmg_step = 8 / 255
-                    elif cls._stu_raw_data.wg_range == 16:
+                    elif self._stu_raw_data.wg_range == 16:
                         fmg_step = 16 / 255
 
-                    f_x_mg = cls._stu_raw_data.w_x_axis * fmg_step
-                    f_y_mg = cls._stu_raw_data.w_y_axis * fmg_step
-                    f_z_mg = cls._stu_raw_data.w_z_axis * fmg_step
+                    f_x_mg = self._stu_raw_data.w_x_axis * fmg_step
+                    f_y_mg = self._stu_raw_data.w_y_axis * fmg_step
+                    f_z_mg = self._stu_raw_data.w_z_axis * fmg_step
 
-                    logger.info(f"Raw={cls._stu_raw_data.w_x_axis:d}\t, X-Axis= {f_x_mg:03.8f}")
-                    logger.info(f"Raw={cls._stu_raw_data.w_y_axis:d}\t, Y-Axis= {f_y_mg:03.8f}")
-                    logger.info(f"Raw={cls._stu_raw_data.w_z_axis:d}\t, Z-Axis= {f_z_mg:03.8f}")
-                else:
-                    PSP.show_error("LMB_GSR_GetAxisData", i_ret)
+                    logger.info(f"Raw={self._stu_raw_data.w_x_axis:d}\t, X-Axis= {f_x_mg:03.8f}")
+                    logger.info(f"Raw={self._stu_raw_data.w_y_axis:d}\t, Y-Axis= {f_y_mg:03.8f}")
+                    logger.info(f"Raw={self._stu_raw_data.w_z_axis:d}\t, Z-Axis= {f_z_mg:03.8f}")
 
                 # Get offset.
-                i_ret = psp.LMB_GSR_GetAxisOffset(byref(cls._stu_raw_data))
-                if i_ret == PSP.ERR_Success:
-                    logger.info(f"Offset X-Axis={cls._stu_raw_data.w_x_axis:d}")
-                    logger.info(f"Offset Y-Axis={cls._stu_raw_data.w_y_axis:d}")
-                    logger.info(f"Offset Z-Axis={cls._stu_raw_data.w_z_axis:d}")
+                i_ret = psp.LMB_GSR_GetAxisOffset(byref(self._stu_raw_data))
+                if i_ret != PSP.ERR_Success:
+                    error_message = PSP.get_error_message("LMB_GSR_GetAxisOffset", i_ret)
+                    logger.error(error_message)
                 else:
-                    PSP.show_error("LMB_GSR_GetAxisOffset", i_ret)
+                    logger.info(f"Offset X-Axis={self._stu_raw_data.w_x_axis:d}")
+                    logger.info(f"Offset Y-Axis={self._stu_raw_data.w_y_axis:d}")
+                    logger.info(f"Offset Z-Axis={self._stu_raw_data.w_z_axis:d}")
 
                 sleep(0.5)

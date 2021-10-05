@@ -6,117 +6,132 @@ from .lmbinc import PSP
 logger = logging.getLogger(__name__)
 
 
-class SLEDLTE:
+class LteStateLED:
     """
     LTE Status LED.
 
     sdk/src_utils/sdk_sled_lte/sdk_sled_lte.c
+
+    :param lmb_io_path: path of liblmbio.so
+    :param lmb_api_path: path of liblmbapi.so
     """
 
-    @classmethod
-    def off(cls) -> None:
+    def __init__(self,
+                 lmb_io_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbio.so",
+                 lmb_api_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbapi.so") -> None:
+        self._lmb_io_path = lmb_io_path
+        self._lmb_api_path = lmb_api_path
+
+    def off(self) -> None:
         """Set LTE Status LED to off."""
-        with PSP() as psp:
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             i_ret = psp.LMB_SLED_SetLteStateLED(0)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             logger.info("set lte led off")
 
-    @classmethod
-    def red(cls) -> None:
+    def red(self) -> None:
         """Set LTE Status LED to red."""
-        with PSP() as psp:
-            i_ret = psp.LMB_SLED_SetLteStateLED(0)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_SLED_SetLteStateLED(0)  # Clear color.
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             i_ret = psp.LMB_SLED_SetLteStateLED(1)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             logger.info("set lte led red on")
 
-    @classmethod
-    def red_blink(cls) -> None:
+    def red_blink(self) -> None:
         """Set LTE Status LED to red blink."""
-        with PSP() as psp:
-            i_ret = psp.LMB_SLED_SetLteStateLED(0)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_SLED_SetLteStateLED(0)  # Clear color.
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             i_ret = psp.LMB_SLED_SetLteStateLED(2)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             logger.info("set lte led red blink")
 
-    @classmethod
-    def green(cls) -> None:
+    def green(self) -> None:
         """Set LTE Status LED to green."""
-        with PSP() as psp:
-            i_ret = psp.LMB_SLED_SetLteStateLED(0)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_SLED_SetLteStateLED(0)  # Clear color.
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             i_ret = psp.LMB_SLED_SetLteStateLED(3)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             logger.info("set lte led green on")
 
-    @classmethod
-    def green_blink(cls) -> None:
+    def green_blink(self) -> None:
         """Set LTE Status LED to green blink."""
-        with PSP() as psp:
-            i_ret = psp.LMB_SLED_SetLteStateLED(0)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_SLED_SetLteStateLED(0)  # Clear color.
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             i_ret = psp.LMB_SLED_SetLteStateLED(4)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             logger.info("set lte led green blink")
 
-    @classmethod
-    def yellow(cls) -> None:
+    def yellow(self) -> None:
         """Set LTE Status LED to yellow."""
-        with PSP() as psp:
-            i_ret = psp.LMB_SLED_SetLteStateLED(0)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_SLED_SetLteStateLED(0)  # Clear color.
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             i_ret = psp.LMB_SLED_SetLteStateLED(5)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             logger.info("set lte led yellow on")
 
-    @classmethod
-    def yellow_blink(cls) -> None:
+    def yellow_blink(self) -> None:
         """Set LTE Status LED to yellow blink."""
-        with PSP() as psp:
-            i_ret = psp.LMB_SLED_SetLteStateLED(0)
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+            i_ret = psp.LMB_SLED_SetLteStateLED(0)  # Clear color.
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             i_ret = psp.LMB_SLED_SetLteStateLED(6)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
-                return
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
+                raise PSP.PSPError(error_message)
             logger.info("set lte led yellow blink")
 
-    @classmethod
-    def test(cls, seconds: float = 2.0) -> None:
+    def test(self, seconds: float = 2.0) -> None:
         """For testing (default 2 seconds delay).
 
         :param seconds: seconds
         """
-        with PSP() as psp:
+        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             i_ret = psp.LMB_SLED_SetLteStateLED(1)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led red on")
 
@@ -124,7 +139,8 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(2)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led red blink")
 
@@ -132,7 +148,8 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(0)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led off")
 
@@ -140,7 +157,8 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(3)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led green on")
 
@@ -148,7 +166,8 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(4)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led green blink")
 
@@ -156,7 +175,8 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(0)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led off")
 
@@ -164,7 +184,8 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(5)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led yellow on")
 
@@ -172,7 +193,8 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(6)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led yellow blink")
 
@@ -180,8 +202,7 @@ class SLEDLTE:
 
             i_ret = psp.LMB_SLED_SetLteStateLED(0)
             if i_ret != PSP.ERR_Success:
-                PSP.show_error("LMB_SLED_SetLteStateLED", i_ret)
+                error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
+                logger.error(error_message)
             else:
                 logger.info("set lte led off")
-
-            sleep(seconds)
