@@ -286,6 +286,50 @@ z_offset = gsr.get_axis_offset().w_z_axis
 gsr.test()
 ```
 
+Software Reset:
+
+```python
+from lannerpsp import SoftwareReset
+
+swr = SoftwareReset()
+
+# Get software reset button status.
+swr_status = swr.get_status()
+
+# Use callback function to detect software 
+# reset button status (default 10 seconds).
+swr.exec_callback()
+
+# For testing (default 5 seconds delay).
+swr.test(5)
+
+# Returns `True` if the device is currently active and `False` otherwise.
+is_swr_pressed = swr.is_pressed
+
+# Pause the script until the device is activated.
+swr.wait_for_press()
+
+# Pause the script until the device is deactivated.
+swr.wait_for_release()
+```
+
+Watchdog Timer:
+
+```python
+from lannerpsp import WatchdogTimer
+
+wdt = WatchdogTimer()
+
+# Enable watchdog timer for 10 seconds.
+wdt.enable(10)
+
+# Reset watchdog timer.
+wdt.reset()
+
+# Disable watchdog timer.
+wdt.disable()
+```
+
 COM Port:
 
 ```python

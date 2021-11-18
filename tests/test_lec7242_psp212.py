@@ -400,3 +400,47 @@ class TestGSR:
         with pytest.raises(AttributeError) as e:
             self.gsr.test()
         assert "undefined symbol: LMB_GSR_GetAxisData" in str(e.value)
+
+
+class TestSWR:
+    """Software Reset.
+
+    <Warning> This object is not suitable for automated testing.
+    """
+
+    swr = SoftwareReset()
+
+
+class TestWDT:
+    """Watchdog Timer."""
+
+    wdt = WatchdogTimer()
+
+    def test_enable(self) -> None:
+        self.wdt.enable(10)
+
+        # Fool Proof.
+        with pytest.raises(TypeError):
+            self.wdt.enable(None)
+        with pytest.raises(TypeError):
+            self.wdt.enable(94.87)
+        with pytest.raises(TypeError):
+            self.wdt.enable("WTF")
+        with pytest.raises(ValueError):
+            self.wdt.enable(-1)
+
+    def test_reset(self) -> None:
+        self.wdt.reset()
+
+    def test_disable(self) -> None:
+        self.wdt.disable()
+
+    def test_integration(self) -> None:
+        with pytest.raises(PSP.PSPError) as e:
+            self.wdt.reset()
+        assert str(e.value) == "LMB_WDT_Tick: 0xffffffff: function failure"
+        self.wdt.enable(10)
+        sleep(DELAY_TIME)
+        self.wdt.reset()
+        sleep(DELAY_TIME)
+        self.wdt.disable()
