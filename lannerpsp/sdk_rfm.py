@@ -6,7 +6,7 @@ from .lmbinc import PSP
 logger = logging.getLogger(__name__)
 
 
-class RFM:
+class RadioFrequencyModule:
     """
     Radio Frequency Module.
 
@@ -35,12 +35,12 @@ class RFM:
         3 (11): mPcie -> on,  m.2 -> on
         """
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_RFM_GetModule(byref(self._udw_reg))
+            i_ret = psp.lib.LMB_RFM_GetModule(byref(self._udw_reg))
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_RFM_GetModule", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info(f"get rfm module status {self._udw_reg.value:x}")
+            logger.debug(f"get rfm module status {self._udw_reg.value:x}")
             return self._udw_reg.value
 
     def set_module(self, value: int) -> None:
@@ -58,12 +58,12 @@ class RFM:
         if not isinstance(value, int):
             raise TypeError("'value' type must be int")
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_RFM_SetModule(value)
+            i_ret = psp.lib.LMB_RFM_SetModule(value)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_RFM_SetModule", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info(f"set rfm module status {value}")
+            logger.debug(f"set rfm module status {value}")
 
     def get_sim(self) -> int:
         """Get SIM card state.
@@ -77,12 +77,12 @@ class RFM:
         3 (11): mPcie -> second sim (SIM4), m.2 -> second sim (SIM2)
         """
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_RFM_GetSIM(byref(self._udw_reg))
+            i_ret = psp.lib.LMB_RFM_GetSIM(byref(self._udw_reg))
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_RFM_GetSIM", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info(f"get rfm sim status {self._udw_reg.value:x}")
+            logger.debug(f"get rfm sim status {self._udw_reg.value:x}")
             return self._udw_reg.value
 
     def set_sim(self, value: int) -> None:
@@ -100,9 +100,9 @@ class RFM:
         if not isinstance(value, int):
             raise TypeError("'value' type must be int")
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_RFM_SetSIM(value)
+            i_ret = psp.lib.LMB_RFM_SetSIM(value)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_RFM_SetSIM", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info(f"set rfm sim status {value}")
+            logger.debug(f"set rfm sim status {value}")

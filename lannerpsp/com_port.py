@@ -2,6 +2,7 @@ import logging
 import subprocess
 
 from .lmbinc import PSP
+from .utils import is_root
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,9 @@ class ComPort:
 
         :param mode: 232/422/485
         """
+        # Check permission.
+        if not is_root():
+            raise PermissionError("Please uses root user !!!")
         # Check type.
         if not isinstance(mode, int):
             raise TypeError("'mode' type must be int")
@@ -38,13 +42,16 @@ class ComPort:
             error_message = "set com1 mode failure"
             logger.error(error_message)
             raise PSP.PSPError(error_message)
-        logger.info(f"set com1 mode {mode}")
+        logger.debug(f"set com1 mode {mode}")
 
     def set_com1_termination(self, enable: bool) -> None:
         """Enable/Disable COM1 termination.
 
         :param enable: True = enable, False = disable
         """
+        # Check permission.
+        if not is_root():
+            raise PermissionError("Please uses root user !!!")
         # Check type.
         if not isinstance(enable, bool):
             raise TypeError("'enable' type must be bool")
@@ -53,10 +60,10 @@ class ComPort:
             subprocess.check_output(
                 [self._config_tool_path, "-com1", "-termon"]
             )
-            logger.info("enable com1 termination")
+            logger.debug("enable com1 termination")
         else:
             # Disable termination.
             subprocess.check_output(
                 [self._config_tool_path, "-com1", "-termoff"]
             )
-            logger.info("disable com1 termination")
+            logger.debug("disable com1 termination")

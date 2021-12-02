@@ -49,12 +49,12 @@ class SoftwareReset:
     def get_status(self) -> int:
         """Get software reset button status."""
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_SWR_GetStatus(byref(self._ub_read))
+            i_ret = psp.lib.LMB_SWR_GetStatus(byref(self._ub_read))
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_SWR_GetStatus", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info(f"SWReset button Status is {self._ub_read.value}")
+            logger.debug(f"SWReset button Status is {self._ub_read.value}")
             return self._ub_read.value
 
     @classmethod
@@ -74,14 +74,14 @@ class SoftwareReset:
         c_callback = CFUNCTYPE(None, IntrusionMsg)
         p_callback = c_callback(self._callback)
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_SWR_IntrCallback(p_callback, 150)
+            i_ret = psp.lib.LMB_SWR_IntrCallback(p_callback, 150)
             if i_ret != PSP.ERR_Success:
                 print("-----> hook Software-Reset button callback failure <-------")
                 return
             print("----> hook Software-Reset button Callback OK <----")
             print("===> wait about 10 second time <===")
             sleep(10)
-            i_ret = psp.LMB_SWR_IntrCallback(None, 150)
+            i_ret = psp.lib.LMB_SWR_IntrCallback(None, 150)
             if i_ret == PSP.ERR_Success:
                 print("----> disabled Software-Reset button Callback hook <----")
 
@@ -101,7 +101,7 @@ class SoftwareReset:
             while seconds >= 0:
                 if round(seconds % 1, 1) == 0.0:
                     print(f"{int(seconds):d}. ", end="", flush=True)
-                psp.LMB_SWR_GetStatus(byref(self._ub_read))
+                psp.lib.LMB_SWR_GetStatus(byref(self._ub_read))
                 if self._ub_read.value == 1:
                     break
                 seconds -= 0.1

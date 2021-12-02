@@ -1,8 +1,23 @@
 import logging
-from ctypes import cdll, CDLL
-from os import geteuid
+from ctypes import addressof, byref, c_char_p, c_int8, c_uint16, cdll, CDLL, Structure
+from mmap import mmap, PROT_READ, MAP_SHARED
+
+from .utils import is_root
 
 logger = logging.getLogger(__name__)
+
+
+class DLLVersion(Structure):
+    """DLL version (define in: sdk/include/lmbinc.h)."""
+    _fields_ = [
+        ("uw_dll_major", c_uint16),
+        ("uw_dll_minor", c_uint16),
+        ("uw_dll_build", c_uint16),
+        ("str_platform_id", c_int8 * 15),
+        ("uw_board_major", c_uint16),
+        ("uw_board_minor", c_uint16),
+        ("uw_board_build", c_uint16),
+    ]
 
 
 class PSP:
@@ -10,6 +25,8 @@ class PSP:
     PSP.
 
     sdk/include/lmbinc.h
+    sdk/src_utils/sdk_gsr/sdk_dll.c
+    sdk/src_utils/sdk_gsr/sdk_bios.c
 
     :param lmb_io_path: path of liblmbio.so
     :param lmb_api_path: path of liblmbapi.so
@@ -35,27 +52,68 @@ class PSP:
     def __init__(self,
                  lmb_io_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbio.so",
                  lmb_api_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbapi.so") -> None:
-        self._lmb_io_path = lmb_io_path
-        self._lmb_api_path = lmb_api_path
-        self._liblmbio = None
-        self._liblmbapi = None
-
-    def __enter__(self) -> CDLL:
-        if geteuid() != 0:
+        if not is_root():
             raise PermissionError("Please uses root user !!!")
-        self._liblmbio = cdll.LoadLibrary(self._lmb_io_path)
-        self._liblmbapi = cdll.LoadLibrary(self._lmb_api_path)
+        self._liblmbio = cdll.LoadLibrary(lmb_io_path)
+        self._liblmbapi = cdll.LoadLibrary(lmb_api_path)
+        self._stu_dll_ver = DLLVersion()
+
+    def __enter__(self):
         i_ret = self._liblmbapi.LMB_DLL_Init()
         if i_ret != self.ERR_Success:
             # This can happen when the BIOS message is different or the driver is not loaded.
             error_message = self.get_error_message("LMB_DLL_Init", i_ret)
             logger.error(error_message)
             raise self.PSPError(f"{error_message}, please confirm the API libraries is matched this platform")
-        return self._liblmbapi
+        i_ret = self._liblmbapi.LMB_DLL_Version(byref(self._stu_dll_ver))
+        if i_ret != self.ERR_Success:
+            error_message = self.get_error_message("LMB_DLL_Version", i_ret)
+            logger.error(error_message)
+            raise self.PSPError(error_message)
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> bool:
         self._liblmbapi.LMB_DLL_DeInit()
         return False
+
+    @property
+    def lib(self) -> CDLL:
+        """The DLL/SO to call C functions."""
+        return self._liblmbapi
+
+    @property
+    def sdk_version(self) -> str:
+        """PSP/SDK version."""
+        return f"{self._stu_dll_ver.uw_dll_major:d}." \
+               f"{self._stu_dll_ver.uw_dll_minor:d}." \
+               f"{self._stu_dll_ver.uw_dll_build:d}"
+
+    @property
+    def iodrv_version(self) -> str:
+        """IODRV version."""
+        # https://stackoverflow.com/a/29293102/9611854
+        return f"{c_char_p(addressof(self._stu_dll_ver.str_platform_id)).value.decode():s}." \
+               f"{self._stu_dll_ver.uw_board_major:d}." \
+               f"{self._stu_dll_ver.uw_board_minor:d}." \
+               f"{self._stu_dll_ver.uw_board_build:d}"
+
+    @property
+    def bios_version(self) -> str:
+        """BIOS version."""
+        # `sudo usermod -g kmem yourID`
+        # `sudo busybox devmem 0x00ff58b 8 | xxd -r -p`
+        key = "*LIID "
+        with open("/dev/mem", "rb") as f:
+            mem = mmap(f.fileno(), 0x10000, MAP_SHARED, PROT_READ, offset=0x000f0000)
+        if mem is None:
+            return ""
+        if not mem.read(33 + len(key)).startswith(key.encode("utf-8")):
+            # not found "*LIID"
+            # add here for BIOS uses traditional position F000:F58B
+            mem.seek(0xF58B)
+        msg = mem.read(33 + len(key)).decode("utf-8").replace(key, "")
+        li = msg.split('"')
+        return li[0] + '"' + li[1] + '"'
 
     @classmethod
     def get_error_message(cls, function_name: str, error_code: int) -> str:

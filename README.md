@@ -131,9 +131,9 @@ lte_stress_led.test(2)
 Hardware Monitor:
 
 ```python
-from lannerpsp import HWM
+from lannerpsp import HardwareMonitor
 
-hwm = HWM()
+hwm = HardwareMonitor()
 
 # Get CPU-1 temperature.
 cpu1_temp = hwm.get_cpu_temp(1)
@@ -180,16 +180,16 @@ psu2_voltage = hwm.get_power_supply(2)
 # For hardware monitor testing.
 hwm.testhwm()
 
-# Get all exist value to dict.
+# Get all exist value to list.
 hwm.get_all()
 ```
 
 Radio Frequency Module:
 
 ```python
-from lannerpsp import RFM
+from lannerpsp import RadioFrequencyModule
 
-rfm = RFM()
+rfm = RadioFrequencyModule()
 
 # Get LTE Module power state.
 # 
@@ -260,27 +260,36 @@ gps_port = gps.search_port()
 G-Sensor:
 
 ```python
-from lannerpsp import GSR
+from lannerpsp import GSensor
 
-gsr = GSR()
+gsr = GSensor()
 
-# Get X direction acceleration value.
-x_accel = gsr.get_axis_data().f_x_mg
+# Get X direction acceleration raw data.
+accel_raw_x = gsr.get_accel().raw_x
 
-# Get Y direction acceleration value.
-y_accel = gsr.get_axis_data().f_y_mg
+# Get Y direction acceleration raw data.
+accel_raw_y = gsr.get_accel().raw_y
 
-# Get Z direction acceleration value.
-z_accel = gsr.get_axis_data().f_z_mg
+# Get Z direction acceleration raw data.
+accel_raw_z = gsr.get_accel().raw_z
 
-# Get X direction offset value.
-x_offset = gsr.get_axis_offset().w_x_axis
+# Get X direction acceleration mg value.
+accel_mg_x = gsr.get_accel().mg_x
 
-# Get Y direction offset value.
-y_offset = gsr.get_axis_offset().w_y_axis
+# Get Y direction acceleration mg value.
+accel_mg_y = gsr.get_accel().mg_y
 
-# Get Z direction offset value.
-z_offset = gsr.get_axis_offset().w_z_axis
+# Get Z direction acceleration mg value.
+accel_mg_z = gsr.get_accel().mg_z
+
+# Get X direction offset raw data.
+offset_raw_x = gsr.get_offset().raw_x
+
+# Get Y direction offset raw data.
+offset_raw_y = gsr.get_offset().raw_y
+
+# Get Z direction offset raw data.
+offset_raw_z = gsr.get_offset().raw_z
 
 # For testing.
 gsr.test()
@@ -363,13 +372,19 @@ from lannerpsp import PSP
 
 def main() -> None:
     with PSP() as psp:  # Automatically initialize the DLL.
+        # Get BIOS version.
+        print(psp.bios_version)
+        # Get IODRV version.
+        print(psp.iodrv_version)
+        # Get PSP/SDK version.
+        print(psp.sdk_version)
         # Set LTE Status LED to off (clear color).
-        i_ret = psp.LMB_SLED_SetLteStateLED(0)
+        i_ret = psp.lib.LMB_SLED_SetLteStateLED(0)
         if i_ret != PSP.ERR_Success:
             error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
             raise PSP.PSPError(error_message)
         # Set LTE Status LED to green blink.
-        i_ret = psp.LMB_SLED_SetLteStateLED(4)
+        i_ret = psp.lib.LMB_SLED_SetLteStateLED(4)
         if i_ret != PSP.ERR_Success:
             error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
             raise PSP.PSPError(error_message)

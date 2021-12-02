@@ -1,7 +1,7 @@
 import logging
-from time import sleep
 
 from .lmbinc import PSP
+from .utils import show_delay
 
 logger = logging.getLogger(__name__)
 
@@ -25,60 +25,66 @@ class GPSLED:
     def off(self) -> None:
         """Set GPS Status LED to off."""
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_SLED_SetGPSLED(0)
+            i_ret = psp.lib.LMB_SLED_SetGPSLED(0)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_SLED_SetGPSLED", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info("set gps led off")
+            logger.debug("set gps led off")
 
     def on(self) -> None:
         """Set GPS Status LED to on."""
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_SLED_SetGPSLED(1)
+            i_ret = psp.lib.LMB_SLED_SetGPSLED(1)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_SLED_SetGPSLED", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info("set gps led on")
+            logger.debug("set gps led on")
 
     def blink(self) -> None:
         """Set GPS Status LED to blink."""
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_SLED_SetGPSLED(2)
+            i_ret = psp.lib.LMB_SLED_SetGPSLED(2)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_SLED_SetGPSLED", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info("set gps led blink")
+            logger.debug("set gps led blink")
 
-    def test(self, seconds: float = 2.0) -> None:
+    def test(self, seconds: int = 2) -> None:
         """For testing (default 2 seconds delay).
 
         :param seconds: seconds
         """
+        # Check type.
+        if not isinstance(seconds, int):
+            raise TypeError("'seconds' type must be int")
+        # Check value.
+        if seconds <= 0:
+            raise ValueError("'seconds' value must be >= 0")
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_SLED_SetGPSLED(1)
+            i_ret = psp.lib.LMB_SLED_SetGPSLED(1)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_SLED_SetGPSLED", i_ret)
-                logger.error(error_message)
+                print(f"\033[1;31m{error_message}\033[0m")
             else:
-                logger.info("set gps led on")
+                print("set gps led on")
 
-            sleep(seconds)
+            show_delay(seconds)
 
-            i_ret = psp.LMB_SLED_SetGPSLED(2)
+            i_ret = psp.lib.LMB_SLED_SetGPSLED(2)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_SLED_SetGPSLED", i_ret)
-                logger.error(error_message)
+                print(f"\033[1;31m{error_message}\033[0m")
             else:
-                logger.info("set gps led blink")
+                print("set gps led blink")
 
-            sleep(seconds)
+            show_delay(seconds)
 
-            i_ret = psp.LMB_SLED_SetGPSLED(0)
+            i_ret = psp.lib.LMB_SLED_SetGPSLED(0)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_SLED_SetGPSLED", i_ret)
-                logger.error(error_message)
+                print(f"\033[1;31m{error_message}\033[0m")
             else:
-                logger.info("set gps led off")
+                print("set gps led off")

@@ -4,7 +4,7 @@ import pytest
 
 from lannerpsp import *
 
-DELAY_TIME = 2.0  # Second.
+DELAY_TIME = 2  # Seconds.
 
 
 class TestPSP:
@@ -13,6 +13,18 @@ class TestPSP:
     def test_init(self) -> None:
         with PSP() as psp:
             pass
+
+    def test_sdk_version(self) -> None:
+        with PSP() as psp:
+            assert psp.sdk_version == "2.1.2"
+
+    def test_iodrv_version(self) -> None:
+        with PSP() as psp:
+            assert psp.iodrv_version == "LEB-7242.1.0.2"
+
+    def test_bios_version(self) -> None:
+        with PSP() as psp:
+            assert psp.bios_version == 'LEB-7242B BIOS V1.10 "03/17/2020"'
 
 
 class TestSystemLED:
@@ -143,10 +155,10 @@ class TestLteStressLED:
         sleep(DELAY_TIME)
 
 
-class TestRFM:
+class TestRadioFrequencyModule:
     """Radio Frequency Module."""
 
-    rfm = RFM()
+    rfm = RadioFrequencyModule()
 
     def test_get_sim(self) -> None:
         assert self.rfm.get_sim() in range(4)
@@ -256,10 +268,10 @@ class TestComPort:
             self.com_port.set_com1_termination(666)
 
 
-class TestHWM:
+class TestHardwareMonitor:
     """Hardware Monitor."""
 
-    hwm = HWM()
+    hwm = HardwareMonitor()
 
     def test_get_cpu_temp(self) -> None:
         # CPU-1 temperature.
@@ -381,19 +393,19 @@ class TestGPS:
         assert "undefined symbol: LMB_GPS_SearchPort" in str(e.value)
 
 
-class TestGSR:
+class TestGSensor:
     """G-Sensor."""
 
-    gsr = GSR()
+    gsr = GSensor()
 
     def test_get_axis_data(self) -> None:
         with pytest.raises(AttributeError) as e:
-            self.gsr.get_axis_data()
+            self.gsr.get_accel()
         assert "undefined symbol: LMB_GSR_GetAxisData" in str(e.value)
 
     def test_get_axis_offset(self) -> None:
         with pytest.raises(AttributeError) as e:
-            self.gsr.get_axis_offset()
+            self.gsr.get_offset()
         assert "undefined symbol: LMB_GSR_GetAxisOffset" in str(e.value)
 
     def test_test(self) -> None:
@@ -402,7 +414,7 @@ class TestGSR:
         assert "undefined symbol: LMB_GSR_GetAxisData" in str(e.value)
 
 
-class TestSWR:
+class TestSoftwareReset:
     """Software Reset.
 
     <Warning> This object is not suitable for automated testing.
@@ -411,7 +423,7 @@ class TestSWR:
     swr = SoftwareReset()
 
 
-class TestWDT:
+class TestWatchdogTimer:
     """Watchdog Timer."""
 
     wdt = WatchdogTimer()

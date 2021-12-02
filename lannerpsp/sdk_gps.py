@@ -27,11 +27,11 @@ class GPS:
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             default_gps_port = "/dev/ttyS1"
             str_gps_port = c_char_p(default_gps_port.encode())
-            i_ret = psp.LMB_GPS_SearchPort(str_gps_port)
+            i_ret = psp.lib.LMB_GPS_SearchPort(str_gps_port)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_GPS_SearchPort", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
             gps_port = str_gps_port.value.decode()
-            logger.info(f"get gps port {gps_port}")
+            logger.debug(f"get gps port {gps_port}")
             return gps_port

@@ -33,34 +33,34 @@ class WatchdogTimer:
         if seconds <= 0:
             raise ValueError("'seconds' value must be > 0")
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_WDT_Config(seconds, 1)
+            i_ret = psp.lib.LMB_WDT_Config(seconds, 1)
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_WDT_Config", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            i_ret = psp.LMB_WDT_Start()
+            i_ret = psp.lib.LMB_WDT_Start()
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_WDT_Start", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info(f"enable watchdog timer for {seconds:d} seconds")
+            logger.debug(f"enable watchdog timer for {seconds:d} seconds")
 
     def disable(self) -> None:
         """Disable watchdog timer."""
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_WDT_Stop()
+            i_ret = psp.lib.LMB_WDT_Stop()
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_WDT_Stop", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info("disable watchdog timer")
+            logger.debug("disable watchdog timer")
 
     def reset(self) -> None:
         """Reset watchdog timer."""
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.LMB_WDT_Tick()
+            i_ret = psp.lib.LMB_WDT_Tick()
             if i_ret != PSP.ERR_Success:
                 error_message = PSP.get_error_message("LMB_WDT_Tick", i_ret)
                 logger.error(error_message)
                 raise PSP.PSPError(error_message)
-            logger.info("reset watchdog timer")
+            logger.debug("reset watchdog timer")
