@@ -371,19 +371,18 @@ from lannerpsp import PSP
 
 
 def main() -> None:
-    with PSP() as psp:  # Automatically initialize the DLL.
+    with PSP() as psp:  # Automatically Init() and DeInit().
         # Get BIOS version.
-        print(psp.bios_version)
+        bios_version = psp.bios_version
+
         # Get IODRV version.
-        print(psp.iodrv_version)
+        iodrv_version = psp.iodrv_version
+
         # Get PSP/SDK version.
-        print(psp.sdk_version)
-        # Set LTE Status LED to off (clear color).
-        i_ret = psp.lib.LMB_SLED_SetLteStateLED(0)
-        if i_ret != PSP.ERR_Success:
-            error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)
-            raise PSP.PSPError(error_message)
-        # Set LTE Status LED to green blink.
+        sdk_version = psp.sdk_version
+
+        # Get the DLL/SO to call C functions by `lib` property.
+        # Example to set LTE Status LED to green blink.
         i_ret = psp.lib.LMB_SLED_SetLteStateLED(4)
         if i_ret != PSP.ERR_Success:
             error_message = PSP.get_error_message("LMB_SLED_SetLteStateLED", i_ret)

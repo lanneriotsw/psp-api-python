@@ -96,15 +96,21 @@ class SoftwareReset:
         # Check value.
         if seconds <= 0:
             raise ValueError("'seconds' value must be > 0")
+        dw_cnt = 0
+        index = seconds
+        i_time = seconds
         print(f"===> wait {seconds} seconds for Software Reset Button trigger .......")
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            while seconds >= 0:
-                if round(seconds % 1, 1) == 0.0:
-                    print(f"{int(seconds):d}. ", end="", flush=True)
+            while True:
+                if dw_cnt % 10 == 0:
+                    print(f"{int(index):d}. ", end="", flush=True)
+                    index -= 1
                 psp.lib.LMB_SWR_GetStatus(byref(self._ub_read))
                 if self._ub_read.value == 1:
                     break
-                seconds -= 0.1
+                dw_cnt += 1
+                if dw_cnt > i_time * 10:
+                    break
                 sleep(0.1)
         print()
         if self._ub_read.value == 1:

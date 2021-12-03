@@ -9,8 +9,9 @@ def is_root() -> bool:
 
 def show_delay(seconds: int) -> None:
     """Flush delay time to stdout."""
-    while seconds > 0:
-        print(f"{int(seconds)}. ", end="", flush=True)
-        seconds -= 1
+    index = seconds
+    while index > 0:
+        print(f"{int(index)}. ", end="", flush=True)
+        index -= 1
         sleep(1.0)
-    print(f"{seconds}.")
+    print(f"{int(index)}.")
