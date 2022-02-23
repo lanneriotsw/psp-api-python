@@ -1,5 +1,5 @@
 import logging
-from ctypes import addressof, byref, c_char_p, c_int8, c_uint16, cdll, CDLL, Structure
+from ctypes import addressof, byref, c_char_p, c_int8, c_int16, c_uint8, c_uint16, c_uint32, cdll, CDLL, Structure
 from mmap import mmap, PROT_READ, MAP_SHARED
 
 from .utils import is_root
@@ -17,6 +17,37 @@ class DLLVersion(Structure):
         ("uw_board_major", c_uint16),
         ("uw_board_minor", c_uint16),
         ("uw_board_build", c_uint16),
+    ]
+
+
+class IntrusionTime(Structure):
+    """Intrusion time (define in: sdk/include/lmbinc.h)."""
+    _fields_ = [
+        ("uw_year", c_uint16),
+        ("ub_month", c_uint8),
+        ("ub_day", c_uint8),
+        ("ub_hour", c_uint8),
+        ("ub_minute", c_uint8),
+        ("ub_second", c_uint8),
+    ]
+
+
+class IntrusionMsg(Structure):
+    """Intrusion callback function (define in: sdk/include/lmbinc.h)."""
+    _fields_ = [
+        ("udw_occur_item", c_uint32),
+        ("udw_status", c_uint32),
+        ("stu_time", IntrusionTime),
+    ]
+
+
+class AxisRawData(Structure):
+    """G-Sensor X,Y,Z Axis (define in: sdk/include/lmbinc.h)."""
+    _fields_ = [
+        ("w_x_axis", c_int16),
+        ("w_y_axis", c_int16),
+        ("w_z_axis", c_int16),
+        ("w_g_range", c_int16),
     ]
 
 

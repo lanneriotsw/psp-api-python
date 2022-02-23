@@ -1,32 +1,11 @@
 import logging
-from ctypes import byref, c_uint8, c_uint16, c_uint32, CFUNCTYPE, Structure
+from ctypes import byref, c_uint8, CFUNCTYPE
 from time import sleep, time
 from typing import Optional
 
-from .lmbinc import PSP
+from .lmbinc import IntrusionMsg, PSP
 
 logger = logging.getLogger(__name__)
-
-
-class IntrusionTime(Structure):
-    """Intrusion time (define in: sdk/include/lmbinc.h)."""
-    _fields_ = [
-        ("uw_year", c_uint16),
-        ("ub_month", c_uint8),
-        ("ub_day", c_uint8),
-        ("ub_hour", c_uint8),
-        ("ub_minute", c_uint8),
-        ("ub_second", c_uint8),
-    ]
-
-
-class IntrusionMsg(Structure):
-    """Intrusion callback function (define in: sdk/include/lmbinc.h)."""
-    _fields_ = [
-        ("udw_occur_item", c_uint32),
-        ("udw_status", c_uint32),
-        ("stu_time", IntrusionTime),
-    ]
 
 
 class SoftwareReset:

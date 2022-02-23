@@ -1,20 +1,10 @@
 import logging
-from ctypes import byref, c_int16, Structure
+from ctypes import byref
 from time import sleep
 
-from .lmbinc import PSP
+from .lmbinc import AxisRawData, PSP
 
 logger = logging.getLogger(__name__)
-
-
-class AxisRawData(Structure):
-    """G-Sensor X,Y,Z Axis (define in: sdk/include/lmbinc.h)."""
-    _fields_ = [
-        ("w_x_axis", c_int16),
-        ("w_y_axis", c_int16),
-        ("w_z_axis", c_int16),
-        ("w_g_range", c_int16),
-    ]
 
 
 class AccelValues:
