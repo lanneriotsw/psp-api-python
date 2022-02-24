@@ -339,6 +339,38 @@ wdt.reset()
 wdt.disable()
 ```
 
+Liquid Crystal Display Module:
+
+```python
+from lannerpsp import LCM
+
+lcm = LCM()
+
+# Get LCM module type.
+lcm.get_module_type()
+
+# Get LCM keys status.
+lcm.get_keys_status()
+
+# Set LCM backlight on.
+lcm.set_backlight(True)
+
+# Set LCM backlight off.
+lcm.set_backlight(False)
+
+# Set LCM cursor to row -> 2, column -> 6.
+lcm.set_cursor(2, 6)
+
+# Write string on LCM.
+lcm.write("Hello World")
+
+# Clear string on LCM.
+lcm.clear()
+
+# Use callback function to detect LCM Keys status.
+lcm.exec_callback()
+```
+
 COM Port:
 
 ```python
