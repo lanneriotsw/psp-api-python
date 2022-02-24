@@ -30,8 +30,8 @@ class WatchdogTimer:
         if not isinstance(seconds, int):
             raise TypeError("'seconds' type must be int")
         # Check value.
-        if seconds <= 0:
-            raise ValueError("'seconds' value must be > 0")
+        if not 1 <= seconds <= 255:
+            raise ValueError("'seconds' value must be between 1 and 255")
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             i_ret = psp.lib.LMB_WDT_Config(seconds, 1)
             if i_ret != PSP.ERR_Success:

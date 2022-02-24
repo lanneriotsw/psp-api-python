@@ -26,8 +26,8 @@ class RadioFrequencyModule:
     def get_module(self) -> int:
         """Get LTE Module power state.
 
-        bit 0 represent m.2 module, bit 1 represent mPCIE module
-        1: power on , 0: power off
+        bit 0 means m.2 module, bit 1 means mPCIE module
+        0: power off, 1: power on
 
         0 (00): mPcie -> off, m.2 -> off
         1 (01): mPcie -> off, m.2 -> on
@@ -46,8 +46,8 @@ class RadioFrequencyModule:
     def set_module(self, value: int) -> None:
         """Set LTE Module power state.
 
-        bit 0 represent m.2 module, bit 1 represent mPCIE module
-        1: power on, 0: power off
+        bit 0 means m.2 module, bit 1 means mPCIE module
+        0: power off, 1: power on
 
         0 (00): mPcie -> off, m.2 -> off
         1 (01): mPcie -> off, m.2 -> on
@@ -57,6 +57,7 @@ class RadioFrequencyModule:
         # Check type.
         if not isinstance(value, int):
             raise TypeError("'value' type must be int")
+        # Check value has been done by the PSP.
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             i_ret = psp.lib.LMB_RFM_SetModule(value)
             if i_ret != PSP.ERR_Success:
@@ -68,7 +69,7 @@ class RadioFrequencyModule:
     def get_sim(self) -> int:
         """Get SIM card state.
 
-        bit 0 represent m.2 module, bit 1 represent mPCIE module
+        bit 0 means m.2 module, bit 1 means mPCIE module
         0: first sim, 1: second sim
 
         0 (00): mPcie -> first sim (SIM3),  m.2 -> first sim (SIM1)
@@ -88,7 +89,7 @@ class RadioFrequencyModule:
     def set_sim(self, value: int) -> None:
         """Set SIM card state.
 
-        bit 0 represent m.2 module, bit 1 represent mPCIE module
+        bit 0 means m.2 module, bit 1 means mPCIE module
         0: first sim, 1: second sim
 
         0 (00): mPcie -> first sim (SIM3),  m.2 -> first sim (SIM1)
@@ -99,6 +100,7 @@ class RadioFrequencyModule:
         # Check type.
         if not isinstance(value, int):
             raise TypeError("'value' type must be int")
+        # Check value has been done by the PSP.
         with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
             i_ret = psp.lib.LMB_RFM_SetSIM(value)
             if i_ret != PSP.ERR_Success:

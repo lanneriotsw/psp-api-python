@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class DLLVersion(Structure):
-    """DLL version (define in: sdk/include/lmbinc.h)."""
+    """DLL version."""
     _fields_ = [
         ("uw_dll_major", c_uint16),
         ("uw_dll_minor", c_uint16),
@@ -21,7 +21,7 @@ class DLLVersion(Structure):
 
 
 class IntrusionTime(Structure):
-    """Intrusion time (define in: sdk/include/lmbinc.h)."""
+    """Intrusion time."""
     _fields_ = [
         ("uw_year", c_uint16),
         ("ub_month", c_uint8),
@@ -33,7 +33,7 @@ class IntrusionTime(Structure):
 
 
 class IntrusionMsg(Structure):
-    """Intrusion callback function (define in: sdk/include/lmbinc.h)."""
+    """Intrusion callback function."""
     _fields_ = [
         ("udw_occur_item", c_uint32),
         ("udw_status", c_uint32),
@@ -42,7 +42,7 @@ class IntrusionMsg(Structure):
 
 
 class AxisRawData(Structure):
-    """G-Sensor X,Y,Z Axis (define in: sdk/include/lmbinc.h)."""
+    """G-Sensor X,Y,Z Axis."""
     _fields_ = [
         ("w_x_axis", c_int16),
         ("w_y_axis", c_int16),

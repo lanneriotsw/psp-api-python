@@ -38,7 +38,7 @@ class SoftwareReset:
 
     @classmethod
     def _callback(cls, stu_intrusion_msg: IntrusionMsg) -> None:
-        """Callback function for exec_callback()"""
+        """Callback function for exec_callback()."""
         print(f"SWR Item = {stu_intrusion_msg.udw_occur_item:04X}, "
               f"Status = {stu_intrusion_msg.udw_status:04X}, "
               f"time is {stu_intrusion_msg.stu_time.uw_year:04d}/"
