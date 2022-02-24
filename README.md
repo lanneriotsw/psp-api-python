@@ -1,10 +1,10 @@
-# Python API for Lanner-PSP
+# Python API for Lanner PSP
 
 [![PyPI version](https://badge.fury.io/py/lannerpsp.svg)](https://badge.fury.io/py/lannerpsp)
 [![License: MIT](https://img.shields.io/pypi/l/lannerpsp)](https://opensource.org/licenses/MIT)
 [![Python version](https://img.shields.io/pypi/pyversions/lannerpsp)](https://www.python.org/)
 
-[Lanner PSP](https://iot.lannerinc.com/psp/PSP_Summary.htm) is an SDK that facilitates communication between you and
+[Lanner PSP](https://link.lannerinc.com/psp) is an SDK that facilitates communication between you and
 your Lanner IPC's IO.
 
 -----
@@ -12,7 +12,7 @@ your Lanner IPC's IO.
 ## Requirements
 
 * **ROOT** privileges
-* [Core SDKs](https://github.com/jrchen982/lannerpsp)
+* [Core SDKs](https://github.com/lanneriotsw/psp-manager)
 * [Python 3.6+](https://www.python.org/)
 
 -----
@@ -28,8 +28,8 @@ pip install lannerpsp
 ### Method 2: From source
 
 ```shell
-git clone https://github.com/jrchen982/lannerpsp-python
-cd lannerpsp-python
+git clone https://github.com/lanneriotsw/psp-api-python.git
+cd psp-api-python
 python setup.py install
 ```
 
@@ -193,8 +193,8 @@ rfm = RadioFrequencyModule()
 
 # Get LTE Module power state.
 # 
-# bit 0 represent m.2 module, bit 1 represent mPCIE module
-# 1: power on, 0: power off
+# bit 0 means m.2 module, bit 1 means mPCIE module
+# 0: power off, 1: power on
 # 
 # 0 (00): mPcie -> off, m.2 -> off
 # 1 (01): mPcie -> off, m.2 -> on
@@ -220,7 +220,7 @@ rfm.set_module(3)
 
 # Get SIM card state.
 # 
-# bit 0 represent m.2 module, bit 1 represent mPCIE module
+# bit 0 means m.2 module, bit 1 means mPCIE module
 # 0: first sim, 1: second sim
 # 
 # 0 (00): mPcie -> first sim (SIM3),  m.2 -> first sim (SIM1)
