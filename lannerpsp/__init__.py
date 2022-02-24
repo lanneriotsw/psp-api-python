@@ -12,6 +12,6 @@ from .sdk_sled_lte_stress import LteStressLED
 from .sdk_swr import SoftwareReset
 from .sdk_wdt import WatchdogTimer
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 __all__ = ["ComPort", "PSP", "GPS", "GSensor", "HardwareMonitor", "LCM", "RadioFrequencyModule",
            "SystemLED", "GPSLED", "LteStateLED", "LteStressLED", "SoftwareReset", "WatchdogTimer"]
