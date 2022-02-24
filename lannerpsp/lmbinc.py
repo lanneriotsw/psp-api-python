@@ -41,6 +41,24 @@ class IntrusionMsg(Structure):
     ]
 
 
+class LCMInfo(Structure):
+    """LCM info."""
+    _fields_ = [
+        ("uw_mode_no", c_uint16),
+        ("uw_version", c_uint16),
+        ("udw_baud_rate", c_uint32),
+    ]
+
+
+class LCMKeyMsg(Structure):
+    """LCM Keys callback function."""
+    _fields_ = [
+        ("ub_keys", c_uint8),
+        ("ub_status", c_uint8),
+        ("stu_time", IntrusionTime),
+    ]
+
+
 class AxisRawData(Structure):
     """G-Sensor X,Y,Z Axis."""
     _fields_ = [
