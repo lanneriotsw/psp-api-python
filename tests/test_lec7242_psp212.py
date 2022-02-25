@@ -382,43 +382,8 @@ class TestHardwareMonitor:
         assert self.hwm.get_all()
 
 
-class TestGPS:
-    """GPS."""
-
-    gps = GPS()
-
-    def test_search_port(self) -> None:
-        with pytest.raises(AttributeError) as e:
-            self.gps.search_port()
-        assert "undefined symbol: LMB_GPS_SearchPort" in str(e.value)
-
-
-class TestGSensor:
-    """G-Sensor."""
-
-    gsr = GSensor()
-
-    def test_get_axis_data(self) -> None:
-        with pytest.raises(AttributeError) as e:
-            self.gsr.get_accel()
-        assert "undefined symbol: LMB_GSR_GetAxisData" in str(e.value)
-
-    def test_get_axis_offset(self) -> None:
-        with pytest.raises(AttributeError) as e:
-            self.gsr.get_offset()
-        assert "undefined symbol: LMB_GSR_GetAxisOffset" in str(e.value)
-
-    def test_test(self) -> None:
-        with pytest.raises(AttributeError) as e:
-            self.gsr.test()
-        assert "undefined symbol: LMB_GSR_GetAxisData" in str(e.value)
-
-
 class TestSoftwareReset:
-    """Software Reset.
-
-    <Warning> This object is not suitable for automated testing.
-    """
+    """Software Reset."""
 
     swr = SoftwareReset()
 
