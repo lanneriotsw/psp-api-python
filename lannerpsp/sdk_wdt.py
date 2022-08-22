@@ -1,66 +1,229 @@
 import logging
+from ctypes import byref
+from typing import Any, Dict, NamedTuple
 
-from .lmbinc import PSP
+from .core import PSP, get_psp_exc_msg
+from .exc import (
+    PSPBusyInUses,
+    PSPError,
+    PSPInvalid,
+    PSPNotOpened,
+    PSPNotSupport,
+)
+from .lmbinc import (
+    BASE_SECOND,
+    BASE_MINUTE,
+    ERR_BusyInUses,
+    ERR_Invalid,
+    ERR_NotOpened,
+    ERR_NotSupport,
+    ERR_Success,
+    WDT_TYPE_SIO,
+    WDT_TYPE_TCO,
+    WDT_TYPE_UNKNOWN,
+    WDTInfo,
+)
+from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
 
-class WatchdogTimer:
+class WDTInfoModel(NamedTuple):
+    """To store WDT info values."""
+    type: str
+    max_count: int
+    is_minute_support: bool
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dict."""
+        return dict(self._asdict())
+
+
+class WDT:
     """
-    Watchdog Timer.
-
-    sdk/src_utils/sdk_sled/sdk_wdt.c
-
-    :param lmb_io_path: path of liblmbio.so
-    :param lmb_api_path: path of liblmbapi.so
+    Watch Dog Timer.
     """
 
-    def __init__(self,
-                 lmb_io_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbio.so",
-                 lmb_api_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbapi.so") -> None:
-        self._lmb_io_path = lmb_io_path
-        self._lmb_api_path = lmb_api_path
+    def __init__(self) -> None:
+        self._version = DLL().get_version()
 
-    def enable(self, seconds: int) -> None:
-        """Enable watchdog timer for specific seconds.
+    def get_info(self) -> WDTInfoModel:
+        """
+        Get Watch Dog Timer information.
 
-        :param seconds: seconds
+        :return: WDT information
+        :rtype: WDTInfoModel
+        :raises PSPNotOpened: The library is not ready or opened yet.
+        :raises PSPNotSupport: This platform does not support this function.
+        :raises PSPError: This function failed.
+        """
+        stu_wdt_info = WDTInfo()
+        type_mapping = {WDT_TYPE_UNKNOWN: "Unknown", WDT_TYPE_SIO: "SuperIO", WDT_TYPE_TCO: "TCO"}
+        with PSP() as psp:
+            i_ret = psp.lib.LMB_WDT_QueryInfo(byref(stu_wdt_info))
+        msg = get_psp_exc_msg("LMB_WDT_QueryInfo", i_ret)
+        if i_ret == ERR_Success:
+            return WDTInfoModel(
+                type=type_mapping[stu_wdt_info.ub_type],
+                max_count=stu_wdt_info.uw_count_max,
+                is_minute_support=bool(stu_wdt_info.ub_minute_support),
+            )
+        elif i_ret == ERR_NotOpened:
+            raise PSPNotOpened(msg)
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        else:
+            raise PSPError(msg)
+
+    def config(self, count: int, time_base: int = 1) -> None:
+        """
+        Configure the Watch Dog Timer for specific time.
+
+        Example:
+
+        .. code-block:: python
+
+            >>> wdt = WDT()
+            >>> wdt.config(200)
+
+        :param int count:
+            The value sets the timer count down.
+
+        :param int time_base:
+            The value selects time base. Set :data:`1` to select SECOND base,
+            Set :data:`2` to select MINUTE base. Defaults to 1.
+
+        :raises TypeError: The input parameters type error.
+        :raises PSPInvalid: Invalid parameter value.
+        :raises PSPNotOpened: The library is not ready or opened yet.
+        :raises PSPNotSupport: This platform does not support this function.
+        :raises PSPBusyInUses: This step is skipped because WDT is already starting now.
+        :raises PSPError: This function failed.
         """
         # Check type.
-        if not isinstance(seconds, int):
-            raise TypeError("'seconds' type must be int")
+        if not isinstance(count, int):
+            raise TypeError("'count' type must be int")
+        if not isinstance(time_base, int):
+            raise TypeError("'time_base' type must be int")
         # Check value.
-        if not 1 <= seconds <= 255:
-            raise ValueError("'seconds' value must be between 1 and 255")
-        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.lib.LMB_WDT_Config(seconds, 1)
-            if i_ret != PSP.ERR_Success:
-                error_message = PSP.get_error_message("LMB_WDT_Config", i_ret)
-                logger.error(error_message)
-                raise PSP.PSPError(error_message)
+        info = self.get_info()
+        if not 1 <= count <= info.max_count:
+            raise PSPInvalid(f"'count' value must be between 1 and {info.max_count}")
+        if time_base not in (BASE_SECOND, BASE_MINUTE):
+            raise PSPInvalid(f"'time_base' value must be {BASE_SECOND}"
+                             f" for SECOND base or {BASE_MINUTE} for MINUTE base")
+        if not info.is_minute_support and time_base == BASE_MINUTE:
+            raise PSPInvalid("WDT only support SECOND base")
+        # Run.
+        time_base_mapping = {BASE_SECOND: "seconds", BASE_MINUTE: "minutes"}
+        with PSP() as psp:
+            i_ret = psp.lib.LMB_WDT_Config(count, 1)
+        msg = get_psp_exc_msg("LMB_WDT_Config", i_ret)
+        if i_ret == ERR_Success:
+            logger.debug(f"configure the watchdog timer for {count:d} {time_base_mapping[time_base]}")
+        elif i_ret == ERR_Invalid:
+            raise PSPInvalid(msg)
+        elif i_ret == ERR_NotOpened:
+            raise PSPNotOpened(msg)
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        elif i_ret == ERR_BusyInUses:
+            raise PSPBusyInUses(msg)
+        else:
+            raise PSPError(msg)
+
+    def enable(self, count: int, time_base: int = 1) -> None:
+        """
+        Configure the Watch Dog Timer for specific time and start the WDT countdown.
+
+        Example:
+
+        .. code-block:: python
+
+            >>> wdt = WDT()
+            >>> wdt.enable(10)
+
+        :param int count:
+            The value sets the timer count down.
+
+        :param int time_base:
+            The value selects time base. Set :data:`1` to select SECOND base,
+            Set :data:`2` to select MINUTE base. Defaults to 1.
+
+        :raises TypeError: The input parameters type error.
+        :raises PSPInvalid: Invalid parameter value.
+        :raises PSPNotOpened: The library is not ready or opened yet.
+        :raises PSPNotSupport: This platform does not support this function.
+        :raises PSPBusyInUses: This step is skipped because WDT is already starting now.
+        :raises PSPError: This function failed.
+        """
+        self.config(count, time_base)
+        with PSP() as psp:
             i_ret = psp.lib.LMB_WDT_Start()
-            if i_ret != PSP.ERR_Success:
-                error_message = PSP.get_error_message("LMB_WDT_Start", i_ret)
-                logger.error(error_message)
-                raise PSP.PSPError(error_message)
-            logger.debug(f"enable watchdog timer for {seconds:d} seconds")
+        msg = get_psp_exc_msg("LMB_WDT_Start", i_ret)
+        if i_ret == ERR_Success:
+            logger.debug("enable watchdog timer")
+        elif i_ret == ERR_NotOpened:
+            raise PSPNotOpened(msg)
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        else:
+            raise PSPError(msg)
 
     def disable(self) -> None:
-        """Disable watchdog timer."""
-        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+        """
+        Stop the WDT countdown.
+
+        Example:
+
+        .. code-block:: python
+
+            >>> wdt = WDT()
+            >>> wdt.enable(10)
+            >>>
+            >>> wdt.disable()
+
+        :raises PSPNotOpened: The library is not ready or opened yet.
+        :raises PSPNotSupport: This platform does not support this function.
+        :raises PSPError: This function failed.
+        """
+        with PSP() as psp:
             i_ret = psp.lib.LMB_WDT_Stop()
-            if i_ret != PSP.ERR_Success:
-                error_message = PSP.get_error_message("LMB_WDT_Stop", i_ret)
-                logger.error(error_message)
-                raise PSP.PSPError(error_message)
+        msg = get_psp_exc_msg("LMB_WDT_Stop", i_ret)
+        if i_ret == ERR_Success:
             logger.debug("disable watchdog timer")
+        elif i_ret == ERR_NotOpened:
+            raise PSPNotOpened(msg)
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        else:
+            raise PSPError(msg)
 
     def reset(self) -> None:
-        """Reset watchdog timer."""
-        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+        """
+        Reload the timer and then re-computes it.
+
+        Example:
+
+        .. code-block:: python
+
+            >>> wdt = WDT()
+            >>> wdt.enable(10)
+            >>>
+            >>> wdt.reset()
+
+        :raises PSPNotOpened: The library is not ready or opened yet.
+        :raises PSPNotSupport: This platform does not support this function.
+        :raises PSPError: This function failed.
+        """
+        with PSP() as psp:
             i_ret = psp.lib.LMB_WDT_Tick()
-            if i_ret != PSP.ERR_Success:
-                error_message = PSP.get_error_message("LMB_WDT_Tick", i_ret)
-                logger.error(error_message)
-                raise PSP.PSPError(error_message)
+        msg = get_psp_exc_msg("LMB_WDT_Tick", i_ret)
+        if i_ret == ERR_Success:
             logger.debug("reset watchdog timer")
+        elif i_ret == ERR_NotOpened:
+            raise PSPNotOpened(msg)
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        else:
+            raise PSPError(msg)

@@ -1,3 +1,5 @@
+portio
 pytest
 setuptools
+sphinx
 twine

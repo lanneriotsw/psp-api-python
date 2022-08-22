@@ -1,174 +1,246 @@
 import logging
 from ctypes import byref
 from time import sleep
+from typing import Any, Dict, NamedTuple
 
-from .lmbinc import AxisRawData, PSP
+from .core import PSP, get_psp_exc_msg
+from .exc import (
+    PSPError,
+    PSPNotSupport,
+)
+from .lmbinc import (
+    AxisRawData,
+    ERR_NotSupport,
+    ERR_Success,
+)
+from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
 
-class AccelValues:
-    """To store accelerate values."""
+class GSRDataModel(NamedTuple):
+    """To store G-Sensor data."""
+    g_range: int
+    raw_x: int
+    raw_y: int
+    raw_z: int
+    mg_x: float
+    mg_y: float
+    mg_z: float
 
-    def __init__(self, g_range: int, raw_x: int, raw_y: int, raw_z: int,
-                 mg_x: float, mg_y: float, mg_z: float) -> None:
-        self._g_range = g_range
-        self._raw_x = raw_x
-        self._raw_y = raw_y
-        self._raw_z = raw_z
-        self._mg_x = mg_x
-        self._mg_y = mg_y
-        self._mg_z = mg_z
-
-    @property
-    def g_range(self) -> int:
-        return self._g_range
-
-    @property
-    def raw_x(self) -> int:
-        return self._raw_x
-
-    @property
-    def raw_y(self) -> int:
-        return self._raw_y
-
-    @property
-    def raw_z(self) -> int:
-        return self._raw_z
-
-    @property
-    def mg_x(self) -> float:
-        return self._mg_x
-
-    @property
-    def mg_y(self) -> float:
-        return self._mg_y
-
-    @property
-    def mg_z(self) -> float:
-        return self._mg_z
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dict."""
+        return dict(self._asdict())
 
 
-class OffsetValues:
-    """To store offset values."""
+class GSROffsetModel(NamedTuple):
+    """To store G-Sensor offset data."""
+    raw_x: int
+    raw_y: int
+    raw_z: int
 
-    def __init__(self, raw_x: int, raw_y: int, raw_z: int) -> None:
-        self._raw_x = raw_x
-        self._raw_y = raw_y
-        self._raw_z = raw_z
-
-    @property
-    def raw_x(self) -> int:
-        return self._raw_x
-
-    @property
-    def raw_y(self) -> int:
-        return self._raw_y
-
-    @property
-    def raw_z(self) -> int:
-        return self._raw_z
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dict."""
+        return dict(self._asdict())
 
 
-class GSensor:
+class GSR:
     """
     G-Sensor.
-
-    sdk/src_utils/sdk_gsr/sdk_gsr.c
-
-    :param lmb_io_path: path of liblmbio.so
-    :param lmb_api_path: path of liblmbapi.so
     """
 
-    def __init__(self,
-                 lmb_io_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbio.so",
-                 lmb_api_path: str = "/opt/lanner/psp/bin/amd64/lib/liblmbapi.so") -> None:
-        self._lmb_io_path = lmb_io_path
-        self._lmb_api_path = lmb_api_path
-        self._stu_raw_data = AxisRawData()
+    def __init__(self) -> None:
+        self._version = DLL().get_version()
 
-    def get_accel(self) -> AccelValues:
-        """Get X/Y/Z direction accelerate value."""
-        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.lib.LMB_GSR_GetAxisData(byref(self._stu_raw_data))
-            if i_ret != PSP.ERR_Success:
-                error_message = PSP.get_error_message("LMB_GSR_GetAxisData", i_ret)
-                logger.error(error_message)
-                raise PSP.PSPError(error_message)
+    def get_data(self) -> GSRDataModel:
+        """
+        Get the X-Axis, Y-Axis and Z-Axis data.
 
-            if self._stu_raw_data.w_g_range == 2:
-                f_mg_step = 2 / 255
-            elif self._stu_raw_data.w_g_range == 4:
-                f_mg_step = 4 / 255
-            elif self._stu_raw_data.w_g_range == 8:
-                f_mg_step = 8 / 255
-            elif self._stu_raw_data.w_g_range == 16:
-                f_mg_step = 16 / 255
+        Example:
 
-            f_x_mg = self._stu_raw_data.w_x_axis * f_mg_step
-            f_y_mg = self._stu_raw_data.w_y_axis * f_mg_step
-            f_z_mg = self._stu_raw_data.w_z_axis * f_mg_step
+        .. code-block:: python
 
-            return AccelValues(g_range=self._stu_raw_data.w_g_range,
-                               raw_x=self._stu_raw_data.w_x_axis,
-                               raw_y=self._stu_raw_data.w_y_axis,
-                               raw_z=self._stu_raw_data.w_z_axis,
-                               mg_x=f_x_mg,
-                               mg_y=f_y_mg,
-                               mg_z=f_z_mg)
+            >>> gsr = GSR()
+            >>> gsr_data = gsr.get_data()
+            >>> gsr_data.g_range
+            2
+            >>> gsr_data.raw_x
+            -4
+            >>> gsr_data.raw_y
+            -9
+            >>> gsr_data.raw_z
+            -214
+            >>> gsr_data.mg_x
+            -0.03137254901960784
+            >>> gsr_data.mg_y
+            -0.07058823529411765
+            >>> gsr_data.mg_z
+            -1.6784313725490196
+            >>> gsr_data.to_dict()
+            {'g_range': 2, 'raw_x': -3, 'raw_y': -9, 'raw_z': -218, 'mg_x': -0.023529411764705882, 'mg_y': -0.07058823529411765, 'mg_z': -1.7098039215686274}
 
-    def get_offset(self) -> OffsetValues:
-        """Get X/Y/Z direction offset value."""
-        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
-            i_ret = psp.lib.LMB_GSR_GetAxisOffset(byref(self._stu_raw_data))
-            if i_ret != PSP.ERR_Success:
-                error_message = PSP.get_error_message("LMB_GSR_GetAxisOffset", i_ret)
-                logger.error(error_message)
-                raise PSP.PSPError(error_message)
+        :return: X/Y/Z Axis data and range with ±g
+        :rtype: GSRDataModel
+        :raises PSPNotSupport: This platform does not support this function.
+        :raises PSPError: This function failed.
+        """
+        stu_raw_data = AxisRawData()
+        with PSP() as psp:
+            i_ret = psp.lib.LMB_GSR_GetAxisData(byref(stu_raw_data))
+        msg = get_psp_exc_msg("LMB_GSR_GetAxisData", i_ret)
+        if i_ret == ERR_Success:
+            pass
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        else:
+            raise PSPError(msg)
 
-            return OffsetValues(raw_x=self._stu_raw_data.w_x_axis,
-                                raw_y=self._stu_raw_data.w_y_axis,
-                                raw_z=self._stu_raw_data.w_z_axis)
+        if stu_raw_data.w_g_range == 2:
+            f_mg_step = 2 / 255
+        elif stu_raw_data.w_g_range == 4:
+            f_mg_step = 4 / 255
+        elif stu_raw_data.w_g_range == 8:
+            f_mg_step = 8 / 255
+        elif stu_raw_data.w_g_range == 16:
+            f_mg_step = 16 / 255
+        else:
+            raise PSPError(f"'w_g_range' = {stu_raw_data.w_g_range}")
+
+        f_x_mg = stu_raw_data.w_x_axis * f_mg_step
+        f_y_mg = stu_raw_data.w_y_axis * f_mg_step
+        f_z_mg = stu_raw_data.w_z_axis * f_mg_step
+
+        return GSRDataModel(g_range=stu_raw_data.w_g_range,
+                            raw_x=stu_raw_data.w_x_axis,
+                            raw_y=stu_raw_data.w_y_axis,
+                            raw_z=stu_raw_data.w_z_axis,
+                            mg_x=f_x_mg,
+                            mg_y=f_y_mg,
+                            mg_z=f_z_mg)
+
+    def get_offset(self) -> GSROffsetModel:
+        """
+        Get the X-Axis, Y-Axis and Z-Axis offset data.
+
+        Example:
+
+        .. code-block:: python
+
+            >>> gsr = GSR()
+            >>> gsr_offset = gsr.get_offset()
+            >>> gsr_offset.raw_x
+            0
+            >>> gsr_offset.raw_y
+            0
+            >>> gsr_offset.raw_z
+            0
+            >>> gsr_offset.to_dict()
+            {'raw_x': 0, 'raw_y': 0, 'raw_z': 0}
+
+        :return: X/Y/Z Axis offset data
+        :rtype: GSROffsetModel
+        :raises PSPNotSupport: This platform does not support this function.
+        :raises PSPError: This function failed.
+        """
+        stu_raw_data = AxisRawData()
+        with PSP() as psp:
+            i_ret = psp.lib.LMB_GSR_GetAxisOffset(byref(stu_raw_data))
+        msg = get_psp_exc_msg("LMB_GSR_GetAxisOffset", i_ret)
+        if i_ret == ERR_Success:
+            return GSROffsetModel(
+                raw_x=stu_raw_data.w_x_axis,
+                raw_y=stu_raw_data.w_y_axis,
+                raw_z=stu_raw_data.w_z_axis,
+            )
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        else:
+            raise PSPError(msg)
 
     def test(self) -> None:
-        """For testing."""
-        with PSP(self._lmb_io_path, self._lmb_api_path) as psp:
+        """
+        For testing.
+
+        Example:
+
+        .. code-block:: python
+
+            >>> gsr = GSR()
+            >>> gsr.test()
+            ---------> 0
+            stuRawData.wRange= ±2g
+            Raw=-5  , X-Axis= -0.03921569
+            Raw=-9  , Y-Axis= -0.07058824
+            Raw=-216        , Z-Axis= -1.69411765
+            Offset X-Axis=0
+            Offset Y-Axis=0
+            Offset Z-Axis=0
+            ---------> 1
+            stuRawData.wRange= ±2g
+            Raw=-5  , X-Axis= -0.03921569
+            Raw=-8  , Y-Axis= -0.06274510
+            Raw=-215        , Z-Axis= -1.68627451
+            Offset X-Axis=0
+            Offset Y-Axis=0
+            Offset Z-Axis=0
+            ---------> 2
+            stuRawData.wRange= ±2g
+            Raw=-4  , X-Axis= -0.03137255
+            Raw=-10 , Y-Axis= -0.07843137
+            Raw=-216        , Z-Axis= -1.69411765
+            Offset X-Axis=0
+            Offset Y-Axis=0
+            Offset Z-Axis=0
+            ...
+            ...
+            ...
+            ---------> 99
+            stuRawData.wRange= ±2g
+            Raw=-7  , X-Axis= -0.05490196
+            Raw=-9  , Y-Axis= -0.07058824
+            Raw=-218        , Z-Axis= -1.70980392
+            Offset X-Axis=0
+            Offset Y-Axis=0
+            Offset Z-Axis=0
+        """
+        stu_raw_data = AxisRawData()
+        with PSP() as psp:
             for i in range(100):
                 print(f"---------> {i:d}")
 
                 # Get accel data.
-                i_ret = psp.lib.LMB_GSR_GetAxisData(byref(self._stu_raw_data))
-                if i_ret != PSP.ERR_Success:
-                    error_message = PSP.get_error_message("LMB_GSR_GetAxisData", i_ret)
-                    print(f"\033[1;31m{error_message}\033[0m")
+                i_ret = psp.lib.LMB_GSR_GetAxisData(byref(stu_raw_data))
+                if i_ret != ERR_Success:
+                    msg = get_psp_exc_msg("LMB_GSR_GetAxisData", i_ret)
+                    print(f"\033[1;31m{msg}\033[0m")
                 else:
-                    print(f"stuRawData.wRange= ±{self._stu_raw_data.w_g_range:d}g")
+                    print(f"stuRawData.wRange= ±{stu_raw_data.w_g_range:d}g")
 
-                    if self._stu_raw_data.w_g_range == 2:
+                    if stu_raw_data.w_g_range == 2:
                         f_mg_step = 2 / 255
-                    elif self._stu_raw_data.w_g_range == 4:
+                    elif stu_raw_data.w_g_range == 4:
                         f_mg_step = 4 / 255
-                    elif self._stu_raw_data.w_g_range == 8:
+                    elif stu_raw_data.w_g_range == 8:
                         f_mg_step = 8 / 255
-                    elif self._stu_raw_data.w_g_range == 16:
+                    elif stu_raw_data.w_g_range == 16:
                         f_mg_step = 16 / 255
 
-                    f_x_mg = self._stu_raw_data.w_x_axis * f_mg_step
-                    f_y_mg = self._stu_raw_data.w_y_axis * f_mg_step
-                    f_z_mg = self._stu_raw_data.w_z_axis * f_mg_step
+                    f_x_mg = stu_raw_data.w_x_axis * f_mg_step
+                    f_y_mg = stu_raw_data.w_y_axis * f_mg_step
+                    f_z_mg = stu_raw_data.w_z_axis * f_mg_step
 
-                    print(f"Raw={self._stu_raw_data.w_x_axis:d}\t, X-Axis= {f_x_mg:03.8f}")
-                    print(f"Raw={self._stu_raw_data.w_y_axis:d}\t, Y-Axis= {f_y_mg:03.8f}")
-                    print(f"Raw={self._stu_raw_data.w_z_axis:d}\t, Z-Axis= {f_z_mg:03.8f}")
+                    print(f"Raw={stu_raw_data.w_x_axis:d}\t, X-Axis= {f_x_mg:03.8f}")
+                    print(f"Raw={stu_raw_data.w_y_axis:d}\t, Y-Axis= {f_y_mg:03.8f}")
+                    print(f"Raw={stu_raw_data.w_z_axis:d}\t, Z-Axis= {f_z_mg:03.8f}")
 
                 # Get offset.
-                i_ret = psp.lib.LMB_GSR_GetAxisOffset(byref(self._stu_raw_data))
-                if i_ret != PSP.ERR_Success:
-                    error_message = PSP.get_error_message("LMB_GSR_GetAxisOffset", i_ret)
-                    print(f"\033[1;31m{error_message}\033[0m")
+                i_ret = psp.lib.LMB_GSR_GetAxisOffset(byref(stu_raw_data))
+                if i_ret != ERR_Success:
+                    msg = get_psp_exc_msg("LMB_GSR_GetAxisOffset", i_ret)
+                    print(f"\033[1;31m{msg}\033[0m")
                 else:
-                    print(f"Offset X-Axis={self._stu_raw_data.w_x_axis:d}")
-                    print(f"Offset Y-Axis={self._stu_raw_data.w_y_axis:d}")
-                    print(f"Offset Z-Axis={self._stu_raw_data.w_z_axis:d}")
+                    print(f"Offset X-Axis={stu_raw_data.w_x_axis:d}")
+                    print(f"Offset Y-Axis={stu_raw_data.w_y_axis:d}")
+                    print(f"Offset Z-Axis={stu_raw_data.w_z_axis:d}")
 
                 sleep(0.5)

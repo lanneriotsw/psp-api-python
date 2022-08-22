@@ -7,11 +7,11 @@ def is_root() -> bool:
     return geteuid() == 0
 
 
-def show_delay(seconds: int) -> None:
-    """Flush delay time to stdout."""
-    index = seconds
+def show_delay(secs: int) -> None:
+    """Flush delay time (seconds) to stdout."""
+    index = int(secs)
     while index > 0:
-        print(f"{int(index)}. ", end="", flush=True)
+        print(f"{index}. ", end="", flush=True)
         index -= 1
         sleep(1.0)
-    print(f"{int(index)}.")
+    print(f"{index}.")
