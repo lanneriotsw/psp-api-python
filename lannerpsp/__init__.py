@@ -28,7 +28,7 @@ from .sdk_hwm import HWM, HWMSensorModel
 from .sdk_lcm import LCM
 from .sdk_odm import ComPort, ComPortInfoModel
 from .sdk_rfm import RFM
-from .sdk_sled import GPSStatusLED, LteStatusLED, LteStressLED, SystemLED
+from .sdk_sled import GPSStatusLED, LTEStatusLED, LTEStressLED, SystemLED
 from .sdk_swr import SWR
 from .sdk_wdt import WDT
 
@@ -44,8 +44,8 @@ __all__ = [
     "GSR",
     "HWM",
     "LCM",
-    "LteStatusLED",
-    "LteStressLED",
+    "LTEStatusLED",
+    "LTEStressLED",
     "PSP",
     "RFM",
     "SWR",

@@ -5,10 +5,12 @@ from .core import PSP, get_psp_exc_msg
 from .exc import (
     PSPError,
     PSPNotExist,
+    PSPInvalid,
     PSPNotOpened,
     PSPNotSupport,
 )
 from .lmbinc import (
+    ERR_Invalid,
     ERR_NotExist,
     ERR_NotOpened,
     ERR_NotSupport,
@@ -269,6 +271,7 @@ class LCM:
         :param int row: assigns row value of LCM display cursor
         :param int column: assigns column value of LCM display cursor
         :raises TypeError: The input parameters type error.
+        :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
         :raises PSPError: This function failed.
@@ -286,6 +289,8 @@ class LCM:
             msg = get_psp_exc_msg("LMB_LCM_SetCursor", i_ret)
             if i_ret == ERR_Success:
                 logger.debug(f"set LCM cursor to row {row} column {column}")
+            elif i_ret == ERR_Invalid:
+                raise PSPInvalid(msg)
             elif i_ret == ERR_NotOpened:
                 raise PSPNotOpened(msg)
             elif i_ret == ERR_NotSupport:

@@ -51,6 +51,14 @@ class WDT:
         """
         Get Watch Dog Timer information.
 
+        Example:
+
+        .. code-block:: python
+
+            >>> wdt = WDT()
+            >>> wdt.get_info()
+            WDTInfoModel(type='SuperIO', max_count=255, is_minute_support=True)
+
         :return: WDT information
         :rtype: WDTInfoModel
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -79,19 +87,26 @@ class WDT:
         """
         Configure the Watch Dog Timer for specific time.
 
-        Example:
+        Example for 200 seconds:
 
         .. code-block:: python
 
             >>> wdt = WDT()
             >>> wdt.config(200)
 
+        Example for 2 minutes:
+
+        .. code-block:: python
+
+            >>> wdt = WDT()
+            >>> wdt.config(2, 2)
+
         :param int count:
             The value sets the timer count down.
 
         :param int time_base:
             The value selects time base. Set :data:`1` to select SECOND base,
-            Set :data:`2` to select MINUTE base. Defaults to 1.
+            Set :data:`2` to select MINUTE base. Defaults to 1 (SECOND base).
 
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: Invalid parameter value.
@@ -107,8 +122,8 @@ class WDT:
             raise TypeError("'time_base' type must be int")
         # Check value.
         info = self.get_info()
-        if not 1 <= count <= info.max_count:
-            raise PSPInvalid(f"'count' value must be between 1 and {info.max_count}")
+        if not 0 <= count <= info.max_count:
+            raise PSPInvalid(f"'count' value must be between 0 and {info.max_count}")
         if time_base not in (BASE_SECOND, BASE_MINUTE):
             raise PSPInvalid(f"'time_base' value must be {BASE_SECOND}"
                              f" for SECOND base or {BASE_MINUTE} for MINUTE base")
@@ -117,7 +132,7 @@ class WDT:
         # Run.
         time_base_mapping = {BASE_SECOND: "seconds", BASE_MINUTE: "minutes"}
         with PSP() as psp:
-            i_ret = psp.lib.LMB_WDT_Config(count, 1)
+            i_ret = psp.lib.LMB_WDT_Config(count, time_base)
         msg = get_psp_exc_msg("LMB_WDT_Config", i_ret)
         if i_ret == ERR_Success:
             logger.debug(f"configure the watchdog timer for {count:d} {time_base_mapping[time_base]}")
@@ -132,19 +147,27 @@ class WDT:
         else:
             raise PSPError(msg)
 
-    def enable(self, count: int, time_base: int = 1) -> None:
+    def enable(self, count: int = 0, time_base: int = 1) -> None:
         """
         Configure the Watch Dog Timer for specific time and start the WDT countdown.
 
-        Example:
+        You can :func:`enable` dircetly by a given time:
 
         .. code-block:: python
 
             >>> wdt = WDT()
-            >>> wdt.enable(10)
+            >>> wdt.enable(200)
+
+        Or :func:`config` first then :func:`enable`
+
+        .. code-block:: python
+
+            >>> wdt = WDT()
+            >>> wdt.config(200)
+            >>> wdt.enable()
 
         :param int count:
-            The value sets the timer count down.
+            The value sets the timer count down. Defaults to 0.
 
         :param int time_base:
             The value selects time base. Set :data:`1` to select SECOND base,
@@ -157,7 +180,8 @@ class WDT:
         :raises PSPBusyInUses: This step is skipped because WDT is already starting now.
         :raises PSPError: This function failed.
         """
-        self.config(count, time_base)
+        if count != 0:
+            self.config(count, time_base)
         with PSP() as psp:
             i_ret = psp.lib.LMB_WDT_Start()
         msg = get_psp_exc_msg("LMB_WDT_Start", i_ret)

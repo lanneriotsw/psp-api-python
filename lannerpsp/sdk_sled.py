@@ -371,7 +371,7 @@ class GPSStatusLED:
                 print("set gps led off")
 
 
-class LteStatusLED:
+class LTEStatusLED:
     """
     LTE Status LED.
     """
@@ -387,7 +387,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.off()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -417,7 +417,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.red()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -448,7 +448,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.red_blink()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -479,7 +479,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.green()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -510,7 +510,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.green_blink()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -541,7 +541,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.yellow()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -572,7 +572,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.yellow_blink()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -603,7 +603,7 @@ class LteStatusLED:
 
         .. code-block:: python
 
-            >>> lte_status_led = LteStatusLED()
+            >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.test()
             set lte led red on
             2. 1. 0.
@@ -715,7 +715,7 @@ class LteStatusLED:
                 print("set lte led off")
 
 
-class LteStressLED:
+class LTEStressLED:
     """
     LTE Stress LED.
     """
@@ -731,7 +731,7 @@ class LteStressLED:
 
         .. code-block:: python
 
-            >>> lte_stress_led = LteStressLED()
+            >>> lte_stress_led = LTEStressLED()
             >>> lte_stress_led.off()
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -761,7 +761,7 @@ class LteStressLED:
 
         .. code-block:: python
 
-            >>> lte_stress_led = LteStressLED()
+            >>> lte_stress_led = LTEStressLED()
             >>> lte_stress_led.set_strength(87)
 
         :param int percent: 0 ~ 100 percent of signal strength
@@ -800,7 +800,7 @@ class LteStressLED:
 
         .. code-block:: python
 
-            >>> lte_stress_led = LteStressLED()
+            >>> lte_stress_led = LTEStressLED()
             >>> lte_stress_led.test(2)
             lte stress led show level 8
             2. 1. 0.

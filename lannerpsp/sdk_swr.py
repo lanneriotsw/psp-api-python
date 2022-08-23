@@ -198,7 +198,7 @@ class SWR:
         """
         if timeout is not None:
             # Check type.
-            if not isinstance(timeout, Union[float, int]):
+            if not isinstance(timeout, (float, int)):
                 raise TypeError("'timeout' type must be float or int or None")
             # Check value.
             if timeout <= 0:
@@ -233,7 +233,7 @@ class SWR:
         """
         if timeout is not None:
             # Check type.
-            if not isinstance(timeout, Union[float, int]):
+            if not isinstance(timeout, (float, int)):
                 raise TypeError("'timeout' type must be float or int or None")
             # Check value.
             if timeout <= 0:

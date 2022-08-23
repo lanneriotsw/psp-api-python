@@ -63,8 +63,8 @@ class ComPort:
             if num != 1:
                 raise PSPInvalid("'num' can only be set to (1) on this platform")
         elif self._version.platform_id in ("LEC-7230",):
-            if not 1 <= num <= 3:
-                raise PSPInvalid("'num' can only be set to (1~3) on this platform")
+            if not 1 <= num <= 2:
+                raise PSPInvalid("'num' can only be set to (1~2) on this platform")
         else:
             raise NotImplementedError
 

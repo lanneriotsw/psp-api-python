@@ -1,3 +1,20 @@
+"""
+Platform: NCA-2510
+PSP version: 2.3.1
+OS version:
+- Ubuntu 18.04: All pass
+SDK:
+- sdk_bios: Done.
+- sdk_dll: Done.
+- sdk_eep: Not implement yet, don't know how to use this SDK.
+- sdk_gpio: Not implement yet, don't know how to use this SDK.
+- sdk_hwm: Done.
+- sdk_lbp: Not implement yet, don't know how to use this SDK.
+- sdk_lcm: Done, except UART type device.
+- sdk_sled: Done.
+- sdk_swr: Done.
+- sdk_wdt: Done.
+"""
 from time import sleep
 
 import pytest
@@ -8,175 +25,71 @@ DELAY_TIME = 2  # Seconds.
 
 
 class TestPSP:
-    """Platform Support Package."""
 
-    def test_init(self) -> None:
-        with PSP() as psp:
+    def test_init(self):
+        with PSP():
             pass
 
-    def test_sdk_version(self) -> None:
-        with PSP() as psp:
-            assert psp.sdk_version == "2.3.1"
 
-    def test_iodrv_version(self) -> None:
-        with PSP() as psp:
-            assert psp.iodrv_version == "NCA-2510.1.1.0"
+class TestDLL:
+    dll = DLL()
 
-    def test_bios_version(self) -> None:
-        with PSP() as psp:
-            assert psp.bios_version == 'NCA-2510B BIOS V2.02 "08/09/2018"'
+    def test_get_version(self):
+        version = self.dll.get_version()
+        assert version.dll_major == 2
+        assert version.dll_minor == 3
+        assert version.dll_build == 1
+        assert version.platform_id == "NCA-2510"
+        assert version.board_major == 1
+        assert version.board_minor == 1
+        assert version.board_build == 0
 
-
-class TestSystemLED:
-    """System/Status LED."""
-
-    system_led = SystemLED()
-
-    def test_green(self) -> None:
-        self.system_led.green()
-        sleep(DELAY_TIME)
-
-    def test_red(self) -> None:
-        self.system_led.red()
-        sleep(DELAY_TIME)
-
-    def test_off(self) -> None:
-        self.system_led.off()
-        sleep(DELAY_TIME)
-
-    def test_test(self) -> None:
-        self.system_led.test(DELAY_TIME)
-        sleep(DELAY_TIME)
+    def test_get_bios_id(self):
+        assert self.dll.get_bios_id() == '*LIID NCA-2510B BIOS V2.02 "08/09/2018"'
 
 
-class TestHardwareMonitor:
-    """Hardware Monitor."""
+class TestHWM:
+    hwm = HWM()
 
-    hwm = HardwareMonitor()
-
-    def test_get_cpu_temp(self) -> None:
-        # CPU-1 temperature.
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_cpu_temp(1)
-        assert str(e.value) == "LMB_HWM_GetCpuTemp: 0xfffffffb: this functions is not support of this platform"
-        # CPU-2 temperature.
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_cpu_temp(2)
-        assert str(e.value) == "LMB_HWM_GetCpuTemp: 0xfffffffb: this functions is not support of this platform"
-
-        # Fool Proof.
-        with pytest.raises(TypeError):
-            self.hwm.get_cpu_temp(None)
-        with pytest.raises(TypeError):
-            self.hwm.get_cpu_temp(94.87)
-        with pytest.raises(TypeError):
-            self.hwm.get_cpu_temp("WTF")
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_cpu_temp(666)
-        assert str(e.value) == "LMB_HWM_GetCpuTemp: 0xffffffff: function failure"
-
-    def test_get_sys_temp(self) -> None:
-        # SYS-1 temperature.
-        self.hwm.get_sys_temp(1)
-        # SYS-2 temperature.
-        self.hwm.get_sys_temp(2)
-
-        # Fool Proof.
-        with pytest.raises(TypeError):
-            self.hwm.get_sys_temp(None)
-        with pytest.raises(TypeError):
-            self.hwm.get_sys_temp(94.87)
-        with pytest.raises(TypeError):
-            self.hwm.get_sys_temp("WTF")
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_sys_temp(666)
-        assert str(e.value) == "LMB_HWM_GetSysTemp: 0xffffffff: function failure"
-
-    def test_get_vcore(self) -> None:
-        # CPU-1 Vcore.
-        self.hwm.get_vcore(1)
-        # CPU-2 Vcore.
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_vcore(2)
-        assert str(e.value) == "LMB_HWM_GetVcore: 0xfffffffb: this functions is not support of this platform"
-
-        # Fool Proof.
-        with pytest.raises(TypeError):
-            self.hwm.get_vcore(None)
-        with pytest.raises(TypeError):
-            self.hwm.get_vcore(94.87)
-        with pytest.raises(TypeError):
-            self.hwm.get_vcore("WTF")
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_vcore(666)
-        assert str(e.value) == "LMB_HWM_GetVcore: 0xffffffff: function failure"
-
-    def test_get_12v(self) -> None:
-        self.hwm.get_12v()
-
-    def test_get_5v(self) -> None:
-        self.hwm.get_5v()
-
-    def test_get_3v3(self) -> None:
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_3v3()
-        assert str(e.value) == "LMB_HWM_Get3V3: 0xfffffffb: this functions is not support of this platform"
-
-    def test_get_5vsb(self) -> None:
-        self.hwm.get_5vsb()
-
-    def test_get_3v3sb(self) -> None:
-        self.hwm.get_3v3sb()
-
-    def test_get_vbat(self) -> None:
-        self.hwm.get_vbat()
-
-    def test_get_power_supply(self) -> None:
-        # PowerSupply 1 AC voltage.
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_power_supply(1)
-        assert str(e.value) == "LMB_HWM_GetPowerSupply: 0xfffffffb: this functions is not support of this platform"
-        # PowerSupply 2 AC voltage.
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_power_supply(2)
-        assert str(e.value) == "LMB_HWM_GetPowerSupply: 0xfffffffb: this functions is not support of this platform"
-
-        # Fool Proof.
-        with pytest.raises(TypeError):
-            self.hwm.get_power_supply(None)
-        with pytest.raises(TypeError):
-            self.hwm.get_power_supply(94.87)
-        with pytest.raises(TypeError):
-            self.hwm.get_power_supply("WTF")
-        with pytest.raises(PSP.PSPError) as e:
-            self.hwm.get_power_supply(666)
-        assert str(e.value) == "LMB_HWM_GetPowerSupply: 0xfffffffc: parameter invalid or out of range"
-
-    # def test_testhwm(self) -> None:
-    #     self.hwm.testhwm()
-
-    # def test_get_all(self) -> None:
-    #     assert self.hwm.get_all()
+    def test_list_supported_sensors(self):
+        supported_sensors = self.hwm.list_supported_sensors()
+        assert [s.sid for s in supported_sensors] == [4, 5, 41, 45, 46, 48, 49, 50, 51, 73, 75]
+        assert supported_sensors[0].sid == 4
+        assert supported_sensors[0].name == "HWMID_TEMP_SYS1"
+        assert supported_sensors[1].sid == 5
+        assert supported_sensors[1].name == "HWMID_TEMP_SYS2"
+        assert supported_sensors[2].sid == 41
+        assert supported_sensors[2].name == "HWMID_VCORE_CPU1"
+        assert supported_sensors[3].sid == 45
+        assert supported_sensors[3].name == "HWMID_VOLT_P12V"
+        assert supported_sensors[4].sid == 46
+        assert supported_sensors[4].name == "HWMID_VOLT_P5V"
+        assert supported_sensors[5].sid == 48
+        assert supported_sensors[5].name == "HWMID_VOLT_P5VSB"
+        assert supported_sensors[6].sid == 49
+        assert supported_sensors[6].name == "HWMID_VOLT_P3V3SB"
+        assert supported_sensors[7].sid == 50
+        assert supported_sensors[7].name == "HWMID_VOLT_VBAT"
+        assert supported_sensors[8].sid == 51
+        assert supported_sensors[8].name == "HWMID_VOLT_DDRCH1"
+        assert supported_sensors[9].sid == 73
+        assert supported_sensors[9].name == "HWMID_RPM_Fan1A"
+        assert supported_sensors[10].sid == 75
+        assert supported_sensors[10].name == "HWMID_RPM_Fan2A"
 
 
 class TestLCM:
-    """Liquid Crystal Display Module."""
-
     lcm = LCM()
 
-    def test_get_module_type(self) -> None:
-        self.lcm.get_module_type()
-        sleep(DELAY_TIME)
-
-    def test_set_backlight(self) -> None:
+    def test_set_backlight(self):
         self.lcm.set_backlight(False)
         sleep(DELAY_TIME)
         self.lcm.set_backlight(True)
         sleep(DELAY_TIME)
 
-    def test_integration(self) -> None:
+    def test_integration(self):
         self.lcm.clear()
-        self.lcm.write("Hello World!")
+        self.lcm.write("Hello Kitty!")
         sleep(DELAY_TIME)
         self.lcm.set_cursor(2, 5)
         sleep(DELAY_TIME)
@@ -186,41 +99,54 @@ class TestLCM:
         sleep(DELAY_TIME)
 
 
-class TestSoftwareReset:
-    """Software Reset."""
+class TestSystemLED:
+    system_led = SystemLED()
 
-    swr = SoftwareReset()
+    def test_green(self):
+        self.system_led.green()
+        sleep(DELAY_TIME)
+
+    def test_red(self):
+        self.system_led.red()
+        sleep(DELAY_TIME)
+
+    def test_off(self):
+        self.system_led.off()
+        sleep(DELAY_TIME)
 
 
-class TestWatchdogTimer:
-    """Watchdog Timer."""
+class TestSWR:
+    swr = SWR()
 
-    wdt = WatchdogTimer()
 
-    def test_enable(self) -> None:
-        self.wdt.enable(10)
+class TestWDT:
+    wdt = WDT()
 
-        # Fool Proof.
-        with pytest.raises(TypeError):
-            self.wdt.enable(None)
-        with pytest.raises(TypeError):
-            self.wdt.enable(94.87)
-        with pytest.raises(TypeError):
-            self.wdt.enable("WTF")
-        with pytest.raises(ValueError):
-            self.wdt.enable(-1)
+    def test_get_info(self):
+        wdt_info = self.wdt.get_info()
+        assert wdt_info.type == "SuperIO"
+        assert wdt_info.max_count == 255
+        assert wdt_info.is_minute_support is True
 
-    def test_reset(self) -> None:
+    def test_enable(self):
+        self.wdt.enable(10, 2)
+
+    def test_reset(self):
         self.wdt.reset()
 
-    def test_disable(self) -> None:
+    def test_disable(self):
         self.wdt.disable()
 
-    def test_integration(self) -> None:
-        with pytest.raises(PSP.PSPError) as e:
+    def test_config_out_of_range(self):
+        with pytest.raises(PSPInvalid):
+            self.wdt.config(256)
+        with pytest.raises(PSPInvalid):
+            self.wdt.config(10, 3)
+
+    def test_integration(self):
+        with pytest.raises(PSPError):
             self.wdt.reset()
-        assert str(e.value) == "LMB_WDT_Tick: 0xffffffff: function failure"
-        self.wdt.enable(10)
+        self.wdt.enable(200)
         sleep(DELAY_TIME)
         self.wdt.reset()
         sleep(DELAY_TIME)
