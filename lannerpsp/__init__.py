@@ -26,18 +26,18 @@ from .sdk_gps import GPS
 from .sdk_gsr import GSR, GSRDataModel, GSROffsetModel
 from .sdk_hwm import HWM, HWMSensorModel
 from .sdk_lcm import LCM
-from .sdk_odm import ComPort, ComPortInfoModel
+from .sdk_odm import COMPort, COMPortInfoModel
 from .sdk_rfm import RFM
 from .sdk_sled import GPSStatusLED, LTEStatusLED, LTEStressLED, SystemLED
 from .sdk_swr import SWR
-from .sdk_wdt import WDT
+from .sdk_wdt import WDT, WDTInfoModel
 
 __version__ = "0.0.6"
 __all__ = [
     # Functions
     "get_psp_exc_msg",
     # Classes
-    "ComPort",
+    "COMPort",
     "DLL",
     "GPS",
     "GPSStatusLED",
@@ -52,11 +52,12 @@ __all__ = [
     "SystemLED",
     "WDT",
     # Models
-    "ComPortInfoModel",
+    "COMPortInfoModel",
+    "DLLVersionModel",
     "GSRDataModel",
     "GSROffsetModel",
     "HWMSensorModel",
-    "DLLVersionModel",
+    "WDTInfoModel",
     # Exceptions & Warnings
     "IPMIError",
     "IPMIIBF0",

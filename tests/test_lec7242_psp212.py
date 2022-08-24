@@ -257,7 +257,7 @@ class TestWDT:
 class TestComPort:
 
     def test_set_all(self):
-        com1 = ComPort(1)
+        com1 = COMPort(1)
         com1.set_mode(232)
         com1.set_mode(422)
         com1.set_mode(485)
@@ -268,10 +268,10 @@ class TestComPort:
 
     def test_init_out_of_range(self):
         with pytest.raises(PSPInvalid) as e:
-            ComPort(2)
+            COMPort(2)
         assert str(e.value) == "'num' can only be set to (1) on this platform"
 
     def test_set_mode_out_of_range(self):
-        com1 = ComPort(1)
+        com1 = COMPort(1)
         with pytest.raises(ValueError):
             com1.set_mode(666)

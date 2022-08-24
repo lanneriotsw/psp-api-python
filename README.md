@@ -23,7 +23,7 @@ Lanner invests great effort to ease customer’s development journey with the re
 
 ## Installation
 
-### Method 1: Using `pip`
+### Method 1: From PyPI
 
 ```shell
 pip install lannerpsp
@@ -41,12 +41,45 @@ python setup.py install
 
 ## Usage
 
-### Debug
-
-You can import `logging` to catch output messages:
+Python executes the functions of PSP by calling the `.so` file which generated after PSP compilation.
+If your [Core SDK](https://github.com/lanneriotsw/psp-manager) was installed via the
+[One-Step Automated Install](https://github.com/lanneriotsw/psp-manager#method-1-one-step-automated-install)
+method, you can use it out of the box, otherwise you should set the `liblmbio.so` and `liblmbapi.so` paths
+before instantiating other objects. For example:
 
 ```python
-import logging
+from lannerpsp import PSP, HWM
 
-logging.basicConfig(level=logging.DEBUG)
+PSP.lmb_io_path = "/path/to/liblmbio.so"
+PSP.lmb_api_path = "/path/to/liblmbapi.so"
+
+hwm = HWM()
+hwm.get_cpu_temp(1)
+...
 ```
+
+Assuming you want to obtain the sensors data for the hardware monitor, let's create a `test.py` file:
+
+```python
+from lannerpsp import HWM
+
+hwm = HWM()
+supported_sensors = hwm.list_supported_sensors()
+for sensor in supported_sensors:
+    print(f"{sensor.display_name} = {sensor.value} {sensor.unit}")
+```
+
+Then run it with **ROOT** privileges, the output will be like:
+
+```console
+root@lec7242:/home/lanner# python test.py 
+CPU 1 temperature = 41 C
+SYS 1 temperature = 42 C
+CPU 1 Vcore = 0.856 V
+5V = 5.087 V
+3.3V = 3.35 V
+battery = 3.184 V
+DDR channel 1 = 1.104 V 
+```
+
+For complete usage, please refer to the [documents](https://lannerpsp.readthedocs.io/).

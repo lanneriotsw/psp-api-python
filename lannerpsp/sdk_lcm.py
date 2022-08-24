@@ -78,6 +78,9 @@ class LCM:
         Open the LCM device with path and assigned speed.
 
         .. Note::
+            Support only **UART** type.
+
+        .. Note::
             The string maximum length depends on LCD module, normally 40 characters.
 
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -158,6 +161,9 @@ class LCM:
         """
         Reset the LCD module.
 
+        .. Note::
+            Support only **UART** type.
+
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
         :raises PSPError: This function failed.
@@ -177,50 +183,6 @@ class LCM:
             else:
                 raise PSPError(msg)
             self._close_device(psp)
-
-    def get_keys_status(self) -> int:
-        """
-        Get LCM keys status.
-
-        bit 0 means Key 1, bit 1 means Key2, bit 2 means Key 3, bit 3 means Key4
-
-        1: pressed , 0: released
-
-        - 0 (0000): key1 -> off, key2 -> off, key3 -> off, key4 -> off
-        - 1 (0001): key1 -> on, key2 -> off, key3 -> off, key4 -> off
-        - 2 (0010): key1 -> off, key2 -> on, key3 -> off, key4 -> off
-        - 4 (0100): key1 -> off, key2 -> off, key3 -> on, key4 -> off
-        - 8 (1000): key1 -> off, key2 -> off, key3 -> off, key4 -> on
-
-        Example:
-
-        .. code-block:: python
-
-            >>> lcm = LCM()
-            >>> lcm.get_keys_status()
-            2
-
-        :return: LCM keys status
-        :rtype: int
-        :raises PSPNotOpened: The library is not ready or opened yet.
-        :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: No key is pressed.
-        """
-        ub_keys = c_uint8()
-        with PSP() as psp:
-            self._open_device(psp)
-            i_ret = psp.lib.LMB_LCM_KeysStatus(byref(ub_keys))
-            msg = get_psp_exc_msg("LMB_LCM_KeysStatus", i_ret)
-            if i_ret == ERR_Success:
-                logger.debug(f"LCM keys status is {ub_keys.value:02x}")
-            elif i_ret == ERR_NotOpened:
-                raise PSPNotOpened(msg)
-            elif i_ret == ERR_NotSupport:
-                raise PSPNotSupport(msg)
-            else:
-                raise PSPError(msg)
-            self._close_device(psp)
-            return ub_keys.value
 
     def set_backlight(self, enable: bool) -> None:
         """
@@ -362,6 +324,50 @@ class LCM:
             else:
                 raise PSPError(msg)
             self._close_device(psp)
+
+    def get_keys_status(self) -> int:
+        """
+        Get LCM keys status.
+
+        bit 0 means Key 1, bit 1 means Key2, bit 2 means Key 3, bit 3 means Key4
+
+        1: pressed , 0: released
+
+        - 0 (0000): key1 -> off, key2 -> off, key3 -> off, key4 -> off
+        - 1 (0001): key1 -> on, key2 -> off, key3 -> off, key4 -> off
+        - 2 (0010): key1 -> off, key2 -> on, key3 -> off, key4 -> off
+        - 4 (0100): key1 -> off, key2 -> off, key3 -> on, key4 -> off
+        - 8 (1000): key1 -> off, key2 -> off, key3 -> off, key4 -> on
+
+        Example:
+
+        .. code-block:: python
+
+            >>> lcm = LCM()
+            >>> lcm.get_keys_status()
+            2
+
+        :return: LCM keys status
+        :rtype: int
+        :raises PSPNotOpened: The library is not ready or opened yet.
+        :raises PSPNotSupport: This function is not supported.
+        :raises PSPError: No key is pressed.
+        """
+        ub_keys = c_uint8()
+        with PSP() as psp:
+            self._open_device(psp)
+            i_ret = psp.lib.LMB_LCM_KeysStatus(byref(ub_keys))
+            msg = get_psp_exc_msg("LMB_LCM_KeysStatus", i_ret)
+            if i_ret == ERR_Success:
+                logger.debug(f"LCM keys status is {ub_keys.value:02x}")
+            elif i_ret == ERR_NotOpened:
+                raise PSPNotOpened(msg)
+            elif i_ret == ERR_NotSupport:
+                raise PSPNotSupport(msg)
+            else:
+                raise PSPError(msg)
+            self._close_device(psp)
+            return ub_keys.value
 
     @classmethod
     def _callback(cls, stu_lcm_msg: LCMKeyMsg) -> None:

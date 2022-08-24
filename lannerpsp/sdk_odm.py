@@ -22,7 +22,7 @@ MODES = ("Loopback", "RS-232", "RS-485", "RS-422")
 TERMS = ("Disabled", "Enabled", "----", "-----")
 
 
-class ComPortInfoModel(NamedTuple):
+class COMPortInfoModel(NamedTuple):
     """To store COM port information."""
     num: int
     mode: int
@@ -35,9 +35,9 @@ class ComPortInfoModel(NamedTuple):
         return dict(self._asdict())
 
 
-class ComPort:
+class COMPort:
     """
-    COM Port.
+    Communication Port.
 
     :param int num: COM port number
     :raises TypeError: The input parameters type error.
@@ -68,7 +68,7 @@ class ComPort:
         else:
             raise NotImplementedError
 
-    def get_info(self) -> ComPortInfoModel:
+    def get_info(self) -> COMPortInfoModel:
         """
         Get COM port information.
 
@@ -76,7 +76,7 @@ class ComPort:
 
         .. code-block:: python
 
-            >>> com1 = ComPort(1)
+            >>> com1 = COMPort(1)
             >>> com1_info = com1.get_info()
             >>> com1_info.num
             1
@@ -92,7 +92,7 @@ class ComPort:
             {'num': 1, 'mode': 485, 'mode_str': 'RS-485', 'termination': True, 'termination_str': 'Enabled'}
 
         :return: COM port information
-        :rtype: ComPortInfoModel
+        :rtype: COMPortInfoModel
         :raises PSPError: This function failed.
         """
         if self._version.platform_id not in ("LEC-7230",):
@@ -110,7 +110,7 @@ class ComPort:
             msg = get_psp_exc_msg("LMB_ODM_TermStat", i_ret)
             if i_ret != ERR_Success:
                 raise PSPError(msg)
-        return ComPortInfoModel(num=self._num,
+        return COMPortInfoModel(num=self._num,
                                 mode=mode_mapping[b_mode.value],
                                 mode_str=MODES[b_mode.value],
                                 termination=termination_mapping[b_term.value + 1],
@@ -124,7 +124,7 @@ class ComPort:
 
         .. code-block:: python
 
-            >>> com1 = ComPort(1)
+            >>> com1 = COMPort(1)
             >>> com1.set_mode(232)
 
         :param int mode: 232/422/485
@@ -149,7 +149,7 @@ class ComPort:
 
         .. code-block:: python
 
-            >>> com1 = ComPort(1)
+            >>> com1 = COMPort(1)
             >>> com1.set_termination(False)
 
         :param bool enable: ``True`` = enable, ``False`` = disable

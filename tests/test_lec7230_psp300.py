@@ -73,7 +73,7 @@ class TestHWM:
 class TestComPort:
 
     def test_set_all(self):
-        com1 = ComPort(1)
+        com1 = COMPort(1)
         com1.set_mode(232)
         com1.set_termination(False)
         com1_info = com1.get_info()
@@ -82,7 +82,7 @@ class TestComPort:
         assert com1_info.mode_str == "RS-232"
         assert com1_info.termination is False
         assert com1_info.termination_str == "Disabled"
-        com2 = ComPort(2)
+        com2 = COMPort(2)
         com2.set_mode(485)
         com2.set_termination(True)
         com2_info = com2.get_info()
@@ -94,11 +94,11 @@ class TestComPort:
 
     def test_init_out_of_range(self):
         with pytest.raises(PSPInvalid) as e:
-            ComPort(3)
+            COMPort(3)
         assert str(e.value) == "'num' can only be set to (1~2) on this platform"
 
     def test_set_mode_out_of_range(self):
-        com1 = ComPort(1)
+        com1 = COMPort(1)
         with pytest.raises(ValueError):
             com1.set_mode(666)
 

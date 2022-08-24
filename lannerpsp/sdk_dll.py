@@ -40,7 +40,7 @@ class DLLVersionModel(NamedTuple):
 
 class DLL:
     """
-    DLL.
+    Dynamic Link Library.
     """
 
     def __init__(self) -> None:
