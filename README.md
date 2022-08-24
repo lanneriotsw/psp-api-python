@@ -82,4 +82,4 @@ battery = 3.184 V
 DDR channel 1 = 1.104 V 
 ```
 
-For complete usage, please refer to the [documents](https://lannerpsp.readthedocs.io/).
+For complete usage, please refer to the [documents](https://psp-api-python.readthedocs.io/).
