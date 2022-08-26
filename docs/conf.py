@@ -26,9 +26,9 @@ release = info['version']
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.intersphinx', 'm2r2']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.intersphinx']
 
-source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
 # source_encoding = 'utf-8-sig'
 exclude_patterns = ['_build']
 templates_path = ['_templates']
