@@ -82,7 +82,7 @@ class GSR:
         :return: X/Y/Z Axis data and range with ±g
         :rtype: GSRDataModel
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         stu_raw_data = AxisRawData()
         with PSP() as psp:
@@ -140,7 +140,7 @@ class GSR:
         :return: X/Y/Z Axis offset data
         :rtype: GSROffsetModel
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         stu_raw_data = AxisRawData()
         with PSP() as psp:
@@ -191,9 +191,9 @@ class GSR:
             Offset X-Axis=0
             Offset Y-Axis=0
             Offset Z-Axis=0
-            ...
-            ...
-            ...
+            .
+            .
+            .
             ---------> 99
             stuRawData.wRange= ±2g
             Raw=-7  , X-Axis= -0.05490196

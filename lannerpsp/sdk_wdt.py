@@ -63,7 +63,7 @@ class WDT:
         :rtype: WDTInfoModel
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         stu_wdt_info = WDTInfo()
         type_mapping = {WDT_TYPE_UNKNOWN: "Unknown", WDT_TYPE_SIO: "SuperIO", WDT_TYPE_TCO: "TCO"}
@@ -113,7 +113,7 @@ class WDT:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
         :raises PSPBusyInUses: This step is skipped because WDT is already starting now.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(count, int):
@@ -178,7 +178,7 @@ class WDT:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
         :raises PSPBusyInUses: This step is skipped because WDT is already starting now.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         if count != 0:
             self.config(count, time_base)
@@ -209,7 +209,7 @@ class WDT:
 
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_WDT_Stop()
@@ -238,7 +238,7 @@ class WDT:
 
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_WDT_Tick()

@@ -42,7 +42,7 @@ class SWR:
         :return: software reset button status
         :rtype: int
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         ub_read = c_uint8()
         with PSP() as psp:
@@ -160,7 +160,7 @@ class SWR:
     @property
     def is_pressed(self) -> bool:
         """
-        Returns ``True`` if the device is currently active and ``False`` otherwise.
+        Returns :data:`True` if the device is currently active and :data:`False` otherwise.
 
         Example:
 
@@ -173,7 +173,7 @@ class SWR:
         :return: if is pressed or not
         :rtype: bool
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         return bool(self.get_status())
 
@@ -190,11 +190,11 @@ class SWR:
 
         :type timeout: float or int or None
         :param timeout: Number of seconds to wait before proceeding.
-            If this is ``None`` (the default), then wait indefinitely until the device is active.
+            If this is :data:`None` (the default), then wait indefinitely until the device is active.
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameters value error.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         if timeout is not None:
             # Check type.
@@ -225,11 +225,11 @@ class SWR:
 
         :type timeout: float or int or None
         :param timeout: Number of seconds to wait before proceeding.
-            If this is ``None`` (the default), then wait indefinitely until the device is active.
+            If this is :data:`None` (the default), then wait indefinitely until the device is active.
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameters value error.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         if timeout is not None:
             # Check type.

@@ -45,7 +45,7 @@ class SystemLED:
         :rtype: int
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         ub_read = c_uint8(0xFF)
         with PSP() as psp:
@@ -74,7 +74,7 @@ class SystemLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetSystemLED(0)
@@ -109,7 +109,7 @@ class SystemLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetSystemLED(1)
@@ -144,7 +144,7 @@ class SystemLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetSystemLED(2)
@@ -241,7 +241,7 @@ class GPSStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetGPSLED(0)
@@ -271,7 +271,7 @@ class GPSStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetGPSLED(1)
@@ -301,7 +301,7 @@ class GPSStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetGPSLED(2)
@@ -393,7 +393,7 @@ class LTEStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetLteStateLED(0)
@@ -423,7 +423,7 @@ class LTEStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         self.off()  # Clear color.
         with PSP() as psp:
@@ -454,7 +454,7 @@ class LTEStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         self.off()  # Clear color.
         with PSP() as psp:
@@ -485,7 +485,7 @@ class LTEStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         self.off()  # Clear color.
         with PSP() as psp:
@@ -516,7 +516,7 @@ class LTEStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         self.off()  # Clear color.
         with PSP() as psp:
@@ -547,7 +547,7 @@ class LTEStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         self.off()  # Clear color.
         with PSP() as psp:
@@ -578,7 +578,7 @@ class LTEStatusLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         self.off()  # Clear color.
         with PSP() as psp:
@@ -737,7 +737,7 @@ class LTEStressLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             i_ret = psp.lib.LMB_SLED_SetLteStressLED(-1)
@@ -769,7 +769,7 @@ class LTEStressLED:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(percent, int):

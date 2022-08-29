@@ -1,6 +1,6 @@
-=========
-API - LED
-=========
+==========
+API - SLED
+==========
 
 .. module:: lannerpsp.sdk_sled
 

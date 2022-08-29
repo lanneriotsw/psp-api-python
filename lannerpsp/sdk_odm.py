@@ -93,7 +93,7 @@ class COMPort:
 
         :return: COM port information
         :rtype: COMPortInfoModel
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         if self._version.platform_id not in ("LEC-7230",):
             raise PSPNotSupport("Not support on this platform")
@@ -131,7 +131,7 @@ class COMPort:
         :raises PermissionError: if not running as root user
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameter is out of range.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         if self._version.platform_id == "LEB-7242":
             from .gpio_config_tool import GPIOConfigTool
@@ -152,10 +152,10 @@ class COMPort:
             >>> com1 = COMPort(1)
             >>> com1.set_termination(False)
 
-        :param bool enable: ``True`` = enable, ``False`` = disable
+        :param bool enable: set :data:`True` to enable, otherwise :data:`False`
         :raises PermissionError: if not running as root user
         :raises TypeError: The input parameters type error.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         if self._version.platform_id == "LEB-7242":
             from .gpio_config_tool import GPIOConfigTool
@@ -171,7 +171,7 @@ class COMPort:
 
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameter is out of range.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(mode, int):
@@ -196,7 +196,7 @@ class COMPort:
 
         :param bool enable: ``True`` = enable, ``False`` = disable
         :raises TypeError: The input parameters type error.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(enable, bool):

@@ -43,16 +43,14 @@ class LCM:
         """
         Get the LCM current connected port and speed.
 
-        .. Note::
-            The string maximum length depends on LCD module, normally 40 characters.
-
-        :return: current connected port and speed
+        :return: the port and speed the LCM is currently connected to
         :rtype: str
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
         :raises PSPNotExist: This function is not enabled or does not exist.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
+        # TODO: Example
         dw_speed = c_int32(self._dw_speed)
         with PSP() as psp:
             if self._version.dll_major == 2 and self._version.dll_minor in (1, 2, 3):
@@ -86,7 +84,7 @@ class LCM:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
         :raises PSPNotExist: This function is not enabled or does not exist.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         i_ret = psp.lib.LMB_LCM_OpenPort(self._str_lcm_port, self._dw_speed)
         msg = get_psp_exc_msg("LMB_LCM_OpenPort", i_ret)
@@ -104,6 +102,11 @@ class LCM:
     def _open_device(self, psp: PSP) -> None:
         """
         Open and connect LCD module.
+
+        :raises PSPNotOpened: The library is not ready or opened yet.
+        :raises PSPNotSupport: This function is not supported.
+        :raises PSPNotExist: This function is not enabled or does not exist.
+        :raises PSPError: General PSP functional error.
         """
         i_ret = psp.lib.LMB_LCM_DeviceOpen()
         msg = get_psp_exc_msg("LMB_LCM_DeviceOpen", i_ret)
@@ -124,7 +127,7 @@ class LCM:
 
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         i_ret = psp.lib.LMB_LCM_DeviceClose()
         msg = get_psp_exc_msg("LMB_LCM_DeviceClose", i_ret)
@@ -166,8 +169,9 @@ class LCM:
 
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
+        # TODO: Example
         with PSP() as psp:
             self._open_port(psp)
             if self._get_device_info(psp) == LCM_LPT_TYPE:
@@ -195,11 +199,11 @@ class LCM:
             >>> lcm = LCM()
             >>> lcm.set_backlight(True)
 
-        :param bool enable: ``True`` to enable backlight, otherwise ``False``
+        :param bool enable: set :data:`True` to enable backlight, otherwise :data:`False`
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(enable, bool):
@@ -230,13 +234,13 @@ class LCM:
             >>> lcm = LCM()
             >>> lcm.set_cursor(2, 6)
 
-        :param int row: assigns row value of LCM display cursor
-        :param int column: assigns column value of LCM display cursor
+        :param int row: assign row value of LCM display cursor
+        :param int column: assign column value of LCM display cursor
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(row, int):
@@ -265,6 +269,9 @@ class LCM:
         """
         Write string to LCD module.
 
+        .. Note::
+            The maximum string length depends on the LCD module, normally 40 characters.
+
         Example:
 
         .. code-block:: python
@@ -276,7 +283,7 @@ class LCM:
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(msg, str):
@@ -309,7 +316,7 @@ class LCM:
 
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         with PSP() as psp:
             self._open_device(psp)

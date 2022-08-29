@@ -46,7 +46,7 @@ class RFM:
 
         :return: module power status
         :rtype: int
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         udw_reg = c_uint32(0)
         with PSP() as psp:
@@ -81,7 +81,7 @@ class RFM:
         :param int value: module power status 0 ~ 3
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameter is out of range.
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(value, int):
@@ -121,7 +121,7 @@ class RFM:
 
         :return: SIM card status
         :rtype: int
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         udw_reg = c_uint32(0)
         with PSP() as psp:
@@ -140,10 +140,10 @@ class RFM:
         bit 0 means m.2 module, bit 1 means mPCIE module
         0: first sim, 1: second sim
 
-        0 (00): mPcie -> first sim (SIM3),  m.2 -> first sim (SIM1)
-        1 (01): mPcie -> first sim (SIM3),  m.2 -> second sim (SIM2)
-        2 (10): mPcie -> second sim (SIM4), m.2 -> first sim (SIM1)
-        3 (11): mPcie -> second sim (SIM4), m.2 -> second sim (SIM2)
+        - 0 (00): mPcie -> first sim (SIM3),  m.2 -> first sim (SIM1)
+        - 1 (01): mPcie -> first sim (SIM3),  m.2 -> second sim (SIM2)
+        - 2 (10): mPcie -> second sim (SIM4), m.2 -> first sim (SIM1)
+        - 3 (11): mPcie -> second sim (SIM4), m.2 -> second sim (SIM2)
 
         Example:
 
@@ -155,7 +155,7 @@ class RFM:
         :param int value: SIM card status 0 ~ 3
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameter is out of range.
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(value, int):

@@ -77,11 +77,11 @@ class DLL:
             >>> version.board_build
             2
 
-        :return: obtains the DLL and Board Library version information
+        :return: the DLL and Board Library version information
         :rtype: DLLVersionModel
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: For generic PSP error.
+        :raises PSPError: General PSP functional error.
         """
         stu_dll_ver = DLLVersion()
         with PSP() as psp:
@@ -117,11 +117,11 @@ class DLL:
             >>> dll.get_bios_id()
             'LEB-7242B BIOS V1.12 "03/09/2022"'
 
-        :return: obtains the mother board BIOS information
+        :return: the mother board BIOS information
         :rtype: str
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: For generic PSP error.
+        :raises PSPError: General PSP functional error.
         """
         version = self.get_version()
         if version.dll_major == 2 and version.dll_minor in (0, 1, 2):

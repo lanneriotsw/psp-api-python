@@ -39,11 +39,11 @@ class GPS:
             >>> gps.search_port()
             '/dev/ttyS3'
 
-        :return: GPS port
+        :return: the GPS port on the platform
         :rtype: str
         :raises PSPNotSupport: This function is not supported.
         :raises PSPNotExist: The device does not exist.
-        :raises PSPError: General function error.
+        :raises PSPError: General PSP functional error.
         """
         str_gps_port = c_char_p(DEFAULT_GPS_PORT.encode())
         with PSP() as psp:

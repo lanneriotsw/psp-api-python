@@ -78,7 +78,7 @@ class HWM:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(num, int):
@@ -113,13 +113,13 @@ class HWM:
             41
 
         :param int num: selects System sensor
-        :return: the current temperature value of the CPU
+        :return: the current temperature value of the system
         :rtype: int
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(num, int):
@@ -154,13 +154,13 @@ class HWM:
             0.856
 
         :param int num: selects CPU number
-        :return: obtains the current voltage of CPU Vcore
+        :return: the current voltage of CPU Vcore
         :rtype: float
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(num, int):
@@ -194,11 +194,11 @@ class HWM:
             >>> hwm.get_12v_volt()
             12.232
 
-        :return: obtains the current voltage of positive 12V
+        :return: the current voltage of positive 12V
         :rtype: float
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         f_temp = c_float()
         with PSP() as psp:
@@ -227,11 +227,11 @@ class HWM:
             >>> hwm.get_5v_volt()
             5.087
 
-        :return: obtains the current voltage of positive 5V
+        :return: the current voltage of positive 5V
         :rtype: float
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         f_temp = c_float()
         with PSP() as psp:
@@ -260,11 +260,11 @@ class HWM:
             >>> hwm.get_3v3_volt()
             3.328
 
-        :return: obtains the current voltage of positive 3.3V
+        :return: the current voltage of positive 3.3V
         :rtype: float
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         f_temp = c_float()
         with PSP() as psp:
@@ -293,11 +293,11 @@ class HWM:
             >>> hwm.get_5vsb_volt()
             5.003
 
-        :return: obtains the current voltage of positive 5V standby power
+        :return: the current voltage of positive 5V standby power
         :rtype: float
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         f_temp = c_float()
         with PSP() as psp:
@@ -326,11 +326,11 @@ class HWM:
             >>> hwm.get_3v3sb_volt()
             3.344
 
-        :return: obtains the current voltage of positive 3.3V standby power
+        :return: the current voltage of positive 3.3V standby power
         :rtype: float
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         f_temp = c_float()
         with PSP() as psp:
@@ -359,11 +359,11 @@ class HWM:
             >>> hwm.get_bat_volt()
             3.168
 
-        :return: obtains the current voltage of the battery
+        :return: the current voltage of the battery
         :rtype: float
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         f_temp = c_float()
         with PSP() as psp:
@@ -393,13 +393,13 @@ class HWM:
             1.096
 
         :param int ch: assign DDR channel
-        :return: obtains the current voltage of the DDR channel
+        :return: the current voltage of the DDR channel
         :rtype: float
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(ch, int):
@@ -426,13 +426,13 @@ class HWM:
         Read the power supply AC input (V).
 
         :param int num: assigns the AC power supply number which is described in user manual
-        :return: obtains the AC power voltage
+        :return: the AC power voltage
         :rtype: int
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # TODO: Example
         # Check type.
@@ -460,13 +460,13 @@ class HWM:
         Get CPU fan speed (RPM).
 
         :param int num: the number of fan
-        :return: fan speed
+        :return: the fan speed
         :rtype: int
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # TODO: Example
         # Check type.
@@ -494,13 +494,13 @@ class HWM:
         Get SYS fan speed (RPM).
 
         :param int num: the number of fan
-        :return: fan speed
+        :return: the fan speed
         :rtype: int
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # TODO: Example
         # Check type.
@@ -536,13 +536,13 @@ class HWM:
             7297
 
         :param int num: assigns the fan index number which is described in user manual
-        :return: obtains the fan speed
+        :return: the fan speed
         :rtype: int
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(num, int):
@@ -578,13 +578,13 @@ class HWM:
 
         :param int num: assigns the fan index number which is described in user manual
         :param int ex_num: assigns the fan sub-index number which is described in user manual (A=1, B=2, and so on)
-        :return: obtains the fan speed
+        :return: the fan speed
         :rtype: int
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(num, int):
@@ -621,13 +621,13 @@ class HWM:
             'HWMID_TEMP_CPU1'
 
         :param int sid: designates sensor index number
-        :return: obtains the sensor name of the designated
+        :return: the sensor name of the designated
         :rtype: str
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(sid, int):
@@ -677,13 +677,13 @@ class HWM:
             '41000 mCelsius'
 
         :param int sid: designates sensor index number
-        :return: obtains the message of the designated
+        :return: the message of the designated
         :rtype: str
         :raises TypeError: The input parameters type error.
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         # Check type.
         if not isinstance(sid, int):
@@ -730,15 +730,6 @@ class HWM:
 
             >>> hwm = HWM()
             >>> sensors = hwm.list_supported_sensors()
-            >>> sensors
-            [
-                HWMSensorModel(sid=0, name='HWMID_TEMP_CPU1', display_name='CPU-1 temperature', value=40, unit='°C'),
-                HWMSensorModel(sid=2, name='HWMID_TEMP_SYS1', display_name='SYS-1 temperature', value=42, unit='°C'),
-                .
-                .
-                .
-                HWMSensorModel(sid=12, name='HWMID_VOLT_DDRCH1', display_name='VDIMM-1', value=1.096, unit='V'),
-            ]
             >>> for s in sensors:
             ...     s.to_dict()
             {'sid': 0, 'name': 'HWMID_TEMP_CPU1', 'display_name': 'CPU-1 temperature', 'value': 40, 'unit': '°C'}
@@ -762,7 +753,7 @@ class HWM:
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotSupport: This platform does not support this function.
-        :raises PSPError: This function failed.
+        :raises PSPError: General PSP functional error.
         """
         if self._version.dll_major == 2 and self._version.dll_minor == 1:
             total = 100
@@ -838,8 +829,10 @@ class HWM:
 
         or
 
-        .. code-block:: console
+        .. code-block:: python
 
+            >>> hwm = HWM()
+            >>> hwm.testhwm()
             ===> Hardware Monitor Type is SuperIO <===
             Sensor Name        Value          LowCritical      UpperCritical   Result
             -------------------------------------------------------------------------

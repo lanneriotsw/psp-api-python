@@ -15,8 +15,8 @@ Table of Contents
    api_hwm
    api_lcm
    api_odm
-   api_sled
    api_rfm
+   api_sled
    api_swr
    api_wdt
    api_exc
