@@ -4,7 +4,7 @@ Changelog
 
 .. currentmodule:: lannerpsp
 
-Release 0.0.7 (2022-08-30)
+Release 0.0.8 (2022-08-30)
 ==========================
 
 What's New
@@ -18,6 +18,11 @@ Bug Fixes
 
 * Fix :meth:`HWM.list_supported_sensors` docs from °C to C.
 * Fix code-block decorator from python to pycon.
+
+Release 0.0.7 (2022-08-30)
+==========================
+
+Not exists.
 
 Release 0.0.6 (2022-08-29)
 ==========================

@@ -32,7 +32,7 @@ from .sdk_sled import GPSStatusLED, LTEStatusLED, LTEStressLED, SystemLED
 from .sdk_swr import SWR
 from .sdk_wdt import WDT, WDTInfoModel
 
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 __all__ = [
     # Functions
     "get_psp_exc_msg",
