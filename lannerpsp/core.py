@@ -97,7 +97,7 @@ class PSP:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> with PSP() as psp:  # Automatically Init() and DeInit().
             ...     psp.lib.LMB_SLED_SetLteStateLED(0)

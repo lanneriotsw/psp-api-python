@@ -33,7 +33,7 @@ class GPS:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gps = GPS()
             >>> gps.search_port()

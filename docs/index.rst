@@ -8,6 +8,7 @@ Table of Contents
    :numbered:
 
    installing
+   recipes
    development
    api_dll
    api_gps

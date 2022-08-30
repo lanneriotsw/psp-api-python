@@ -33,7 +33,7 @@ class SWR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> swr = SWR()
             >>> swr.get_status()
@@ -73,7 +73,7 @@ class SWR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> swr = SWR()
             >>> swr.exec_callback()
@@ -107,7 +107,7 @@ class SWR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> swr = SWR()
             >>> swr.test(5)
@@ -116,7 +116,7 @@ class SWR:
             5. 4. 3. 2. 1. 0.
             Software/Reset button not detected ! --> ALARM
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> swr.test()
             ===> wait 5 seconds for Software Reset Button trigger .......
@@ -164,7 +164,7 @@ class SWR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> swr = SWR()
             >>> swr.is_pressed
@@ -183,7 +183,7 @@ class SWR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> swr = SWR()
             >>> swr.wait_for_press()
@@ -218,7 +218,7 @@ class SWR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> swr = SWR()
             >>> swr.wait_for_release()

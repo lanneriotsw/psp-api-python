@@ -53,7 +53,7 @@ class WDT:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> wdt = WDT()
             >>> wdt.get_info()
@@ -89,14 +89,14 @@ class WDT:
 
         Example for 200 seconds:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> wdt = WDT()
             >>> wdt.config(200)
 
         Example for 2 minutes:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> wdt = WDT()
             >>> wdt.config(2, 2)
@@ -106,7 +106,7 @@ class WDT:
 
         :param int time_base:
             The value selects time base. Set :data:`1` to select SECOND base,
-            Set :data:`2` to select MINUTE base. Defaults to 1 (SECOND base).
+            Set :data:`2` to select MINUTE base. Defaults to :data:`1`.
 
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: Invalid parameter value.
@@ -153,14 +153,14 @@ class WDT:
 
         You can :func:`enable` dircetly by a given time:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> wdt = WDT()
             >>> wdt.enable(200)
 
         Or :func:`config` first then :func:`enable`
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> wdt = WDT()
             >>> wdt.config(200)
@@ -171,7 +171,7 @@ class WDT:
 
         :param int time_base:
             The value selects time base. Set :data:`1` to select SECOND base,
-            Set :data:`2` to select MINUTE base. Defaults to 1.
+            Set :data:`2` to select MINUTE base. Defaults to :data:`1`.
 
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: Invalid parameter value.
@@ -200,7 +200,7 @@ class WDT:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> wdt = WDT()
             >>> wdt.enable(10)
@@ -229,7 +229,7 @@ class WDT:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> wdt = WDT()
             >>> wdt.enable(10)

@@ -50,18 +50,17 @@ class COMPort:
         # Check type.
         if not isinstance(num, int):
             raise TypeError("'num' type must be int")
-        # Check import.
-        if self._version.platform_id == "LEB-7242":
+        # Check value.
+        if self._version.platform_id in ("LEB-7242",):
+            if num != 1:
+                raise PSPInvalid("'num' can only be set to (1) on this platform")
+            # Check import for LEC-7242.
             try:
                 from portio import ioperm
             except ImportError:
                 raise RuntimeError(
                     "Install lannerpsp with 'lec7242' extra in order to use COM port."
                 )
-        # Check value.
-        if self._version.platform_id in ("LEB-7242",):
-            if num != 1:
-                raise PSPInvalid("'num' can only be set to (1) on this platform")
         elif self._version.platform_id in ("LEC-7230",):
             if not 1 <= num <= 2:
                 raise PSPInvalid("'num' can only be set to (1~2) on this platform")
@@ -74,7 +73,7 @@ class COMPort:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> com1 = COMPort(1)
             >>> com1_info = com1.get_info()
@@ -122,7 +121,7 @@ class COMPort:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> com1 = COMPort(1)
             >>> com1.set_mode(232)
@@ -147,7 +146,7 @@ class COMPort:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> com1 = COMPort(1)
             >>> com1.set_termination(False)
@@ -194,7 +193,7 @@ class COMPort:
         """
         For LEC-7230.
 
-        :param bool enable: ``True`` = enable, ``False`` = disable
+        :param bool enable: set :data:`True` to enable, otherwise :data:`False`
         :raises TypeError: The input parameters type error.
         :raises PSPError: General PSP functional error.
         """

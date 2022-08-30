@@ -58,7 +58,7 @@ class GSR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gsr = GSR()
             >>> gsr_data = gsr.get_data()
@@ -124,7 +124,7 @@ class GSR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gsr = GSR()
             >>> gsr_offset = gsr.get_offset()
@@ -163,7 +163,7 @@ class GSR:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gsr = GSR()
             >>> gsr.test()

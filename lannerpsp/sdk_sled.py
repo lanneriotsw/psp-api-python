@@ -36,7 +36,7 @@ class SystemLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> system_led = SystemLED()
             >>> system_led.get_status()
@@ -66,7 +66,7 @@ class SystemLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> system_led = SystemLED()
             >>> system_led.off()
@@ -101,7 +101,7 @@ class SystemLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> system_led = SystemLED()
             >>> system_led.green()
@@ -136,7 +136,7 @@ class SystemLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> system_led = SystemLED()
             >>> system_led.red()
@@ -171,7 +171,7 @@ class SystemLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> system_led = SystemLED()
             >>> system_led.test()
@@ -233,7 +233,7 @@ class GPSStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gps_status_led = GPSStatusLED()
             >>> gps_status_led.off()
@@ -263,7 +263,7 @@ class GPSStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gps_status_led = GPSStatusLED()
             >>> gps_status_led.on()
@@ -293,7 +293,7 @@ class GPSStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gps_status_led = GPSStatusLED()
             >>> gps_status_led.blink()
@@ -323,7 +323,7 @@ class GPSStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> gps_status_led = GPSStatusLED()
             >>> gps_status_led.test()
@@ -385,7 +385,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.off()
@@ -415,7 +415,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.red()
@@ -446,7 +446,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.red_blink()
@@ -477,7 +477,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.green()
@@ -508,7 +508,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.green_blink()
@@ -539,7 +539,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.yellow()
@@ -570,7 +570,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.yellow_blink()
@@ -601,7 +601,7 @@ class LTEStatusLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_status_led = LTEStatusLED()
             >>> lte_status_led.test()
@@ -729,7 +729,7 @@ class LTEStressLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_stress_led = LTEStressLED()
             >>> lte_stress_led.off()
@@ -759,7 +759,7 @@ class LTEStressLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_stress_led = LTEStressLED()
             >>> lte_stress_led.set_strength(87)
@@ -798,7 +798,7 @@ class LTEStressLED:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lte_stress_led = LTEStressLED()
             >>> lte_stress_led.test(2)

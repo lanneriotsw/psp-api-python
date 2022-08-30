@@ -52,7 +52,7 @@ class DLL:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> dll = DLL()
             >>> version = dll.get_version()
@@ -111,7 +111,7 @@ class DLL:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> dll = DLL()
             >>> dll.get_bios_id()

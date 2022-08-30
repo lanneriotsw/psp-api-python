@@ -76,10 +76,8 @@ class LCM:
         Open the LCM device with path and assigned speed.
 
         .. Note::
-            Support only **UART** type.
-
-        .. Note::
-            The string maximum length depends on LCD module, normally 40 characters.
+            * Support only **UART** type.
+            * The string maximum length depends on LCD module, normally 40 characters.
 
         :raises PSPNotOpened: The library is not ready or opened yet.
         :raises PSPNotSupport: This function is not supported.
@@ -194,7 +192,7 @@ class LCM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lcm = LCM()
             >>> lcm.set_backlight(True)
@@ -229,13 +227,13 @@ class LCM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lcm = LCM()
             >>> lcm.set_cursor(2, 6)
 
-        :param int row: assign row value of LCM display cursor
-        :param int column: assign column value of LCM display cursor
+        :param int row: row value of LCM display cursor
+        :param int column: column value of LCM display cursor
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: The input parameter is out of range.
         :raises PSPNotOpened: The library is not ready or opened yet.
@@ -274,7 +272,7 @@ class LCM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lcm = LCM()
             >>> lcm.write("Hello World")
@@ -309,7 +307,7 @@ class LCM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lcm = LCM()
             >>> lcm.clear()
@@ -348,7 +346,7 @@ class LCM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lcm = LCM()
             >>> lcm.get_keys_status()
@@ -394,7 +392,7 @@ class LCM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> lcm = LCM()
             >>> lcm.exec_callback()

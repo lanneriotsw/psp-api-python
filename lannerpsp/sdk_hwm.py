@@ -65,7 +65,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_cpu_temp(1)
@@ -106,13 +106,13 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_sys_temp(1)
             41
 
-        :param int num: selects System sensor
+        :param int num: selects System sensor number
         :return: the current temperature value of the system
         :rtype: int
         :raises TypeError: The input parameters type error.
@@ -147,7 +147,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_core_volt(1)
@@ -188,7 +188,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_12v_volt()
@@ -221,7 +221,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_5v_volt()
@@ -254,7 +254,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_3v3_volt()
@@ -287,7 +287,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_5vsb_volt()
@@ -320,7 +320,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_3v3sb_volt()
@@ -353,7 +353,7 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_bat_volt()
@@ -386,13 +386,13 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_dimm_volt()
             1.096
 
-        :param int ch: assign DDR channel
+        :param int ch: the DDR channel
         :return: the current voltage of the DDR channel
         :rtype: float
         :raises TypeError: The input parameters type error.
@@ -425,7 +425,7 @@ class HWM:
         """
         Read the power supply AC input (V).
 
-        :param int num: assigns the AC power supply number which is described in user manual
+        :param int num: the AC power supply number which is described in user manual
         :return: the AC power voltage
         :rtype: int
         :raises TypeError: The input parameters type error.
@@ -529,13 +529,13 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_fan_speed(1)
             7297
 
-        :param int num: assigns the fan index number which is described in user manual
+        :param int num: the fan index number which is described in user manual
         :return: the fan speed
         :rtype: int
         :raises TypeError: The input parameters type error.
@@ -570,14 +570,14 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_fan_speed_ex(1, 1)
             7258
 
-        :param int num: assigns the fan index number which is described in user manual
-        :param int ex_num: assigns the fan sub-index number which is described in user manual (A=1, B=2, and so on)
+        :param int num: the fan index number which is described in user manual
+        :param int ex_num: the fan sub-index number which is described in user manual (A=1, B=2, and so on)
         :return: the fan speed
         :rtype: int
         :raises TypeError: The input parameters type error.
@@ -614,13 +614,13 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_sensor_name(0)
             'HWMID_TEMP_CPU1'
 
-        :param int sid: designates sensor index number
+        :param int sid: sensor index number
         :return: the sensor name of the designated
         :rtype: str
         :raises TypeError: The input parameters type error.
@@ -670,13 +670,13 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.get_sensor_msg(0)
             '41000 mCelsius'
 
-        :param int sid: designates sensor index number
+        :param int sid: sensor index number
         :return: the message of the designated
         :rtype: str
         :raises TypeError: The input parameters type error.
@@ -726,14 +726,14 @@ class HWM:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> sensors = hwm.list_supported_sensors()
             >>> for s in sensors:
             ...     s.to_dict()
-            {'sid': 0, 'name': 'HWMID_TEMP_CPU1', 'display_name': 'CPU-1 temperature', 'value': 40, 'unit': '°C'}
-            {'sid': 2, 'name': 'HWMID_TEMP_SYS1', 'display_name': 'SYS-1 temperature', 'value': 42, 'unit': '°C'}
+            {'sid': 0, 'name': 'HWMID_TEMP_CPU1', 'display_name': 'CPU-1 temperature', 'value': 40, 'unit': 'C'}
+            {'sid': 2, 'name': 'HWMID_TEMP_SYS1', 'display_name': 'SYS-1 temperature', 'value': 42, 'unit': 'C'}
             .
             .
             .
@@ -741,8 +741,8 @@ class HWM:
             >>> for s in sensors:
             ...     print(f"{s.display_name} = {s.value} {s.unit}")
             ...
-            CPU-1 temperature = 40 °C
-            SYS-1 temperature = 42 °C
+            CPU-1 temperature = 40 C
+            SYS-1 temperature = 42 C
             .
             .
             .
@@ -813,9 +813,9 @@ class HWM:
         """
         For hardware monitor testing.
 
-        Example:
+        Example for PSP version < 2.3:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.testhwm()
@@ -827,9 +827,9 @@ class HWM:
             Vbat =   3.168 V                (min =   3.000 V, max =   3.300 V)
             VDDR =   1.104 V                (min =   1.080 V, max =   1.320 V)
 
-        or
+        or PSP version >= 2.3:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> hwm = HWM()
             >>> hwm.testhwm()

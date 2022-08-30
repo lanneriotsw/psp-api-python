@@ -50,7 +50,7 @@ class GPIOConfigTool:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> GPIOConfigTool().set_com1_mode(232)
 
@@ -82,7 +82,7 @@ class GPIOConfigTool:
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> GPIOConfigTool().set_com1_termination(True)
 

@@ -27,18 +27,18 @@ class RFM:
         """
         Get module power status.
 
-        bit 0 means m.2 module, bit 1 means mPCIE module
+        bit 0 means M.2 module, bit 1 means mPCIe module
 
         0: power off, 1: power on
 
-        - 0 (00): mPcie -> off, m.2 -> off
-        - 1 (01): mPcie -> off, m.2 -> on
-        - 2 (10): mPcie -> on,  m.2 -> off
-        - 3 (11): mPcie -> on,  m.2 -> on
+        - 0 (00): mPCIe -> off, M.2 -> off
+        - 1 (01): mPCIe -> off, M.2 -> on
+        - 2 (10): mPCIe -> on,  M.2 -> off
+        - 3 (11): mPCIe -> on,  M.2 -> on
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> rfm = RFM()
             >>> power_status = rfm.get_power_status()
@@ -62,18 +62,18 @@ class RFM:
         """
         Set module power status.
 
-        bit 0 means m.2 module, bit 1 means mPCIE module
+        bit 0 means M.2 module, bit 1 means mPCIe module
 
         0: power off, 1: power on
 
-        - 0 (00): mPcie -> off, m.2 -> off
-        - 1 (01): mPcie -> off, m.2 -> on
-        - 2 (10): mPcie -> on,  m.2 -> off
-        - 3 (11): mPcie -> on,  m.2 -> on
+        - 0 (00): mPCIe -> off, M.2 -> off
+        - 1 (01): mPCIe -> off, M.2 -> on
+        - 2 (10): mPCIe -> on,  M.2 -> off
+        - 3 (11): mPCIe -> on,  M.2 -> on
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> rfm = RFM()
             >>> rfm.set_power_status(1)
@@ -102,18 +102,18 @@ class RFM:
         """
         Get SIM card status.
 
-        bit 0 means m.2 module, bit 1 means mPCIE module
+        bit 0 means M.2 module, bit 1 means mPCIe module
 
         0: first sim, 1: second sim
 
-        - 0 (00): mPcie -> first sim (SIM3),  m.2 -> first sim (SIM1)
-        - 1 (01): mPcie -> first sim (SIM3),  m.2 -> second sim (SIM2)
-        - 2 (10): mPcie -> second sim (SIM4), m.2 -> first sim (SIM1)
-        - 3 (11): mPcie -> second sim (SIM4), m.2 -> second sim (SIM2)
+        - 0 (00): mPCIe -> first sim (SIM3),  M.2 -> first sim (SIM1)
+        - 1 (01): mPCIe -> first sim (SIM3),  M.2 -> second sim (SIM2)
+        - 2 (10): mPCIe -> second sim (SIM4), M.2 -> first sim (SIM1)
+        - 3 (11): mPCIe -> second sim (SIM4), M.2 -> second sim (SIM2)
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> rfm = RFM()
             >>> sim_status = rfm.get_sim_status()
@@ -137,17 +137,17 @@ class RFM:
         """
         Set SIM card status.
 
-        bit 0 means m.2 module, bit 1 means mPCIE module
+        bit 0 means M.2 module, bit 1 means mPCIe module
         0: first sim, 1: second sim
 
-        - 0 (00): mPcie -> first sim (SIM3),  m.2 -> first sim (SIM1)
-        - 1 (01): mPcie -> first sim (SIM3),  m.2 -> second sim (SIM2)
-        - 2 (10): mPcie -> second sim (SIM4), m.2 -> first sim (SIM1)
-        - 3 (11): mPcie -> second sim (SIM4), m.2 -> second sim (SIM2)
+        - 0 (00): mPCIe -> first sim (SIM3),  M.2 -> first sim (SIM1)
+        - 1 (01): mPCIe -> first sim (SIM3),  M.2 -> second sim (SIM2)
+        - 2 (10): mPCIe -> second sim (SIM4), M.2 -> first sim (SIM1)
+        - 3 (11): mPCIe -> second sim (SIM4), M.2 -> second sim (SIM2)
 
         Example:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> rfm = RFM()
             >>> rfm.set_sim_status(2)
