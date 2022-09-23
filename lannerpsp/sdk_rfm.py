@@ -5,6 +5,7 @@ from .core import PSP, get_psp_exc_msg
 from .exc import (
     PSPError,
     PSPInvalid,
+    PSPNotSupport,
 )
 from .lmbinc import (
     ERR_Invalid,
@@ -14,14 +15,29 @@ from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
+SUPPORTED_PLATFORMS = ("LEB-7242",)
+UNSUPPORTED_PLATFORMS = ("LEC-7230", "NCA-2510", "V3S", "V6S",)
+
 
 class RFM:
     """
     Radio Frequency Module.
+
+    :param bool check_platform:
+        Set to :data:`True` to check if the platform supports this feature.
+        Defaults to :data:`False` for better compatibility.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, check_platform: bool = False) -> None:
         self._version = DLL().get_version()
+        if not check_platform:
+            return
+        if self._version.platform_id in SUPPORTED_PLATFORMS:
+            pass
+        elif self._version.platform_id in UNSUPPORTED_PLATFORMS:
+            raise PSPNotSupport("Not supported on this platform")
+        else:
+            raise NotImplementedError
 
     def get_power_status(self) -> int:
         """
@@ -138,6 +154,7 @@ class RFM:
         Set SIM card status.
 
         bit 0 means M.2 module, bit 1 means mPCIe module
+
         0: first sim, 1: second sim
 
         - 0 (00): mPCIe -> first sim (SIM3),  M.2 -> first sim (SIM1)

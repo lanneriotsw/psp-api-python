@@ -9,6 +9,7 @@ setup(
     name="lannerpsp",
     install_requires=[],
     extras_require={
+        "all": ["portio == 0.5"],
         "lec7242": ["portio == 0.5"],
     },
 )

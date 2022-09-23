@@ -15,10 +15,6 @@ represent. All classes in this section are concrete (not abstract).
 DLL
 ---
 
-.. note::
-
-    For all versions of Lanner PSP on all platforms.
-
 .. autoclass:: DLL
     :members: get_version, get_bios_id
 
@@ -32,3 +28,11 @@ DLLVersionModel
 
 .. autoclass:: DLLVersionModel
     :members: to_dict
+
+
+Supported Platforms
+===================
+
+.. note::
+
+    For all versions of Lanner PSP on all platforms.

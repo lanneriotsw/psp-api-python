@@ -27,6 +27,9 @@ from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
+SUPPORTED_PLATFORMS = ("LEB-7242", "LEC-7230", "NCA-2510", "V3S", "V6S",)
+UNSUPPORTED_PLATFORMS = ()
+
 
 class WDTInfoModel(NamedTuple):
     """To store WDT info values."""
@@ -42,10 +45,22 @@ class WDTInfoModel(NamedTuple):
 class WDT:
     """
     Watch Dog Timer.
+
+    :param bool check_platform:
+        Set to :data:`True` to check if the platform supports this feature.
+        Defaults to :data:`False` for better compatibility.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, check_platform: bool = False) -> None:
         self._version = DLL().get_version()
+        if not check_platform:
+            return
+        if self._version.platform_id in SUPPORTED_PLATFORMS:
+            pass
+        elif self._version.platform_id in UNSUPPORTED_PLATFORMS:
+            raise PSPNotSupport("Not supported on this platform")
+        else:
+            raise NotImplementedError
 
     def get_info(self) -> WDTInfoModel:
         """
@@ -105,8 +120,8 @@ class WDT:
             The value sets the timer count down.
 
         :param int time_base:
-            The value selects time base. Set :data:`1` to select SECOND base,
-            Set :data:`2` to select MINUTE base. Defaults to :data:`1`.
+            The value selects time base. Set ``1`` to select SECOND base,
+            Set ``2`` to select MINUTE base. Defaults to ``1``.
 
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: Invalid parameter value.
@@ -170,8 +185,8 @@ class WDT:
             The value sets the timer count down. Defaults to 0.
 
         :param int time_base:
-            The value selects time base. Set :data:`1` to select SECOND base,
-            Set :data:`2` to select MINUTE base. Defaults to :data:`1`.
+            The value selects time base. Set ``1`` to select SECOND base,
+            Set ``2`` to select MINUTE base. Defaults to ``1``.
 
         :raises TypeError: The input parameters type error.
         :raises PSPInvalid: Invalid parameter value.

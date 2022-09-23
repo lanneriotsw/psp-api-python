@@ -18,6 +18,10 @@ from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
+SUPPORTED_1_COM = ("LEB-7242",)
+SUPPORTED_2_COM = ("LEC-7230",)
+UNSUPPORTED_COM = ("NCA-2510",)
+
 MODES = ("Loopback", "RS-232", "RS-485", "RS-422")
 TERMS = ("Disabled", "Enabled", "----", "-----")
 
@@ -51,19 +55,22 @@ class COMPort:
         if not isinstance(num, int):
             raise TypeError("'num' type must be int")
         # Check value.
-        if self._version.platform_id in ("LEB-7242",):
+        if self._version.platform_id in SUPPORTED_1_COM:
             if num != 1:
                 raise PSPInvalid("'num' can only be set to (1) on this platform")
             # Check import for LEC-7242.
-            try:
-                from portio import ioperm
-            except ImportError:
-                raise RuntimeError(
-                    "Install lannerpsp with 'lec7242' extra in order to use COM port."
-                )
-        elif self._version.platform_id in ("LEC-7230",):
+            if self._version.platform_id == "LEB-7242":
+                try:
+                    from portio import ioperm
+                except ImportError:
+                    raise RuntimeError(
+                        "Install lannerpsp with 'lec7242' extra in order to use COM port."
+                    )
+        elif self._version.platform_id in SUPPORTED_2_COM:
             if not 1 <= num <= 2:
                 raise PSPInvalid("'num' can only be set to (1~2) on this platform")
+        elif self._version.platform_id in UNSUPPORTED_COM:
+            raise PSPNotSupport("Not supported on this platform")
         else:
             raise NotImplementedError
 

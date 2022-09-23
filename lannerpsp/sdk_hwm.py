@@ -33,6 +33,9 @@ from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
+SUPPORTED_PLATFORMS = ("LEB-7242", "LEC-7230", "NCA-2510", "V3S", "V6S",)
+UNSUPPORTED_PLATFORMS = ()
+
 ALARM = "\033[1;31mALARM\033[m"
 DEFAULT_HWM_CONF = "/etc/lanner/hwm.conf"
 
@@ -53,11 +56,23 @@ class HWMSensorModel(NamedTuple):
 class HWM:
     """
     Hardware Monitor.
+
+    :param bool check_platform:
+        Set to :data:`True` to check if the platform supports this feature.
+        Defaults to :data:`False` for better compatibility.
     """
 
-    def __init__(self) -> None:
-        self._version = DLL().get_version()
+    def __init__(self, check_platform: bool = False) -> None:
         self._dw_sensor_type = c_int32(0)
+        self._version = DLL().get_version()
+        if not check_platform:
+            return
+        if self._version.platform_id in SUPPORTED_PLATFORMS:
+            pass
+        elif self._version.platform_id in UNSUPPORTED_PLATFORMS:
+            raise PSPNotSupport("Not supported on this platform")
+        else:
+            raise NotImplementedError
 
     def get_cpu_temp(self, num: int) -> int:
         """
@@ -732,12 +747,12 @@ class HWM:
             >>> sensors = hwm.list_supported_sensors()
             >>> for s in sensors:
             ...     s.to_dict()
-            {'sid': 0, 'name': 'HWMID_TEMP_CPU1', 'display_name': 'CPU-1 temperature', 'value': 40, 'unit': 'C'}
-            {'sid': 2, 'name': 'HWMID_TEMP_SYS1', 'display_name': 'SYS-1 temperature', 'value': 42, 'unit': 'C'}
+            {'sid': 0, 'name': 'HWMID_TEMP_CPU1', 'display_name': 'CPU 1 temperature', 'value': 40, 'unit': 'C'}
+            {'sid': 2, 'name': 'HWMID_TEMP_SYS1', 'display_name': 'SYS 1 temperature', 'value': 42, 'unit': 'C'}
             .
             .
             .
-            {'sid': 12, 'name': 'HWMID_VOLT_DDRCH1', 'display_name': 'VDIMM-1', 'value': 1.096, 'unit': 'V'}
+            {'sid': 12, 'name': 'HWMID_VOLT_DDRCH1', 'display_name': 'DDR channel 1', 'value': 1.096, 'unit': 'V'}
             >>> for s in sensors:
             ...     print(f"{s.display_name} = {s.value} {s.unit}")
             ...

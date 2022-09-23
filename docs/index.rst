@@ -15,9 +15,12 @@ Table of Contents
    api_gsr
    api_hwm
    api_lcm
-   api_odm
+   api_odm_com_port
    api_rfm
    api_sled
+   api_sled_gps
+   api_sled_lte
+   api_sled_lte_stress
    api_swr
    api_wdt
    api_exc

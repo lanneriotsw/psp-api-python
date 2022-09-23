@@ -4,8 +4,12 @@ from ctypes import cdll, CDLL
 from .exc import (
     PSPBoardNotMatch,
     PSPBusyInUses,
+    PSPDriverNotLoad,
     PSPError,
+    PSPInvalid,
     PSPNotExist,
+    PSPNotOpened,
+    PSPNotSupport,
 )
 from .lmbinc import (
     ERR_BoardNotMatch,
@@ -60,12 +64,21 @@ class PSP:
         msg = get_psp_exc_msg("LMB_DLL_Init", i_ret)
         if i_ret == ERR_Success:
             return self
-        msg += "\nplease confirm the API libraries is matched this platform or the lmbiodrv driver was loaded"
-        logger.error(msg)
+        msg += " please confirm the API libraries is matched this platform or the lmbiodrv driver was loaded"
         if i_ret == ERR_NotExist:
             raise PSPNotExist(msg)
+        elif i_ret == ERR_NotOpened:
+            raise PSPNotOpened(msg)
+        elif i_ret == ERR_Invalid:
+            raise PSPInvalid(msg)
+        elif i_ret == ERR_NotSupport:
+            raise PSPNotSupport(msg)
+        elif i_ret == ERR_BusyInUses:
+            raise PSPBusyInUses(msg)
         elif i_ret == ERR_BoardNotMatch:
             raise PSPBoardNotMatch(msg)
+        elif i_ret == ERR_DriverNotLoad:
+            raise PSPDriverNotLoad(msg)
         else:
             raise PSPError(msg)
 

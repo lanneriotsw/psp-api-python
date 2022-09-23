@@ -4,9 +4,9 @@ Installing Python API for Lanner PSP
 
 .. Note::
 
-    "Python API for Lanner PSP" uses Python to call the ``.so`` file generated after PSP compilation
-    to execute PSP functions, and encapsulates many C functions in PSP into Python interfaces, so
-    please make sure to install `Core SDK`_ before use.
+    "Python API for Lanner PSP" uses Python to call the shared object file generated after PSP
+    compilation to execute PSP functions, and encapsulates many C functions in PSP into Python
+    interfaces, so please make sure to install `Core SDK`_ before use.
 
 Method 1: From PyPI
 ===================

@@ -2,6 +2,7 @@ import logging
 
 from portio import inb, ioperm, outb
 
+from .exc import PSPInvalid
 from .utils import is_root
 
 logger = logging.getLogger(__name__)
@@ -57,7 +58,7 @@ class GPIOConfigTool:
         :param int mode: 232/422/485
         :raises PermissionError: if not running as root user
         :raises TypeError: The input parameters type error.
-        :raises ValueError: The input parameters value error.
+        :raises PSPInvalid: The input parameter is out of range.
         """
         # Check permission.
         if not is_root():
@@ -73,7 +74,7 @@ class GPIOConfigTool:
         elif mode == 485:
             self._com3_switch_mode(2)
         else:
-            raise ValueError("'mode' value must be 232 or 422 or 485")
+            raise PSPInvalid("'mode' value must be 232 or 422 or 485")
         logger.debug(f"set com1 mode {mode}")
 
     def set_com1_termination(self, enable: bool) -> None:

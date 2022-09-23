@@ -1,6 +1,6 @@
-=========
-API - RFM
-=========
+===============
+API - RF Module
+===============
 
 .. module:: lannerpsp.sdk_rfm
 
@@ -15,11 +15,14 @@ represent. All classes in this section are concrete (not abstract).
 RFM
 ---
 
-.. note::
-
-    For `LEC-7242`_.
-
 .. autoclass:: RFM
     :members: get_power_status, set_power_status, get_sim_status, set_sim_status
+
+Supported Platforms
+===================
+
+The following platforms have been verified and confirmed to be supported:
+
+* `LEC-7242`_
 
 .. _LEC-7242: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-7242

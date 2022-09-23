@@ -18,14 +18,29 @@ from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
+SUPPORTED_PLATFORMS = ("LEB-7242", "NCA-2510",)
+UNSUPPORTED_PLATFORMS = ("LEC-7230", "V3S", "V6S",)
+
 
 class SWR:
     """
     Software Reset Button.
+
+    :param bool check_platform:
+        Set to :data:`True` to check if the platform supports this feature.
+        Defaults to :data:`False` for better compatibility.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, check_platform: bool = False) -> None:
         self._version = DLL().get_version()
+        if not check_platform:
+            return
+        if self._version.platform_id in SUPPORTED_PLATFORMS:
+            pass
+        elif self._version.platform_id in UNSUPPORTED_PLATFORMS:
+            raise PSPNotSupport("Not supported on this platform")
+        else:
+            raise NotImplementedError
 
     def get_status(self) -> int:
         """

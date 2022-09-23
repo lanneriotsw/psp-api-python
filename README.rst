@@ -26,8 +26,8 @@ consuming job which requires lots of related knowledge and time. In order to ach
 access hardware functionality, Lanner_ invests great effort to ease customer’s development journey
 with the release of a suite of reliable Software APIs.
 
-"Python API for Lanner PSP" uses Python to call the ``.so`` file generated after PSP compilation to
-execute PSP functions, and encapsulates many C functions in PSP into Python interfaces, so please
+"Python API for Lanner PSP" uses Python to call the shared object file generated after PSP compilation
+to execute PSP functions, and encapsulates many C functions in PSP into Python interfaces, so please
 make sure to install `Core SDK`_ before use.
 
 If your `Core SDK`_ was installed via the `One-Step Automated Install`_ method, you can use it out of
@@ -67,7 +67,7 @@ Then run it with **ROOT** privileges, the output will be like:
     CPU 1 Vcore = 0.856 V
     5V = 5.087 V
     3.3V = 3.35 V
-    battery = 3.184 V
+    Battery = 3.184 V
     DDR channel 1 = 1.104 V
 
 For complete usage, please refer to the documents_.

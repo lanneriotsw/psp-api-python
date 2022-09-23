@@ -1,4 +1,4 @@
-from enum import auto, Enum
+from enum import auto, Enum, unique
 
 HWM_DISPLAY_NAME_MAPPING = {
     # Temperature area
@@ -53,9 +53,9 @@ HWM_DISPLAY_NAME_MAPPING = {
     "HWMID_VOLT_P12V": "12V",
     "HWMID_VOLT_P5V": "5V",
     "HWMID_VOLT_P3V3": "3.3V",
-    "HWMID_VOLT_P5VSB": "standby 5V",
-    "HWMID_VOLT_P3V3SB": "standby 3.3V",
-    "HWMID_VOLT_VBAT": "battery",
+    "HWMID_VOLT_P5VSB": "Standby 5V",
+    "HWMID_VOLT_P3V3SB": "Standby 3.3V",
+    "HWMID_VOLT_VBAT": "Battery",
     "HWMID_VOLT_DDRCH1": "DDR channel 1",
     "HWMID_VOLT_DDRCH2": "DDR channel 2",
     "HWMID_VOLT_DDRCH3": "DDR channel 3",
@@ -80,26 +80,26 @@ HWM_DISPLAY_NAME_MAPPING = {
     "HWMID_RPM_FanCpu2": "CPU 2 fan speed",
     "HWMID_RPM_FanSys1": "SYS 1 fan speed",
     "HWMID_RPM_FanSys2": "SYS 2 fan speed",
-    "HWMID_RPM_Fan1A": "fan 1A speed",
-    "HWMID_RPM_Fan1B": "fan 1B speed",
-    "HWMID_RPM_Fan2A": "fan 2A speed",
-    "HWMID_RPM_Fan2B": "fan 2B speed",
-    "HWMID_RPM_Fan3A": "fan 3A speed",
-    "HWMID_RPM_Fan3B": "fan 3B speed",
-    "HWMID_RPM_Fan4A": "fan 4A speed",
-    "HWMID_RPM_Fan4B": "fan 4B speed",
-    "HWMID_RPM_Fan5A": "fan 5A speed",
-    "HWMID_RPM_Fan5B": "fan 5B speed",
-    "HWMID_RPM_Fan6A": "fan 6A speed",
-    "HWMID_RPM_Fan6B": "fan 6B speed",
-    "HWMID_RPM_Fan7A": "fan 7A speed",
-    "HWMID_RPM_Fan7B": "fan 7B speed",
-    "HWMID_RPM_Fan8A": "fan 8A speed",
-    "HWMID_RPM_Fan8B": "fan 8B speed",
-    "HWMID_RPM_Fan9A": "fan 9A speed",
-    "HWMID_RPM_Fan9B": "fan 9B speed",
-    "HWMID_RPM_Fan10A": "fan 10A speed",
-    "HWMID_RPM_Fan10B": "fan 10B speed",
+    "HWMID_RPM_Fan1A": "Fan 1A speed",
+    "HWMID_RPM_Fan1B": "Fan 1B speed",
+    "HWMID_RPM_Fan2A": "Fan 2A speed",
+    "HWMID_RPM_Fan2B": "Fan 2B speed",
+    "HWMID_RPM_Fan3A": "Fan 3A speed",
+    "HWMID_RPM_Fan3B": "Fan 3B speed",
+    "HWMID_RPM_Fan4A": "Fan 4A speed",
+    "HWMID_RPM_Fan4B": "Fan 4B speed",
+    "HWMID_RPM_Fan5A": "Fan 5A speed",
+    "HWMID_RPM_Fan5B": "Fan 5B speed",
+    "HWMID_RPM_Fan6A": "Fan 6A speed",
+    "HWMID_RPM_Fan6B": "Fan 6B speed",
+    "HWMID_RPM_Fan7A": "Fan 7A speed",
+    "HWMID_RPM_Fan7B": "Fan 7B speed",
+    "HWMID_RPM_Fan8A": "Fan 8A speed",
+    "HWMID_RPM_Fan8B": "Fan 8B speed",
+    "HWMID_RPM_Fan9A": "Fan 9A speed",
+    "HWMID_RPM_Fan9B": "Fan 9B speed",
+    "HWMID_RPM_Fan10A": "Fan 10A speed",
+    "HWMID_RPM_Fan10B": "Fan 10B speed",
     # Power supply area
     "HWMID_PSU1_STATUS": "PSU 1 status",
     "HWMID_PSU1_VOLTIN": "PSU 1 Vin",
@@ -128,6 +128,7 @@ HWM_DISPLAY_NAME_MAPPING = {
 }
 
 
+@unique
 class HWMSensorItemV23(Enum):
     # Temperature area
     HWMID_TEMP_CPU1 = 0
@@ -255,6 +256,7 @@ class HWMSensorItemV23(Enum):
     HWMID_TOTAL = auto()
 
 
+@unique
 class HWMSensorItemV30(Enum):
     # Temperature area
     HWMID_TEMP_CPU1 = 0

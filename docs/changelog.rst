@@ -4,6 +4,25 @@ Changelog
 
 .. currentmodule:: lannerpsp
 
+Release 0.0.9 (2022-09-23)
+==========================
+
+What's New
+----------
+
+* Add the ``all`` identifier to install all optional dependencies via ``pip install lannerpsp[all]``
+  for compatibility with all product types.
+* Change :exc:`ValueError` to :exc:`PSPInvalid` in :meth:`GPIOConfigTool.set_com1_mode` for better
+  consistency.
+* Add the ``check_platform`` parameter to the ``__init__`` method of multiple objects to check if the
+  current platform supports it.
+* Update the docs.
+
+Bug Fixes
+----------
+
+* Fix all display names to start with uppercase for :meth:`HWM.list_supported_sensors`.
+
 Release 0.0.8 (2022-08-30)
 ==========================
 
@@ -46,7 +65,7 @@ What's New
 * Change :class:`SoftwareReset` to :class:`SWR`.
 * Change :class:`WatchdogTimer` to :class:`WDT`.
 * Add direct access to COM port for `LEC-7242`_ with :class:`GPIOConfigTool`.
-* Add :meth:`WDT.enable`.
+* Add :meth:`WDT.config`.
 * Add ``time_base`` setting to :meth:`WDT.config` and :meth:`WDT.enable`.
 * Add PSP 3.0.0 support for `LEC-7230M`_.
 * Update test cases.
