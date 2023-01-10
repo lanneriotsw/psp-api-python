@@ -22,7 +22,7 @@ Development installation
     $ cd psp-api-python
     $ python3 -m venv venv
     $ source venv/bin/activate
-    (venv) $ pip install -r requirements.txt
+    (venv) $ pip install .[test,doc,dev]
 
 Building the docs
 =================

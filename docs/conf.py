@@ -3,23 +3,26 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import os
+import os.path
 import sys
 from datetime import datetime
 from pathlib import Path
 
-from setuptools.config import read_configuration
+import toml
 
-sys.path.insert(0, os.path.abspath('..'))
-config = read_configuration(str(Path(__file__).parent / '..' / 'setup.cfg'))
-info = config['metadata']
+# sys.path.insert(0, os.path.abspath('..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+config = toml.load(Path(__file__).parent / '..' / 'pyproject.toml')
+info = config['project']
+from lannerpsp import __version__
+info['version'] = __version__
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = info['name']
-author = info['author']
-copyright = f'{datetime.now():%Y}, Lanner Electronics Inc'
+author = info['authors'][0]['name']
+project_copyright = f'{datetime.now():%Y}, Lanner Electronics Inc'
 version = info['version']
 release = info['version']
 
@@ -64,8 +67,8 @@ html_theme = 'sphinx_rtd_theme'
 # html_theme_path = []
 html_title = f'{info["name"]} {info["version"]} Documentation'
 # html_short_title = None
-# html_logo = None
-# html_favicon = None
+html_logo = 'logo.svg'
+html_favicon = 'favicon.ico'
 html_static_path = ['_static']
 # html_extra_path = []
 # html_last_updated_fmt = '%b %d, %Y'

@@ -125,6 +125,7 @@ HWM_DISPLAY_NAME_MAPPING = {
     "HWMID_PSU2_TEMP2": "PSU 2 temperature 2",
     # add here for new items
     #
+    "HWMID_VOLT_VCCGT": "VCC GT",
 }
 
 

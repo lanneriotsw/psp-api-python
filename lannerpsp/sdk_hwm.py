@@ -19,6 +19,12 @@ from .lmbinc import (
     ERR_NotOpened,
     ERR_NotSupport,
     ERR_Success,
+    HWM_RISER_12V,
+    HWM_RISER_12VEXT,
+    HWM_RISER_FAN1,
+    HWM_RISER_TEMP1,
+    HWM_RISER_TEMPLocal,
+    HWM_RISER_VCC,
 )
 from .lmbipmi import (
     HWM_TYPE_NONE,
@@ -33,11 +39,17 @@ from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_PLATFORMS = ("LEB-7242", "LEC-7230", "NCA-2510", "V3S", "V6S",)
+SUPPORTED_PLATFORMS = ("LEB-7242", "LEC-2290", "LEC-7230", "NCA-2510", "V3S", "V6S",)
 UNSUPPORTED_PLATFORMS = ()
 
 ALARM = "\033[1;31mALARM\033[m"
 DEFAULT_HWM_CONF = "/etc/lanner/hwm.conf"
+
+
+class _HWMSensorMsgModel(NamedTuple):
+    """To store Hardware Monitor sensor message."""
+    value: Union[int, float, str]
+    unit: str
 
 
 class HWMSensorModel(NamedTuple):
@@ -103,8 +115,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetCpuTemp(num, byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_GetCpuTemp", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_TEMP_CPU{num:d}"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(f_temp.value):d}")
+            # hwm_id = f"HWMID_TEMP_CPU{num:d}"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(f_temp.value):d}")
             return int(f_temp.value)
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -144,8 +156,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetSysTemp(num, byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_GetSysTemp", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_TEMP_SYS{num:d}"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(f_temp.value):d}")
+            # hwm_id = f"HWMID_TEMP_SYS{num:d}"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(f_temp.value):d}")
             return int(f_temp.value)
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -185,8 +197,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetVcore(num, byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_GetVcore", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_VCORE_CPU{num:d}"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = f"HWMID_VCORE_CPU{num:d}"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -220,8 +232,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_Get12V(byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_Get12V", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = "HWMID_VOLT_P12V"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = "HWMID_VOLT_P12V"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -253,8 +265,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_Get5V(byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_Get5V", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = "HWMID_VOLT_P5V"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = "HWMID_VOLT_P5V"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -286,8 +298,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_Get3V3(byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_Get3V3", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = "HWMID_VOLT_P3V3"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = "HWMID_VOLT_P3V3"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -319,8 +331,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_Get5Vsb(byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_Get5Vsb", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = "HWMID_VOLT_P5VSB"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = "HWMID_VOLT_P5VSB"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -352,8 +364,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_Get3V3sb(byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_Get3V3sb", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = "HWMID_VOLT_P3V3SB"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = "HWMID_VOLT_P3V3SB"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -385,8 +397,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetVbat(byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_GetVbat", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = "HWMID_VOLT_VBAT"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = "HWMID_VOLT_VBAT"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -424,8 +436,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetVDDR(ch, byref(f_temp))
         msg = get_psp_exc_msg("LMB_HWM_GetVDDR", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_VOLT_DDRCH{ch:d}"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
+            # hwm_id = f"HWMID_VOLT_DDRCH{ch:d}"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {f_temp.value:2.3f}")
             return float(f"{f_temp.value:2.3f}")
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -458,8 +470,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetPowerSupply(num, byref(w_data))
         msg = get_psp_exc_msg("LMB_HWM_GetPowerSupply", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_PSU{num:d}_VOLTIN"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {w_data.value:d}")
+            # hwm_id = f"HWMID_PSU{num:d}_VOLTIN"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {w_data.value:d}")
             return w_data.value
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -492,8 +504,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetCpuFan(num, byref(w_rpm))
         msg = get_psp_exc_msg("LMB_HWM_GetCpuFan", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_RPM_FanCpu{num:d}"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
+            # hwm_id = f"HWMID_RPM_FanCpu{num:d}"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
             return int(w_rpm.value)
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -526,8 +538,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetSysFan(num, byref(w_rpm))
         msg = get_psp_exc_msg("LMB_HWM_GetSysFan", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_RPM_FanSys{num:d}"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
+            # hwm_id = f"HWMID_RPM_FanSys{num:d}"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
             return int(w_rpm.value)
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -567,8 +579,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetFanSpeed(num, byref(w_rpm))
         msg = get_psp_exc_msg("LMB_HWM_GetFanSpeed", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_RPM_Fan{num:d}A"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
+            # hwm_id = f"HWMID_RPM_Fan{num:d}A"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
             return int(w_rpm.value)
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -611,8 +623,8 @@ class HWM:
             i_ret = psp.lib.LMB_HWM_GetFanSpeedEx(num, byref(w_rpm), ex_num)
         msg = get_psp_exc_msg("LMB_HWM_GetFanSpeedEx", i_ret)
         if i_ret == ERR_Success:
-            hwm_id = f"HWMID_RPM_Fan{num:d}{ascii_uppercase[ex_num - 1]}"
-            logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
+            # hwm_id = f"HWMID_RPM_Fan{num:d}{ascii_uppercase[ex_num - 1]}"
+            # logger.debug(f"{HWM_DISPLAY_NAME_MAPPING[hwm_id]} = {int(w_rpm.value):d}")
             return int(w_rpm.value)
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -668,7 +680,7 @@ class HWM:
         msg = get_psp_exc_msg("LMB_HWM_GetSensorName", i_ret)
         if i_ret == ERR_Success:
             name: str = str_id_name.value.decode(errors="ignore")
-            logger.debug(f"Sensor ID={sid:d}, name is \"{name}\"")
+            # logger.debug(f"Sensor ID={sid:d}, name is \"{name}\"")
             return name
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -724,7 +736,7 @@ class HWM:
         msg = get_psp_exc_msg("LMB_HWM_GetSensorReport", i_ret)
         if i_ret == ERR_Success:
             message: str = str_msg.value.decode(errors="ignore")
-            logger.debug(f"Sensor ID={sid:d}, message is \"{message}\"")
+            # logger.debug(f"Sensor ID={sid:d}, message is \"{message}\"")
             return message
         elif i_ret == ERR_NotOpened:
             raise PSPNotOpened(msg)
@@ -785,38 +797,114 @@ class HWM:
             except PSPError:
                 continue
             name = self.get_sensor_name(i)
-            display_name = HWM_DISPLAY_NAME_MAPPING[name]
-            [value_str, unit] = message.strip().split()  # type: str
-            if unit in ("mCelsius",):
-                value = int(value_str) // 1000
-                unit = "C"
-            elif unit in ("mVolts",):
-                value = int(value_str) / 1000
-                unit = "V"
-            elif unit in ("mAmps",):
-                value = int(value_str) / 1000
-                unit = "A"
-            elif unit in ("mWatts",):
-                value = int(value_str) / 1000
-                unit = "W"
-            elif unit in ("Volts",):
-                value = int(value_str)
-                unit = "V"
-            elif unit in ("RPM",):
-                value = int(value_str)
-                unit = "RPM"
-            elif unit in ("Status",):
-                value = value_str
-                unit = "Status"
-            else:
-                value = None
-                # NotImplementedError
+            display_name = HWM_DISPLAY_NAME_MAPPING.get(name, None)
+            if display_name is None:
+                continue
+            parsed_msg = self._parse_sensor_msg(msg=message)
             supported_sensors.append(HWMSensorModel(sid=i,
                                                     name=name,
                                                     display_name=display_name,
-                                                    value=value,
-                                                    unit=unit))
+                                                    value=parsed_msg.value,
+                                                    unit=parsed_msg.unit))
+        # For LEC-2290 with PSP version 2.1.X:
+        if self._version.platform_id in ("LEC-2290",) and self._version.dll_major == 2 and self._version.dll_minor == 1:
+            str_msg = create_string_buffer(30)
+            with PSP() as psp:
+                for x in range(1, 3):
+                    sid = HWM_RISER_TEMP1 + x - 1
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        parsed_msg = self._parse_sensor_msg(msg=message)
+                        supported_sensors.append(HWMSensorModel(sid=sid,
+                                                                name="",
+                                                                display_name=f"Graphic Card Temp-{x}",
+                                                                value=parsed_msg.value,
+                                                                unit=parsed_msg.unit))
+                for x in range(1, 3):
+                    sid = HWM_RISER_FAN1 + x - 1
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        parsed_msg = self._parse_sensor_msg(msg=message)
+                        supported_sensors.append(HWMSensorModel(sid=sid,
+                                                                name="",
+                                                                display_name=f"Graphic Card FAN-{x}",
+                                                                value=parsed_msg.value,
+                                                                unit=parsed_msg.unit))
+                # For PSP version 2.1.2:
+                if self._version.dll_build == 2:
+                    sid = HWM_RISER_TEMPLocal
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        parsed_msg = self._parse_sensor_msg(msg=message)
+                        supported_sensors.append(HWMSensorModel(sid=sid,
+                                                                name="",
+                                                                display_name=f"Graphic Card Temp-Chip",
+                                                                value=parsed_msg.value,
+                                                                unit=parsed_msg.unit))
+                    sid = HWM_RISER_VCC
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        parsed_msg = self._parse_sensor_msg(msg=message)
+                        supported_sensors.append(HWMSensorModel(sid=sid,
+                                                                name="",
+                                                                display_name=f"Graphic Card 3.3V",
+                                                                value=parsed_msg.value,
+                                                                unit=parsed_msg.unit))
+                    sid = HWM_RISER_12V
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        parsed_msg = self._parse_sensor_msg(msg=message)
+                        supported_sensors.append(HWMSensorModel(sid=sid,
+                                                                name="",
+                                                                display_name=f"Graphic Card 12V",
+                                                                value=parsed_msg.value,
+                                                                unit=parsed_msg.unit))
+                    sid = HWM_RISER_12VEXT
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        parsed_msg = self._parse_sensor_msg(msg=message)
+                        supported_sensors.append(HWMSensorModel(sid=sid,
+                                                                name="",
+                                                                display_name=f"Graphic Card 12VEXT",
+                                                                value=parsed_msg.value,
+                                                                unit=parsed_msg.unit))
         return supported_sensors
+
+    @classmethod
+    def _parse_sensor_msg(cls, msg: str) -> _HWMSensorMsgModel:
+        """
+        Parse sensor message from :meth:`get_sensor_name`.
+
+        :param str msg: Output message from :meth:`get_sensor_name`.
+        :return: The :class:`_HWMSensorMsgModel` model.
+        :rtype: _HWMSensorMsgModel
+        """
+        value_str, unit = msg.strip().split()  # type: str
+        if unit in ("mCelsius",):
+            value = int(value_str) // 1000
+            unit = "C"
+        elif unit in ("mVolts",):
+            value = int(value_str) / 1000
+            unit = "V"
+        elif unit in ("mAmps",):
+            value = int(value_str) / 1000
+            unit = "A"
+        elif unit in ("mWatts",):
+            value = int(value_str) / 1000
+            unit = "W"
+        elif unit in ("Volts",):
+            value = int(value_str)
+            unit = "V"
+        elif unit in ("RPM",):
+            value = int(value_str)
+            unit = "RPM"
+        elif unit in ("Status",):
+            value = value_str
+            unit = "Status"
+        else:
+            value = value_str
+            # NotImplementedError
+        return _HWMSensorMsgModel(value=value, unit=unit)
 
     def testhwm(
             self,
@@ -1056,6 +1144,95 @@ class HWM:
                 if w_rpm.value < min_ or w_rpm.value > max_:
                     msg += f" {ALARM}"
                 print(msg)
+        # For LEC-2290 with PSP version 2.1.X:
+        if self._version.platform_id in ("LEC-2290",) and self._version.dll_major == 2 and self._version.dll_minor == 1:
+            for i in range(100, 0, -1):  # Searching from behind will be faster.
+                name = self.get_sensor_name(i)
+                if name != "HWMID_VOLT_VCCGT":
+                    continue
+                min_ = self._str_replace(cp.get("HWM_vccgt_volt", "min", fallback="0"))
+                max_ = self._str_replace(cp.get("HWM_vccgt_volt", "max", fallback="0"))
+                message = self.get_sensor_msg(sid=i)
+                value = self._parse_sensor_msg(msg=message).value
+                msg = f"VGT = {value:7.3f} V\t\t\t" \
+                      f"(min = {min_:7.3f} V, max = {max_:7.3f} V)"
+                if value < min_ or value > max_:
+                    msg += f" {ALARM}"
+                print(msg)
+                break
+            print("\033[2;31m=================== Graphic Card Sensor Items ======================\033[m")
+            str_msg = create_string_buffer(30)
+            with PSP() as psp:
+                for x in range(1, 3):
+                    sid = HWM_RISER_TEMP1 + x - 1
+                    min_ = self._str_replace(cp.get("HWM_RISER_TEMP", "min", fallback="0"))
+                    max_ = self._str_replace(cp.get("HWM_RISER_TEMP", "max", fallback="0"))
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        value = self._parse_sensor_msg(msg=message).value
+                        msg = f"Graphic Card Temp-{x:d} = {int(value):3d} C\t" \
+                              f"(min = {min_:7.0f} C, max = {max_:7.0f} C)"
+                        if value < min_ or value > max_:
+                            msg += f" {ALARM}"
+                        print(msg)
+                for x in range(1, 3):
+                    sid = HWM_RISER_FAN1 + x - 1
+                    min_ = self._str_replace(cp.get("HWM_RISER_FAN", "min", fallback="0"))
+                    max_ = self._str_replace(cp.get("HWM_RISER_FAN", "max", fallback="0"))
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        value = self._parse_sensor_msg(msg=message).value
+                        msg = f"Graphic Card FAN-{x:d} = {value:5d} rpm\t" \
+                              f"(min = {min_:5.0f} rpm, max = {max_:5.0f} rpm)"
+                        if value < min_ or value > max_:
+                            msg += f" {ALARM}"
+                        print(msg)
+                # For PSP version 2.1.2:
+                if self._version.dll_build == 2:
+                    sid = HWM_RISER_TEMPLocal
+                    min_ = self._str_replace(cp.get("HWM_RISER_LOCAL", "min", fallback="0"))
+                    max_ = self._str_replace(cp.get("HWM_RISER_LOCAL", "max", fallback="0"))
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        value = self._parse_sensor_msg(msg=message).value
+                        msg = f"Graphic Card Temp-Chip = {int(value):3d} C\t" \
+                              f"(min = {min_:7.0f} C, max = {max_:7.0f} C)"
+                        if value < min_ or value > max_:
+                            msg += f" {ALARM}"
+                        print(msg)
+                    sid = HWM_RISER_VCC
+                    min_ = self._str_replace(cp.get("HWM_3v3_volt", "min", fallback="0"))
+                    max_ = self._str_replace(cp.get("HWM_3v3_volt", "max", fallback="0"))
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        value = self._parse_sensor_msg(msg=message).value
+                        msg = f"Graphic Card 3.3V = {value:7.3f} V\t" \
+                              f"(min = {min_:7.3f} V, max = {max_:7.3f} V)"
+                        if value < min_ or value > max_:
+                            msg += f" {ALARM}"
+                        print(msg)
+                    sid = HWM_RISER_12V
+                    min_ = self._str_replace(cp.get("HWM_RISER_12v", "min", fallback="0"))
+                    max_ = self._str_replace(cp.get("HWM_RISER_12v", "max", fallback="0"))
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        value = self._parse_sensor_msg(msg=message).value
+                        msg = f"Graphic Card 12V = {value:7.3f} V\t" \
+                              f"(min = {min_:7.3f} V, max = {max_:7.3f} V)"
+                        if value < min_ or value > max_:
+                            msg += f" {ALARM}"
+                        print(msg)
+                    sid = HWM_RISER_12VEXT
+                    min_ = self._str_replace(cp.get("HWM_RISER_12v", "min", fallback="0"))
+                    max_ = self._str_replace(cp.get("HWM_RISER_12v", "max", fallback="0"))
+                    if psp.lib.LMB_HWM_GetF75837(sid, str_msg) != ERR_NotSupport:
+                        message: str = str_msg.value.decode(errors="ignore")
+                        value = self._parse_sensor_msg(msg=message).value
+                        msg = f"Graphic Card 12VEXT = {value:7.3f} V\t" \
+                              f"(min = {min_:7.3f} V, max = {max_:7.3f} V)"
+                        if value < min_ or value > max_:
+                            msg += f" {ALARM}"
+                        print(msg)
 
     def _hwm_tst_v23(
             self,

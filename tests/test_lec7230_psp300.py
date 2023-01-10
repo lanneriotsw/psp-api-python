@@ -49,7 +49,7 @@ class TestHWM:
 
     def test_list_supported_sensors(self):
         supported_sensors = self.hwm.list_supported_sensors()
-        assert [s.sid for s in supported_sensors] == [4, 5, 41, 42, 45, 46, 47, 49, 50]
+        assert sorted([s.sid for s in supported_sensors]) == sorted([4, 5, 41, 42, 45, 46, 47, 49, 50])
         assert supported_sensors[0].sid == 4
         assert supported_sensors[0].name == "HWMID_TEMP_SYS1"
         assert supported_sensors[1].sid == 5

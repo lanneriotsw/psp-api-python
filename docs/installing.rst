@@ -22,6 +22,6 @@ Method 2: From source
 
     git clone https://github.com/lanneriotsw/psp-api-python.git
     cd psp-api-python
-    python setup.py install
+    pip install .
 
 .. _Core SDK: https://github.com/lanneriotsw/psp-manager

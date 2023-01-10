@@ -10,6 +10,10 @@ Python API for Lanner PSP
     :target: https://opensource.org/licenses/MIT
     :alt: License: MIT
 
+.. image:: https://static.pepy.tech/badge/lannerpsp
+    :target: https://pepy.tech/project/lannerpsp
+    :alt: Total downloads
+
 .. image:: https://img.shields.io/pypi/pyversions/lannerpsp
     :target: https://www.python.org/
     :alt: Python version

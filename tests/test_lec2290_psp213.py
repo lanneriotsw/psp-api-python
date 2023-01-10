@@ -1,14 +1,11 @@
 """
-Platform: V3S
-PSP version: 2.1.0
+Platform: LEC-2290
+PSP version: 2.1.3
 OS version:
-- CentOS 7: All pass
+- Debian 11: All pass
 SDK:
-- sdk_can: Not implement yet, don't know how to use this SDK.
 - sdk_dll: Done.
 - sdk_gpio: Not implement yet, don't know how to use this SDK.
-- sdk_gps: Only completed the `search port` function.
-- sdk_gsr: Done, except `-set [register] [value]` and `-get [register]`, don't know how to use these functions.
 - sdk_hwm: Done.
 - sdk_ign: Not implement yet, don't know how to use this SDK.
 - sdk_poe: Not implement yet, don't know how to use this SDK.
@@ -37,39 +34,14 @@ class TestDLL:
         version = self.dll.get_version()
         assert version.dll_major == 2
         assert version.dll_minor == 1
-        assert version.dll_build == 0
-        assert version.platform_id == "V3S"
+        assert version.dll_build == 3
+        assert version.platform_id == "LEC-2290"
         assert version.board_major == 1
         assert version.board_minor == 0
         assert version.board_build == 2
 
     def test_get_bios_id(self):
-        assert self.dll.get_bios_id() == 'V3S BIOS V1.x0 "12/05/2019"'
-
-
-class TestGPS:
-    gps = GPS()
-
-    def test_search_port(self):
-        port = self.gps.search_port()
-        assert port == "/dev/ttyS3"
-
-
-class TestGSR:
-    gsr = GSR()
-
-    def test_get_data(self):
-        gsr_data = self.gsr.get_data()
-        assert gsr_data.g_range == 2
-        assert isinstance(gsr_data.mg_x, float)
-        assert isinstance(gsr_data.mg_y, float)
-        assert isinstance(gsr_data.mg_z, float)
-
-    def test_get_offset(self):
-        gsr_offset = self.gsr.get_offset()
-        assert gsr_offset.raw_x == 0
-        assert gsr_offset.raw_y == 0
-        assert gsr_offset.raw_z == 0
+        assert self.dll.get_bios_id() == 'LEB-2291B BIOS V2.02 "06/08/2021"'
 
 
 class TestHWM:
@@ -77,21 +49,26 @@ class TestHWM:
 
     def test_list_supported_sensors(self):
         supported_sensors = self.hwm.list_supported_sensors()
-        assert sorted([s.sid for s in supported_sensors]) == sorted([0, 2, 4, 7, 8, 11, 12])
+        assert sorted([s.sid for s in supported_sensors]) == sorted([
+            0, 2, 4, 6, 7, 10, 11, 72,
+            225, 226, 232, 233,
+        ])
         assert supported_sensors[0].sid == 0
         assert supported_sensors[0].name == "HWMID_TEMP_CPU1"
         assert supported_sensors[1].sid == 2
         assert supported_sensors[1].name == "HWMID_TEMP_SYS1"
         assert supported_sensors[2].sid == 4
         assert supported_sensors[2].name == "HWMID_VCORE_CPU1"
-        assert supported_sensors[3].sid == 7
-        assert supported_sensors[3].name == "HWMID_VOLT_P5V"
-        assert supported_sensors[4].sid == 8
-        assert supported_sensors[4].name == "HWMID_VOLT_P3V3"
-        assert supported_sensors[5].sid == 11
-        assert supported_sensors[5].name == "HWMID_VOLT_VBAT"
-        assert supported_sensors[6].sid == 12
-        assert supported_sensors[6].name == "HWMID_VOLT_DDRCH1"
+        assert supported_sensors[3].sid == 6
+        assert supported_sensors[3].name == "HWMID_VOLT_P12V"
+        assert supported_sensors[4].sid == 7
+        assert supported_sensors[4].name == "HWMID_VOLT_P5V"
+        assert supported_sensors[5].sid == 10
+        assert supported_sensors[5].name == "HWMID_VOLT_P3V3SB"
+        assert supported_sensors[6].sid == 11
+        assert supported_sensors[6].name == "HWMID_VOLT_VBAT"
+        assert supported_sensors[7].sid == 72
+        assert supported_sensors[7].name == "HWMID_VOLT_VCCGT"
 
 
 class TestWDT:

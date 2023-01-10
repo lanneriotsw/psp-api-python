@@ -3,6 +3,7 @@ Platform: LEC-7242
 PSP version: 2.1.2
 OS version:
 - Debian 10: All pass
+- Debian 11: All pass
 SDK:
 - sdk_bios: Done.
 - sdk_dll: Done.
@@ -54,7 +55,7 @@ class TestHWM:
 
     def test_list_supported_sensors(self):
         supported_sensors = self.hwm.list_supported_sensors()
-        assert [s.sid for s in supported_sensors] == [0, 2, 4, 7, 8, 11, 12]
+        assert sorted([s.sid for s in supported_sensors]) == sorted([0, 2, 4, 7, 8, 11, 12])
         assert supported_sensors[0].sid == 0
         assert supported_sensors[0].name == "HWMID_TEMP_CPU1"
         assert supported_sensors[1].sid == 2

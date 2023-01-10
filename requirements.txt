@@ -1,6 +1,0 @@
-portio
-pytest
-setuptools
-sphinx
-sphinx-rtd-theme
-twine

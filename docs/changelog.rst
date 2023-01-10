@@ -4,6 +4,25 @@ Changelog
 
 .. currentmodule:: lannerpsp
 
+Release 0.0.10 (2023-01-10)
+===========================
+
+What's New
+----------
+
+* Add :class:`HWM` graphic card support for `LEC-2290`_.
+* Add `LEC-2290`_ test scripts for PSP version 2.1.2 and 2.1.3.
+* Use `pyproject.toml` to replace `setup.cfg`, `setup.py` and `requirements.txt`.
+* Add Lanner logo and Lanner icon to sphinx docs.
+
+Bug Fixes
+---------
+
+* Changed optional dependency name `lec7242` to `portio` for generality.
+* Remove redundant log message in :class:`HWM`.
+
+.. _LEC-2290: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-2290
+
 Release 0.0.9 (2022-09-23)
 ==========================
 
@@ -19,7 +38,7 @@ What's New
 * Update the docs.
 
 Bug Fixes
-----------
+---------
 
 * Fix all display names to start with uppercase for :meth:`HWM.list_supported_sensors`.
 
@@ -33,7 +52,7 @@ What's New
 * Remove LICENSE block shown in PyPi.
 
 Bug Fixes
-----------
+---------
 
 * Fix :meth:`HWM.list_supported_sensors` docs from °C to C.
 * Fix code-block decorator from python to pycon.
@@ -71,7 +90,7 @@ What's New
 * Update test cases.
 
 Bug Fixes
-----------
+---------
 
 * Enhanced fool-proof checks for many functions.
 
@@ -90,7 +109,7 @@ What's New
 * Add :class:`LCM` usage in ``README.md``.
 
 Bug Fixes
-----------
+---------
 
 * Fix ``seconds`` fool-proof check in :meth:`WatchdogTimer.enable`.
 
@@ -114,7 +133,7 @@ What's New
 * Update test cases in ``tests/``.
 
 Bug Fixes
-----------
+---------
 
 * Fix permission check in :class:`ComPort`.
 * Fix :meth:`SoftwareReset.test` stdout error when setting less than 5 seconds.

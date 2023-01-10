@@ -38,12 +38,14 @@ Supported Platforms
 
 The following platforms have been verified and confirmed to be supported:
 
+* `LEC-2290`_
 * `LEC-7230M`_
 * `LEC-7242`_
 * `NCA-2510`_
 * `V3S`_
 * `V6S`_
 
+.. _LEC-2290: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-2290
 .. _LEC-7230M: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-7230m
 .. _LEC-7242: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-7242
 .. _NCA-2510: https://lannerinc.com/products/telecom-datacenter-appliances/vcpe-ucpe-platforms/nca-2510

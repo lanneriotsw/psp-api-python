@@ -27,7 +27,7 @@ from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_PLATFORMS = ("LEB-7242", "LEC-7230", "NCA-2510", "V3S", "V6S",)
+SUPPORTED_PLATFORMS = ("LEB-7242", "LEC-2290", "LEC-7230", "NCA-2510", "V3S", "V6S",)
 UNSUPPORTED_PLATFORMS = ()
 
 

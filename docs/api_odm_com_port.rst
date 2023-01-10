@@ -34,7 +34,7 @@ Supported Platforms
 
 .. note::
 
-    The `LEC-7242`_ requires some additional dependencies to be installed via ``pip install lannerpsp[lec7242]``
+    The `LEC-7242`_ requires some additional dependencies to be installed via ``pip install lannerpsp[portio]``
     to use the COM port.
 
 The following platforms have been verified and confirmed to be supported:
