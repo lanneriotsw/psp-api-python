@@ -4,6 +4,14 @@ Changelog
 
 .. currentmodule:: lannerpsp
 
+Release 0.0.11 (2023-01-10)
+===========================
+
+Bug Fixes
+---------
+
+* Fix sphinx docs :exc:`ModuleNotFoundError` when building on `readthedocs`_.
+
 Release 0.0.10 (2023-01-10)
 ===========================
 

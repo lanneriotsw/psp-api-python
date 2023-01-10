@@ -37,7 +37,7 @@ from .sdk_sled_lte_stress import LTEStressLED
 from .sdk_swr import SWR
 from .sdk_wdt import WDT, WDTInfoModel
 
-__version__ = "0.0.10"
+__version__ = "0.0.11"
 __all__ = [
     # Functions
     "get_psp_exc_msg",
