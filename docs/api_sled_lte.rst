@@ -16,7 +16,7 @@ LTEStatusLED
 ------------
 
 .. autoclass:: LTEStatusLED
-    :members: off, red, red_blink, green, green_blink, yellow, yellow_blink, test
+    :members: off, red, red_blink, green, green_blink, yellow, yellow_blink
 
 Supported Platforms
 ===================

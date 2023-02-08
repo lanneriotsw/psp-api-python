@@ -4,6 +4,25 @@ Changelog
 
 .. currentmodule:: lannerpsp
 
+Release 0.0.12 (2023-02-08)
+===========================
+
+What's New
+----------
+
+* Add :class:`GPIO` support.
+* Add :class:`PoE` support.
+* Add `IIoT-I530`_ test scripts for PSP version 2.3.7.
+* Update documentation.
+* Remove ``test`` functions in documentation that will be removed in a future release.
+
+Bug Fixes
+---------
+
+* Fix the discrimination logic in :meth:`DLL.get_bios_id`.
+
+.. _IIoT-I530: https://lannerinc.com/products/intelligent-edge-appliances/intelligent-video-platform/iiot-i530
+
 Release 0.0.11 (2023-01-10)
 ===========================
 
@@ -20,13 +39,13 @@ What's New
 
 * Add :class:`HWM` graphic card support for `LEC-2290`_.
 * Add `LEC-2290`_ test scripts for PSP version 2.1.2 and 2.1.3.
-* Use `pyproject.toml` to replace `setup.cfg`, `setup.py` and `requirements.txt`.
+* Use ``pyproject.toml`` to replace ``setup.cfg``, ``setup.py`` and ``requirements.txt``.
 * Add Lanner logo and Lanner icon to sphinx docs.
 
 Bug Fixes
 ---------
 
-* Changed optional dependency name `lec7242` to `portio` for generality.
+* Changed optional dependency name ``lec7242`` to ``portio`` for generality.
 * Remove redundant log message in :class:`HWM`.
 
 .. _LEC-2290: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-2290

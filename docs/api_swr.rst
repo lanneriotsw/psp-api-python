@@ -16,7 +16,7 @@ SWR
 ---
 
 .. autoclass:: SWR
-    :members: get_status, exec_callback, test, is_pressed, wait_for_press, wait_for_release
+    :members: get_status, exec_callback, is_pressed, wait_for_press, wait_for_release
 
 Supported Platforms
 ===================

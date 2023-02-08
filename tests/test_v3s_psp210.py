@@ -6,12 +6,12 @@ OS version:
 SDK:
 - sdk_can: Not implement yet, don't know how to use this SDK.
 - sdk_dll: Done.
-- sdk_gpio: Not implement yet, don't know how to use this SDK.
+- sdk_gpio: Done.
 - sdk_gps: Only completed the `search port` function.
 - sdk_gsr: Done, except `-set [register] [value]` and `-get [register]`, don't know how to use these functions.
 - sdk_hwm: Done.
 - sdk_ign: Not implement yet, don't know how to use this SDK.
-- sdk_poe: Not implement yet, don't know how to use this SDK.
+- sdk_poe: Done.
 - sdk_wdt: Done.
 """
 from time import sleep
@@ -45,6 +45,11 @@ class TestDLL:
 
     def test_get_bios_id(self):
         assert self.dll.get_bios_id() == 'V3S BIOS V1.x0 "12/05/2019"'
+
+
+class TestGPIO:
+    # TODO: Tooling is required.
+    pass
 
 
 class TestGPS:
@@ -92,6 +97,28 @@ class TestHWM:
         assert supported_sensors[5].name == "HWMID_VOLT_VBAT"
         assert supported_sensors[6].sid == 12
         assert supported_sensors[6].name == "HWMID_VOLT_DDRCH1"
+
+
+class TestPoE:
+
+    def test_get_supported_ports(self):
+        poe_info = PoE.get_info()
+        assert poe_info.number_of_poe_ports == 4
+
+    def test_set_all(self):
+        for i in range(4):
+            poe1 = PoE(i + 1)
+            poe1.enable()
+            assert poe1.get_power_status() is True
+            assert PoE.get_info().power_status[i + 1] is True
+            poe1.disable()
+            assert poe1.get_power_status() is False
+            assert PoE.get_info().power_status[i + 1] is False
+
+    def test_init_out_of_range(self):
+        with pytest.raises(PSPInvalid) as e:
+            PoE(5)
+        assert str(e.value) == "'num' can only be set to (1~4) on this platform"
 
 
 class TestWDT:

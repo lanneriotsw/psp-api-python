@@ -1,5 +1,6 @@
 import logging
 from ctypes import cdll, CDLL
+from typing import List
 
 from .exc import (
     PSPBoardNotMatch,
@@ -162,3 +163,25 @@ def get_psp_exc_msg(func_name: str, ret_code: int) -> str:
     else:
         msg += "unknown error )"
     return msg
+
+
+def convert_to_bit_array(n: int) -> List[int]:
+    """
+    Convert int to bit array.
+
+    Example:
+
+    .. code-block:: pycon
+
+        >>> from lannerpsp import *
+        >>> gpio = GPIO()
+        >>> gpio.get_digital_in()
+        12
+        >>> convert_to_bit_array(gpio.get_digital_in())
+        [1, 1, 0, 0]
+
+    :param int n: An integer to be converted.
+    :return: A list of 0 or 1.
+    :rtype: typing.List[int]
+    """
+    return [1 if digit == "1" else 0 for digit in bin(n)[2:]]  # [2:] to chop off the "0b" part

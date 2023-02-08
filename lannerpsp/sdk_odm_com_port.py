@@ -1,5 +1,5 @@
 import logging
-from ctypes import byref, c_int8
+from ctypes import byref, c_uint8
 from typing import Any, Dict, NamedTuple
 
 from .core import PSP, get_psp_exc_msg
@@ -13,14 +13,16 @@ from .lmbinc import (
     URMODE_RS232,
     URMODE_RS422,
     URMODE_RS485,
+    URTERM_OFF,
+    URTERM_ON,
 )
 from .sdk_dll import DLL
 
 logger = logging.getLogger(__name__)
 
 SUPPORTED_1_COM = ("LEB-7242",)
-SUPPORTED_2_COM = ("LEC-7230",)
-UNSUPPORTED_COM = ("NCA-2510",)
+SUPPORTED_2_COM = ("LEB-2680", "LEC-7230")
+UNSUPPORTED_COM = ("LEC-2290", "NCA-2510", "V3S", "V6S",)
 
 MODES = ("Loopback", "RS-232", "RS-485", "RS-422")
 TERMS = ("Disabled", "Enabled", "----", "-----")
@@ -46,6 +48,8 @@ class COMPort:
     :param int num: COM port number
     :raises TypeError: The input parameters type error.
     :raises PSPInvalid: The input parameter is out of range.
+    :raises PSPNotSupport: This function is not supported.
+    :raises NotImplementedError: It has not been verified to run on this platform.
     """
 
     def __init__(self, num: int) -> None:
@@ -103,10 +107,10 @@ class COMPort:
         """
         if self._version.platform_id not in ("LEC-7230",):
             raise PSPNotSupport("Not support on this platform")
-        b_mode = c_int8()
-        b_term = c_int8()
+        b_mode = c_uint8()
+        b_term = c_uint8()
         mode_mapping = {URMODE_RS232: 232, URMODE_RS422: 422, URMODE_RS485: 485}
-        termination_mapping = {2: True, 1: False}
+        termination_mapping = {URTERM_ON: True, URTERM_OFF: False}
         with PSP() as psp:
             i_ret = psp.lib.LMB_ODM_GetUartMode(self._num, byref(b_mode))
             msg = get_psp_exc_msg("LMB_ODM_GetUartMode", i_ret)
@@ -142,7 +146,7 @@ class COMPort:
         if self._version.platform_id == "LEB-7242":
             from .gpio_config_tool import GPIOConfigTool
             GPIOConfigTool().set_com1_mode(mode)
-        elif self._version.platform_id == "LEC-7230":
+        elif self._version.platform_id in ("LEB-2680", "LEC-7230"):
             self._set_mode(mode)
         else:
             raise PSPNotSupport("Not support on this platform")
@@ -166,7 +170,7 @@ class COMPort:
         if self._version.platform_id == "LEB-7242":
             from .gpio_config_tool import GPIOConfigTool
             GPIOConfigTool().set_com1_termination(enable)
-        elif self._version.platform_id == "LEC-7230":
+        elif self._version.platform_id in ("LEB-2680", "LEC-7230"):
             self._set_termination(enable)
         else:
             raise PSPNotSupport("Not support on this platform")
@@ -187,7 +191,7 @@ class COMPort:
             raise PSPInvalid("'mode' value must be 232 or 422 or 485")
         # Run.
         mode_mapping = {232: URMODE_RS232, 422: URMODE_RS422, 485: URMODE_RS485}
-        b_mode = c_int8(mode_mapping[mode])
+        b_mode = c_uint8(mode_mapping[mode])
         with PSP() as psp:
             i_ret = psp.lib.LMB_ODM_SetUartMode(self._num, b_mode)
         msg = get_psp_exc_msg("LMB_ODM_SetUartMode", i_ret)
@@ -208,8 +212,8 @@ class COMPort:
         if not isinstance(enable, bool):
             raise TypeError("'enable' type must be bool")
         # Run.
-        termination_mapping = {True: 2, False: 1}
-        b_term = c_int8(termination_mapping[enable])
+        termination_mapping = {True: URTERM_ON, False: URTERM_OFF}
+        b_term = c_uint8(termination_mapping[enable])
         with PSP() as psp:
             i_ret = psp.lib.LMB_ODM_Termination(self._num, b_term.value - 1)
         msg = get_psp_exc_msg("LMB_ODM_Termination", i_ret)

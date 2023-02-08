@@ -16,7 +16,7 @@ SystemLED
 ---------
 
 .. autoclass:: SystemLED
-    :members: get_status, off, green, red, test
+    :members: get_status, off, green, red
 
 Supported Platforms
 ===================

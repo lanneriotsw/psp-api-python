@@ -20,7 +20,7 @@ from .utils import show_delay
 logger = logging.getLogger(__name__)
 
 SUPPORTED_PLATFORMS = ("LEB-7242", "NCA-2510",)
-UNSUPPORTED_PLATFORMS = ("LEC-7230", "V3S", "V6S",)
+UNSUPPORTED_PLATFORMS = ("LEB-2680", "LEC-2290", "LEC-7230", "V3S", "V6S",)
 
 
 class SystemLED:
@@ -32,6 +32,10 @@ class SystemLED:
     :param bool check_platform:
         Set to :data:`True` to check if the platform supports this feature.
         Defaults to :data:`False` for better compatibility.
+    :raises PSPNotSupport: This function is not supported
+        (when ``check_platform`` is set to :data:`True`).
+    :raises NotImplementedError: It has not been verified to run on this platform
+        (when ``check_platform`` is set to :data:`True`).
     """
 
     def __init__(self, check_platform: bool = False) -> None:
@@ -55,6 +59,7 @@ class SystemLED:
 
             >>> system_led = SystemLED()
             >>> system_led.get_status()
+            2
 
         :return: system LED status
         :rtype: int

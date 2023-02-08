@@ -11,11 +11,13 @@ Table of Contents
    recipes
    development
    api_dll
+   api_gpio
    api_gps
    api_gsr
    api_hwm
    api_lcm
    api_odm_com_port
+   api_poe
    api_rfm
    api_sled
    api_sled_gps

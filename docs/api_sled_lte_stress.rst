@@ -16,7 +16,7 @@ LTEStressLED
 ------------
 
 .. autoclass:: LTEStressLED
-    :members: off, set_strength, test
+    :members: off, set_strength
 
 Supported Platforms
 ===================

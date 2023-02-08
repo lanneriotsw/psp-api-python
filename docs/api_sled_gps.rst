@@ -16,7 +16,7 @@ GPSStatusLED
 ------------
 
 .. autoclass:: GPSStatusLED
-    :members: off, on, blink, test
+    :members: off, on, blink
 
 Supported Platforms
 ===================

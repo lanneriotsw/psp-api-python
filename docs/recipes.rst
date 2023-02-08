@@ -41,17 +41,31 @@ be found in the user manual on Lanner's official website `product page`_.
 
 .. _product page: https://lannerinc.com/products
 
+GPIO
+====
+
+Example for `LEC-2290`_:
+
+.. image:: images/LEC-2290_GPIO.*
+
+`LEC-2290`_ has 1x 20 pin terminal block 8 DI (12V) & 8 DO (12V,100mA) Isolation, you can get
+or set the :class:`GPIO` status according to your needs:
+
+.. literalinclude:: examples/gpio_full_usage.py
+
+.. _LEC-2290: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-2290
+
 GPS
 ===
 
-Example for V6S_:
+Example for `V6S`_:
 
 .. image:: images/V6S_GPS.*
 
 Connect the GPS antenna and place it in an open and unshaded place to ensure
 that the GPS can receive satellite signals normally.
 
-Search for the port of the :class:`GPS` on V6S_:
+Search for the port of the :class:`GPS` on `V6S`_:
 
 .. literalinclude:: examples/gps_search_port.py
 
@@ -60,11 +74,11 @@ Search for the port of the :class:`GPS` on V6S_:
 LCD Module
 ==========
 
-Example for NCA-2510_:
+Example for `NCA-2510`_:
 
 .. image:: images/NCA-2510_LCM.*
 
-NCA-2510_ has a LCD Module with a keypad, you can write string to the :class:`LCM`
+`NCA-2510`_ has a LCD Module with a keypad, you can write string to the :class:`LCM`
 or get the keypad status:
 
 .. literalinclude:: examples/lcm_write.py
@@ -74,21 +88,35 @@ or get the keypad status:
 COM Port
 ========
 
-Example for LEC-7230M_:
+Example for `LEC-7230M`_:
 
 .. image:: images/LEC-7230M_COMPort.*
 
-LEC-7230M_ has 2x DB9 Serial COM ports supporting RS232/422/485, you can set
+`LEC-7230M`_ has 2x DB9 Serial COM ports supporting RS232/422/485, you can set
 the :class:`COMPort` mode according to your needs:
 
 .. literalinclude:: examples/com_port_set_mode.py
 
 .. _LEC-7230M: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-7230m
 
+PoE
+===
+
+Example for `IIoT-I530`_:
+
+.. image:: images/IIoT-I530_PoE.*
+
+`IIoT-I530`_ SKU A has 6x GbE RJ45 for PoE+ (Total PoE budget of 120W), you can set
+the :class:`PoE` power status according to your needs:
+
+.. literalinclude:: examples/poe_full_usage.py
+
+.. _IIoT-I530: https://lannerinc.com/products/intelligent-edge-appliances/intelligent-video-platform/iiot-i530
+
 RF Module
 =========
 
-Example for LEC-7242_:
+Example for `LEC-7242`_:
 
 .. image:: images/LEC-7242_RFM.*
 
@@ -113,7 +141,7 @@ SIM1, SIM2 for M.2 LTE module, SIM3, SIM4 for mini-PCIe LTE module:
     The Cover-Remove-detect I/O will deliver the GPO signal and cut off the Power
     of m.2 and mini PCIe while uninstalls the cover.
 
-LEC-7242_ is pre-installed with a mini-PCIe LTE module. Suppose a SIM card is
+`LEC-7242`_ is pre-installed with a mini-PCIe LTE module. Suppose a SIM card is
 installed in each of the SIM3 and SIM4 slots, and SIM3 is enabled. If you want
 to switch the SIM card from SIM3 slot to SIM4 slot:
 
@@ -124,11 +152,11 @@ to switch the SIM card from SIM3 slot to SIM4 slot:
 System LED
 ==========
 
-Example for LEC-7242_:
+Example for `LEC-7242`_:
 
 .. image:: images/LEC-7242_SystemLED.*
 
-LEC-7242_ has a Yellow LED for Alarm, you can set the :class:`SystemLED`
+`LEC-7242`_ has a Yellow LED for Alarm, you can set the :class:`SystemLED`
 light mode according to your needs:
 
 .. literalinclude:: examples/system_led_set_mode.py
@@ -136,11 +164,11 @@ light mode according to your needs:
 GPS Status LED
 ==============
 
-Example for LEC-7242_:
+Example for `LEC-7242`_:
 
 .. image:: images/LEC-7242_GPSStatusLED.*
 
-LEC-7242_ has 1x Blue LED for GPS status, you can set the :class:`GPSStatusLED`
+`LEC-7242`_ has 1x Blue LED for GPS status, you can set the :class:`GPSStatusLED`
 light mode according to your needs:
 
 .. literalinclude:: examples/gps_status_led_set_mode.py
@@ -148,11 +176,11 @@ light mode according to your needs:
 LTE Status LED
 ==============
 
-Example for LEC-7242_:
+Example for `LEC-7242`_:
 
 .. image:: images/LEC-7242_LTEStatusLED.*
 
-LEC-7242_ has 1x Yellow/Green/Red LED for LTE status, you can set the :class:`LTEStatusLED`
+`LEC-7242`_ has 1x Yellow/Green/Red LED for LTE status, you can set the :class:`LTEStatusLED`
 light mode according to your needs:
 
 .. literalinclude:: examples/lte_status_led_set_mode.py
@@ -160,11 +188,11 @@ light mode according to your needs:
 LTE Stress LED
 ==============
 
-Example for LEC-7242_:
+Example for `LEC-7242`_:
 
 .. image:: images/LEC-7242_LTEStressLED.*
 
-LEC-7242_ has 4x Blue LED for LTE signal level status, you can set the :class:`LTEStressLED`
+`LEC-7242`_ has 4x Blue LED for LTE signal level status, you can set the :class:`LTEStressLED`
 signal strength from 1% to 100%:
 
 .. literalinclude:: examples/lte_stress_led_set_strength.py
@@ -172,7 +200,7 @@ signal strength from 1% to 100%:
 Software Reset Button
 =====================
 
-Example for NCR-1510_:
+Example for `NCR-1510`_:
 
 .. image:: images/NCR-1510_SWR.*
 

@@ -5,7 +5,7 @@ OS version:
 - Debian 10: All pass
 SDK:
 - sdk_dll: Done.
-- sdk_gpio: Not implement yet, don't know how to use this SDK.
+- sdk_gpio: Done.
 - sdk_hwm: Done, except `-testop [seconds]`, don't know how to use this function.
 - sdk_odm: Done.
 - sdk_swr: Not implement yet, don't know how to set the button from hardware reset to software reset.
@@ -42,6 +42,11 @@ class TestDLL:
 
     def test_get_bios_id(self):
         assert self.dll.get_bios_id() == 'LEB-7230L Ver.MI0 04/10/2018'
+
+
+class TestGPIO:
+    # TODO: Tooling is required.
+    pass
 
 
 class TestHWM:

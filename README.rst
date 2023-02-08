@@ -27,7 +27,7 @@ About
 When developers intend to write an application that involves hardware access, they were required
 to fully understand the specifications to utilize the drivers. This is often being considered a time-
 consuming job which requires lots of related knowledge and time. In order to achieve better full
-access hardware functionality, Lanner_ invests great effort to ease customer’s development journey
+access hardware functionality, `Lanner`_ invests great effort to ease customer’s development journey
 with the release of a suite of reliable Software APIs.
 
 "Python API for Lanner PSP" uses Python to call the shared object file generated after PSP compilation
@@ -74,13 +74,21 @@ Then run it with **ROOT** privileges, the output will be like:
     Battery = 3.184 V
     DDR channel 1 = 1.104 V
 
-For complete usage, please refer to the documents_.
+For complete usage, please refer to the `documentation`_.
+
+Concurrency and Parallelism
+===========================
+
+`Lanner PSP`_ invokes many underlying hardware interfaces for communication, such as IPMI, SMBus,
+Super I/O, or some MCUs. Some PSP functions may occupy the same communication channel, such as UART
+or I2C, etc. Please **avoid** using multi-process or multi-threading unless you can ensure they will
+not cause errors due to simultaneous access to the same channel.
 
 Installation
 ============
 
 To use the "Python API for Lanner PSP", you must have **ROOT** privileges and the `Core SDK`_ must be
-installed first. To install "Python API for Lanner PSP", see the Installation_ chapter.
+installed first. To install "Python API for Lanner PSP", see the `Installation`_ chapter.
 
 Documentation
 =============
@@ -91,7 +99,7 @@ Issues and questions
 ====================
 
 If you have a feature request or bug report, please open an `issue on GitHub`_.
-If you have a question or need help, this may be better suited to Lanner_'s official online customer service.
+If you have a question or need help, this may be better suited to `Lanner`_'s official online customer service.
 
 Python support
 ==============
@@ -104,6 +112,6 @@ Python support
 .. _Lanner: https://lannerinc.com/
 .. _Core SDK: https://github.com/lanneriotsw/psp-manager
 .. _One-Step Automated Install: https://github.com/lanneriotsw/psp-manager#method-1-one-step-automated-install
-.. _documents: https://psp-api-python.readthedocs.io/
+.. _documentation: https://psp-api-python.readthedocs.io/
 .. _Installation: https://psp-api-python.readthedocs.io/en/stable/installing.html
 .. _issue on GitHub: https://github.com/lanneriotsw/psp-api-python/issues/new

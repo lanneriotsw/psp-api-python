@@ -7,7 +7,7 @@ SDK:
 - sdk_bios: Done.
 - sdk_dll: Done.
 - sdk_eep: Not implement yet, don't know how to use this SDK.
-- sdk_gpio: Not implement yet, don't know how to use this SDK.
+- sdk_gpio: Done.
 - sdk_hwm: Done.
 - sdk_lbp: Not implement yet, don't know how to use this SDK.
 - sdk_lcm: Done, except UART type device.
@@ -46,6 +46,11 @@ class TestDLL:
 
     def test_get_bios_id(self):
         assert self.dll.get_bios_id() == '*LIID NCA-2510B BIOS V2.02 "08/09/2018"'
+
+
+class TestGPIO:
+    # TODO: Tooling is required.
+    pass
 
 
 class TestHWM:

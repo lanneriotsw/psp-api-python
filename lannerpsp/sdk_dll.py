@@ -123,21 +123,7 @@ class DLL:
         :raises PSPNotSupport: This platform does not support this function.
         :raises PSPError: General PSP functional error.
         """
-        version = self.get_version()
-        if version.dll_major == 2 and version.dll_minor in (0, 1, 2):
-            # `sudo usermod -g kmem yourID`
-            # `sudo busybox devmem 0x00ff58b 8 | xxd -r -p`
-            key = "*LIID "
-            with open("/dev/mem", "rb") as f:
-                mem = mmap(f.fileno(), 0x10000, MAP_SHARED, PROT_READ, offset=0x000f0000)
-            if mem is None:
-                return ""
-            if not mem.read(33 + len(key)).startswith(key.encode()):
-                # not found "*LIID"
-                # add here for BIOS uses traditional position F000:F58B
-                mem.seek(0xF58B)
-            return mem.read(33 + len(key)).decode().replace(key, "").strip().rsplit('"', 1)[0] + '"'
-        else:
+        try:
             str_bios_id = (c_int8 * 50)(*range(50))  # str_bios_id = create_string_buffer(50)
             with PSP() as psp:
                 i_ret = psp.lib.LMB_DLL_BIOSID(str_bios_id, sizeof(str_bios_id))
@@ -150,3 +136,16 @@ class DLL:
                 raise PSPNotSupport(msg)
             else:
                 raise PSPError(msg)
+        except AttributeError:
+            # `sudo usermod -g kmem yourID`
+            # `sudo busybox devmem 0x00ff58b 8 | xxd -r -p`
+            key = "*LIID "
+            with open("/dev/mem", "rb") as f:
+                mem = mmap(f.fileno(), 0x10000, MAP_SHARED, PROT_READ, offset=0x000f0000)
+            if mem is None:
+                return ""
+            if not mem.read(33 + len(key)).startswith(key.encode()):
+                # not found "*LIID"
+                # add here for BIOS uses traditional position F000:F58B
+                mem.seek(0xF58B)
+            return mem.read(33 + len(key)).decode().replace(key, "").strip().rsplit('"', 1)[0] + '"'

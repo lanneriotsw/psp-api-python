@@ -20,7 +20,7 @@ HWM
         get_12v_volt, get_5v_volt, get_3v3_volt, get_5vsb_volt, get_3v3sb_volt,
         get_bat_volt, get_dimm_volt, get_psu_volt,
         get_cpu_fan_speed, get_sys_fan_speed, get_fan_speed, get_fan_speed_ex,
-        get_sensor_name, get_sensor_msg, list_supported_sensors, testhwm
+        get_sensor_name, get_sensor_msg, list_supported_sensors
 
 Models
 ======
@@ -42,6 +42,7 @@ Supported Platforms
 
 The following platforms have been verified and confirmed to be supported:
 
+* `IIoT-I530`_
 * `LEC-2290`_
 * `LEC-7230M`_
 * `LEC-7242`_
@@ -49,6 +50,7 @@ The following platforms have been verified and confirmed to be supported:
 * `V3S`_
 * `V6S`_
 
+.. _IIoT-I530: https://lannerinc.com/products/intelligent-edge-appliances/intelligent-video-platform/iiot-i530
 .. _LEC-2290: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-2290
 .. _LEC-7230M: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-7230m
 .. _LEC-7242: https://lannerinc.com/products/intelligent-edge-appliances/embedded-platform/lec-7242
