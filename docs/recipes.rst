@@ -193,7 +193,7 @@ Example for `LEC-7242`_:
 .. image:: images/LEC-7242_LTEStressLED.*
 
 `LEC-7242`_ has 4x Blue LED for LTE signal level status, you can set the :class:`LTEStressLED`
-signal strength from 1% to 100%:
+signal strength from 0% to 100%:
 
 .. literalinclude:: examples/lte_stress_led_set_strength.py
 

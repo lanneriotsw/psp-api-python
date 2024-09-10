@@ -4,6 +4,16 @@ Changelog
 
 .. currentmodule:: lannerpsp
 
+Release 0.0.13 (2024-09-10)
+===========================
+
+What's New
+----------
+
+* Support for Python 3.12.
+* Support `LEC-2290`_ for PSP version 2.1.4.
+* Update documentation.
+
 Release 0.0.12 (2023-02-08)
 ===========================
 

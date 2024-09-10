@@ -108,7 +108,7 @@ Python support
 
     "Python API for Lanner PSP" only supports Python 3.6 and above.
 
-.. _Lanner PSP: https://link.lannerinc.com/psp
+.. _Lanner PSP: https://link.lannerinc.com/development/lanner-psp
 .. _Lanner: https://lannerinc.com/
 .. _Core SDK: https://github.com/lanneriotsw/psp-manager
 .. _One-Step Automated Install: https://github.com/lanneriotsw/psp-manager#method-1-one-step-automated-install
