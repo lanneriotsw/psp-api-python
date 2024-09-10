@@ -4,6 +4,14 @@ Changelog
 
 .. currentmodule:: lannerpsp
 
+Release 0.0.14 (2024-09-10)
+===========================
+
+Bug Fixes
+---------
+
+* Add ``sphinx-rtd-theme`` to ``docs/requirements.txt``.
+
 Release 0.0.13 (2024-09-10)
 ===========================
 
