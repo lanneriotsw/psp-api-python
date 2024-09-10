@@ -1,1 +1,3 @@
+sphinx<8
+sphinx-rtd-theme
 toml
